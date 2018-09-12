@@ -1,5 +1,8 @@
 package com.ozf.laiyw.manage.common.commons;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -7,11 +10,16 @@ import java.io.Serializable;
  * @Date: 2018/7/19 15:19
  * @Description:
  */
+@ApiModel(value = "WebResult", description = "接口请求的响应结果")
 public class WebResult<T> implements Serializable {
 
+    @ApiModelProperty(value = "是否成功", required = true, dataType = "boolean")
     private boolean success;
+    @ApiModelProperty(value = "响应状态码", required = true, dataType = "int")
     private int code;
+    @ApiModelProperty(value = "响应描述", required = true, dataType = "String")
     private String message;
+    @ApiModelProperty(value = "响应数据", dataType = "T")
     private T data;
 
     public static WebResult successResult() {

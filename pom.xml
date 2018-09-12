@@ -27,7 +27,6 @@
         <log4j.version>1.2.17</log4j.version>
         <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
         <spring.version>4.3.18.RELEASE</spring.version>
-        <spring.boot.version>1.5.9.RELEASE</spring.boot.version>
         <mysql-connector.version>5.1.33</mysql-connector.version>
         <druid.version>1.0.5</druid.version>
         <mybatis.version>3.2.8</mybatis.version>
@@ -50,6 +49,11 @@
         <jasig-cas-server-security-filter.version>2.0.4</jasig-cas-server-security-filter.version>
         <apereo-cas-server-security-filter.version>2.0.10.2</apereo-cas-server-security-filter.version>
         <java-jwt.version>3.1.0</java-jwt.version>
+        <swagger2.version>2.8.0</swagger2.version>
+        <swagger2-annotations.version>1.5.14</swagger2-annotations.version>
+        <swagger-bootstrap-ui.version>1.7.6</swagger-bootstrap-ui.version>
+        <spring-cxf.version>3.2.5</spring-cxf.version>
+        <ws-rs.version>2.0.1</ws-rs.version>
     </properties>
 
     <build>
@@ -125,20 +129,6 @@
                 <artifactId>spring-test</artifactId>
                 <version>${spring.version}</version>
                 <scope>provided</scope>
-            </dependency>
-            <!--spring boot-->
-            <!--不使用spring 的 spring-boot-starter-parent，在子项目中不需要再次添加对 spring-boot-dependencies 的声明-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring.boot.version}</version>
             </dependency>
             <!--mysql-->
             <dependency>
@@ -228,6 +218,12 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-redis</artifactId>
                 <version>${spring-redis.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>redis.clients</groupId>
@@ -367,6 +363,55 @@
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
                 <version>${java-jwt.version}</version>
+            </dependency>
+            <!--swagger2-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!--swagger-annotations 用于model模块 版本与swagger2中annotations一致-->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger2-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swagger-bootstrap-ui.version}</version>
+            </dependency>
+            <!--spring cxf-->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${spring-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-service-description</artifactId>
+                <version>${spring-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${spring-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${spring-cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${ws-rs.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

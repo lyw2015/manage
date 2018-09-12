@@ -2,6 +2,8 @@ package com.ozf.laiyw.manage.common.commons;
 
 public class Constants {
 
+    public static final String UTF_8 = "UTF-8";
+
     /**
      * 超级用户
      */

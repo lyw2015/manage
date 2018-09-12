@@ -1,5 +1,6 @@
 package com.ozf.laiyw.manage.common.utils;
 
+import com.ozf.laiyw.manage.common.commons.Constants;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -18,7 +19,6 @@ import java.util.Map;
 public class HttpUtils {
 
     private static Logger logger = Logger.getLogger(HttpUtils.class);
-    private static final String UTF_8 = "UTF-8";
 
     public static String doPost(String url, Map<String, String> map) {
         HttpClient httpClient = null;
@@ -31,10 +31,10 @@ public class HttpUtils {
                 for (String key : map.keySet()) {
                     list.add(new BasicNameValuePair(key, map.get(key)));
                 }
-                httpPost.setEntity(new UrlEncodedFormEntity(list, UTF_8));
+                httpPost.setEntity(new UrlEncodedFormEntity(list, Constants.UTF_8));
             }
             HttpResponse response = httpClient.execute(httpPost);
-            return EntityUtils.toString(response.getEntity(), UTF_8);
+            return EntityUtils.toString(response.getEntity(), Constants.UTF_8);
         } catch (Exception ex) {
             logger.error("执行POST请求错误，URL：" + url, ex);
             return null;
@@ -48,7 +48,7 @@ public class HttpUtils {
             httpClient = HttpClients.createDefault();
             httpPost = new HttpGet(url);
             HttpResponse response = httpClient.execute(httpPost);
-            return EntityUtils.toString(response.getEntity(), UTF_8);
+            return EntityUtils.toString(response.getEntity(), Constants.UTF_8);
         } catch (Exception ex) {
             logger.error("执行GET请求错误，URL：" + url, ex);
             return null;

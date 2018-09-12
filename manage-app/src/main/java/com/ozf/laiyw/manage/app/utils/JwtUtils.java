@@ -35,6 +35,15 @@ public class JwtUtils {
         this.header = header;
     }
 
+    public static void main(String[] args) {
+        try {
+            JwtUtils jwtUtils = new JwtUtils("72cd517930e2480bb3dee4fecb0a5f0c", 3600, "Authorization");
+            System.out.println(jwtUtils.createToken("123456"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 生成Token
      *

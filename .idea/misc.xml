@@ -3,6 +3,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/manage-app" />
     <file type="web" url="file://$PROJECT_DIR$/manage-cas-server" />
+    <file type="web" url="file://$PROJECT_DIR$/manage-openapi" />
     <file type="web" url="file://$PROJECT_DIR$/manage-web" />
   </component>
   <component name="MavenProjectsManager">
