@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/manage.iml" filepath="$PROJECT_DIR$/manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-activiti/manage-activiti.iml" filepath="$PROJECT_DIR$/manage-activiti/manage-activiti.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-app/manage-app.iml" filepath="$PROJECT_DIR$/manage-app/manage-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-cas-server/manage-cas-server.iml" filepath="$PROJECT_DIR$/manage-cas-server/manage-cas-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-common/manage-common.iml" filepath="$PROJECT_DIR$/manage-common/manage-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-dao/manage-dao.iml" filepath="$PROJECT_DIR$/manage-dao/manage-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-model/manage-model.iml" filepath="$PROJECT_DIR$/manage-model/manage-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-openapi/manage-openapi.iml" filepath="$PROJECT_DIR$/manage-openapi/manage-openapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-redis/manage-redis.iml" filepath="$PROJECT_DIR$/manage-redis/manage-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-service/manage-service.iml" filepath="$PROJECT_DIR$/manage-service/manage-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-shiro/manage-shiro.iml" filepath="$PROJECT_DIR$/manage-shiro/manage-shiro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-web/manage-web.iml" filepath="$PROJECT_DIR$/manage-web/manage-web.iml" />
+    </modules>
+  </component>
+</project>
