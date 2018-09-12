@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="manage-openapi:war">
+    <output-path>$PROJECT_DIR$/manage-openapi/target</output-path>
+    <root id="archive" name="manage-openapi-1.0.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="manage-openapi:war exploded" />
+    </root>
+  </artifact>
+</component>
