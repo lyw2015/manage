@@ -10,9 +10,12 @@
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
 
-    <!-- soap webservice -->
+    <!--  soap webservice
+        Impl类的注解是@Webservice，implementor需要写完全路径
+        Impl类注解是@Service，implementor只需“#”号加bean的id名
+    -->
     <jaxws:endpoint implementor="com.ozf.laiyw.manage.openapi.service.soap.impl.SoapUserServiceImpl"
-                    address="/soap">
+                    address="/user">
     </jaxws:endpoint>
 
     <!-- restful webservice -->
@@ -20,6 +23,7 @@
         <jaxrs:serviceBeans>
             <ref bean="restUserService"/>
         </jaxrs:serviceBeans>
+
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
         </jaxrs:providers>

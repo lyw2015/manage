@@ -3,9 +3,11 @@ package com.ozf.laiyw.manage.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-@ApiModel(value = "User", description = "用户")
+@XmlRootElement//cxf
+@ApiModel(value = "User", description = "用户")//swagger2
 public class User implements Serializable {
 
     @ApiModelProperty(value = "ID", dataType = "String")

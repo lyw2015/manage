@@ -31,4 +31,11 @@ public class RestUserService {
     public List<User> listUser() {
         return soapUserService.listUser();
     }
+
+    @GET
+    @Path("/xmlListUser")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<User> xmlListUser() {
+        return soapUserService.listUser();
+    }
 }
