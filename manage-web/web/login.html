@@ -3,8 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
+    <style>
+        .item {
+            line-height: 35px;
+            width: 250px;
+            text-align: right;
+            font-size: 18px;
+        }
+    </style>
 </head>
-<body>
-<a href="/activiti/model/create">流程设计器</a>
+<body style="background-image: url('https://goss1.veer.com/creative/vcg/veer/612/veer-153787711.jpg');
+        background-position: center,center; background-size: cover; background-repeat: no-repeat;
+        background-attachment: fixed; background-color: #CCCCCC;">
+<h2 style="text-align: center; margin-top: 5%">欢迎登录Manage系统</h2>
+<div style="width: 20%; margin-left: 39%; margin-top: 5%">
+    <form id="frm" method="post">
+        <div class="item">
+            <span>用户名：</span>
+            <input id="account" name="username" type="text" value="admin">
+        </div>
+        <div class="item">
+            <span>密码：</span>
+            <input id="passwd" name="password" type="password" value="123456">
+        </div>
+        <div class="item">
+            <input name="rememberMe" type="checkbox" value=true><span>记住我</span>
+        </div>
+        <div class="item" style="text-align: center;">
+            <input type="reset" value="重置">
+            <input id="login" type="button" value="登录" style="margin-left: 20px;">
+        </div>
+    </form>
+</div>
+<script src="statics/js/jquery.min.js?v=2.1.4"></script>
+<script>
+    $(function () {
+        $("#login").click(function () {
+            submitForm();
+        });
+        $("#passwd").keyup(function (event) {
+            if (event.keyCode == 13) {
+                submitForm();
+            }
+        });
+    });
+
+    function submitForm() {
+        if (!$("#account").val() || !$("#passwd").val()) {
+            alert("请输入用户名或密码");
+            return false;
+        } else {
+            $.ajax({
+                type: "post",
+                data: $("#frm").serialize(),
+                url: "/manage/login",
+                success: function (data) {
+                    if (data.success) {
+                        location.href = "/manage/index";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+    }
+</script>
 </body>
 </html>

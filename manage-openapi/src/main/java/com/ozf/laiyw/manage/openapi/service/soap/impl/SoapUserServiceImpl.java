@@ -24,17 +24,17 @@ public class SoapUserServiceImpl implements SoapUserService {
     public SoapUserServiceImpl() {
         User user = new User();
         user.setId("1");
-        user.setUserName("张三");
+        user.setUsername("张三");
         userList.add(user);
 
         user = new User();
         user.setId("2");
-        user.setUserName("李四");
+        user.setUsername("李四");
         userList.add(user);
 
         user = new User();
         user.setId("3");
-        user.setUserName("王五");
+        user.setUsername("王五");
         userList.add(user);
     }
 

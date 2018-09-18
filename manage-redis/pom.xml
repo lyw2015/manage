@@ -22,6 +22,10 @@
             <artifactId>spring-data-redis</artifactId>
             <exclusions>
                 <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>

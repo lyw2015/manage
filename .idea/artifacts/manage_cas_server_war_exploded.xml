@@ -61,7 +61,7 @@
           <element id="library" level="project" name="Maven: org.springframework.webflow:spring-webflow:2.4.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.webflow:spring-js:2.4.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.webflow:spring-js-resources:2.4.2.RELEASE" />
-          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-core:1.2.6" />
+          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-core:1.3.2" />
           <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.8.3" />
           <element id="library" level="project" name="Maven: org.glassfish.web:javax.el:2.2.6" />
           <element id="library" level="project" name="Maven: org.slf4j:jul-to-slf4j:1.7.12" />

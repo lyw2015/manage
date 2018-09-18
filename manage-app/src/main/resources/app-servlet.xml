@@ -26,9 +26,6 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
-    <!--自定义异常-->
-    <bean class="com.ozf.laiyw.manage.common.exception.CustomHandlerExceptionResoler"/>
-
     <!-- 跨域支持 -->
     <mvc:cors>
         <mvc:mapping path="/**" allowed-origins="*"
@@ -40,6 +37,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/error.html"/>
             <!--接口文档-->
             <mvc:exclude-mapping path="/doc.html"/>
             <mvc:exclude-mapping path="/webjars/**"/>
@@ -52,5 +50,10 @@
 
     <!--Swagger2配置类-->
     <bean class="com.ozf.laiyw.manage.app.config.SwaggerConfig"/>
+
+    <!--自定义异常-->
+    <bean class="com.ozf.laiyw.manage.common.exception.CustomHandlerExceptionResoler">
+           <property name="errorviewname" value="/error.jsp"/>
+    </bean>
 
 </beans>

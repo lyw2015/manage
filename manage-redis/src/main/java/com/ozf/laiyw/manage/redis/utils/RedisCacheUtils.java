@@ -11,48 +11,16 @@ import java.util.concurrent.TimeUnit;
 public class RedisCacheUtils<T> {
 
     @Autowired
-    private RedisTemplate redisTemplate;
-
-    /**
-     * 是否存在指定Key
-     *
-     * @param key
-     * @return
-     */
-    public boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
-    }
-
-    /**
-     * 清除指定key的数据
-     *
-     * @param key
-     */
-    public void delete(String key) {
-        redisTemplate.delete(key);
-    }
-
-    /**
-     * 设置key的有效时长（min）
-     *
-     * @param key
-     * @param expiresTime
-     */
-    public void expire(String key, Integer expiresTime) {
-        redisTemplate.expire(key, expiresTime, TimeUnit.MINUTES);
-    }
+    public RedisTemplate redisTemplate;
 
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *
      * @param key
      * @param value
-     * @return
      */
-    public <T> ValueOperations<String, T> setCacheObject(String key, T value) {
-        ValueOperations<String, T> operation = redisTemplate.opsForValue();
-        operation.set(key, value);
-        return operation;
+    public void setCacheObject(String key, T value) {
+        redisTemplate.boundValueOps(key).set(value);
     }
 
     /**
@@ -61,12 +29,10 @@ public class RedisCacheUtils<T> {
      * @param key
      * @param value
      * @param expiresTime 有效时长（min）
-     * @return
+     * @param timeUnit
      */
-    public <T> ValueOperations<String, T> setCacheObject(String key, T value, Integer expiresTime) {
-        ValueOperations<String, T> operation = redisTemplate.opsForValue();
-        operation.set(key, value, expiresTime, TimeUnit.MINUTES);
-        return operation;
+    public void setCacheObject(String key, T value, Integer expiresTime, TimeUnit timeUnit) {
+        redisTemplate.boundValueOps(key).set(value, expiresTime, timeUnit);
     }
 
     /**
@@ -76,8 +42,8 @@ public class RedisCacheUtils<T> {
      * @return
      */
     public <T> T getCacheObject(String key) {
-        ValueOperations<String, T> operation = redisTemplate.opsForValue();
-        return operation.get(key);
+        BoundValueOperations<String, T> boundValueOperations = redisTemplate.boundValueOps(key);
+        return boundValueOperations.get();
     }
 
     /**
@@ -87,18 +53,14 @@ public class RedisCacheUtils<T> {
      * @param dataList
      * @return
      */
-    public <T> List<Long> setCacheList(String key, List<T> dataList) {
-        List<Long> results = new ArrayList<Long>();
-        if (null != dataList) {
-            BoundListOperations boundListOperations = redisTemplate.boundListOps(key);
+    public <T> void setCacheList(String key, List<T> dataList) {
+        if (null != dataList && !dataList.isEmpty()) {
+            BoundListOperations<String, T> boundListOperations = redisTemplate.boundListOps(key);
             int size = dataList.size();
-            Long tempLong = null;
             for (int i = 0; i < size; i++) {
-                tempLong = boundListOperations.rightPush(dataList.get(i));
-                results.add(tempLong);
+                boundListOperations.rightPush(dataList.get(i));
             }
         }
-        return results;
     }
 
     /**
@@ -108,23 +70,12 @@ public class RedisCacheUtils<T> {
      * @return
      */
     public <T> List<T> getCacheList(String key) {
+        BoundListOperations<String, T> boundListOperations = redisTemplate.boundListOps(key);
         List<T> dataList = new ArrayList<T>();
-        BoundListOperations boundListOperations = redisTemplate.boundListOps(key);
         for (int i = 0; i < boundListOperations.size(); i++) {
-            dataList.add((T) boundListOperations.index(i));
+            dataList.add(boundListOperations.index(i));
         }
         return dataList;
-    }
-
-    /**
-     * 刷新缓存的list对象
-     *
-     * @param key
-     * @param dataList
-     */
-    public void refreshCacheList(String key, List<T> dataList) {
-        redisTemplate.delete(key);
-        setCacheList(key, dataList);
     }
 
     /**
@@ -134,13 +85,14 @@ public class RedisCacheUtils<T> {
      * @param dataSet 缓存的数据
      * @return 缓存数据的对象
      */
-    public <T> BoundSetOperations<String, T> setCacheSet(String key, Set<T> dataSet) {
-        BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
-        Iterator<T> it = dataSet.iterator();
-        while (it.hasNext()) {
-            setOperation.add(it.next());
+    public <T> void setCacheSet(String key, Set<T> dataSet) {
+        if (null != dataSet && !dataSet.isEmpty()) {
+            BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
+            Iterator<T> it = dataSet.iterator();
+            while (it.hasNext()) {
+                setOperation.add(it.next());
+            }
         }
-        return setOperation;
     }
 
     /**
@@ -151,10 +103,9 @@ public class RedisCacheUtils<T> {
      */
     public Set<T> getCacheSet(String key) {
         Set<T> dataSet = new HashSet<T>();
-        BoundSetOperations<String, T> operation = redisTemplate.boundSetOps(key);
-        Long size = operation.size();
-        for (int i = 0; i < size; i++) {
-            dataSet.add(operation.pop());
+        Cursor<T> cursor = redisTemplate.boundSetOps(key).scan(ScanOptions.NONE);
+        while (cursor.hasNext()) {
+            dataSet.add(cursor.next());
         }
         return dataSet;
     }
@@ -166,14 +117,11 @@ public class RedisCacheUtils<T> {
      * @param dataMap
      * @return
      */
-    public <T> HashOperations<String, String, T> setCacheMap(String key, Map<String, T> dataMap) {
-        HashOperations hashOperations = redisTemplate.opsForHash();
-        if (null != dataMap) {
-            for (Map.Entry<String, T> entry : dataMap.entrySet()) {
-                hashOperations.put(key, entry.getKey(), entry.getValue());
-            }
+    public <T> void setCacheMap(String key, Map<String, T> dataMap) {
+        if (null != dataMap && !dataMap.isEmpty()) {
+            BoundHashOperations<String, String, T> boundHashOperations = redisTemplate.boundHashOps(key);
+            boundHashOperations.putAll(dataMap);
         }
-        return hashOperations;
     }
 
     /**
@@ -183,7 +131,41 @@ public class RedisCacheUtils<T> {
      * @return
      */
     public <T> Map<String, T> getCacheMap(String key) {
-        Map<String, T> map = redisTemplate.opsForHash().entries(key);
-        return map;
+        return redisTemplate.boundHashOps(key).entries();
+    }
+
+    /**
+     * 在指定的map中添加键值对
+     *
+     * @param mapKey
+     * @param dataKey
+     * @param value
+     */
+    public void addMapData(String mapKey, String dataKey, T value) {
+        redisTemplate.boundHashOps(mapKey).put(dataKey, value);
+    }
+
+    /**
+     * 获取指定map中的键值对
+     *
+     * @param mapKey
+     * @param dataKey
+     * @param <T>
+     * @return
+     */
+    public <T> T getMapDataByKey(String mapKey, String dataKey) {
+        BoundHashOperations<String, String, T> boundHashOperations = redisTemplate.boundHashOps(mapKey);
+        return boundHashOperations.get(dataKey);
+    }
+
+    /**
+     * 删除指定map中的键值对
+     *
+     * @param mapKey
+     * @param dataKey
+     * @return
+     */
+    public long deleteMapDataByKey(String mapKey, String dataKey) {
+        return redisTemplate.boundHashOps(mapKey).delete(dataKey);
     }
 }
