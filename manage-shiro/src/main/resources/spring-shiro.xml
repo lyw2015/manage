@@ -23,6 +23,35 @@
         <property name="maxAge" value="-1"/>
     </bean>
 
+    <!-- 会话管理器使用用于web 环境的DefaultWebSessionManager
+        org.apache.shiro.web.session.mgt.DefaultWebSessionManager
+        com.ozf.laiyw.manage.shiro.core.ShiroWebSessionManager
+    -->
+    <bean id="sessionManager" class="com.ozf.laiyw.manage.shiro.core.ShiroWebSessionManager">
+        <!-- 设置全局会话超时时间，默认30分钟(1800000) -->
+        <property name="globalSessionTimeout" value="1800000"/>
+        <property name="deleteInvalidSessions" value="true"/>
+        <!--登录页面不携带sessionid 1.3.2+版本熟悉-->
+        <property name="sessionIdUrlRewritingEnabled" value="false"/>
+        <property name="sessionDAO" ref="sessionDAO"/>
+        <!--是否启用/禁用Session Id Cookie，默认是启用的；如果禁用后将不会设置Session Id Cookie，即默认使用了Servlet容器的JSESSIONID，且通过URL重写（URL中的“;JSESSIONID=id”部分）保存Session Id-->
+        <property name="sessionIdCookieEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+        <!--会话验证调度器-->
+        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
+        <!--开启会话验证器-->
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <!--调度时间间隔，单位毫秒-->
+    </bean>
+
+    <!-- 会话验证调度器 -->
+    <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+        <!--检测时间间距，默认是30分钟-->
+        <property name="sessionValidationInterval" value="1800000"/>
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+
+
     <!--rememberMeCookie 即记住我的Cookie，保存时长7 天-->
     <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <constructor-arg value="rememberMe"/>
@@ -34,25 +63,6 @@
     <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
         <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
         <property name="cookie" ref="rememberMeCookie"/>
-    </bean>
-
-    <bean id="rememberAuthFilter" class="com.ozf.laiyw.manage.shiro.filter.CustomFormAuthenticationFilter"/>
-
-    <!-- 会话管理器使用用于web 环境的DefaultWebSessionManager
-        org.apache.shiro.web.session.mgt.DefaultWebSessionManager
-        com.ozf.laiyw.manage.shiro.core.ShiroWebSessionManager
-    -->
-    <bean id="sessionManager" class="com.ozf.laiyw.manage.shiro.core.ShiroWebSessionManager">
-        <!-- 设置全局会话超时时间，默认30分钟(1800000) -->
-        <property name="globalSessionTimeout" value="1800000"/>
-        <property name="deleteInvalidSessions" value="true"/>
-        <!--登录页面不携带sessionid 1.3.2+版本熟悉-->
-        <property name="sessionIdUrlRewritingEnabled" value="false"/>
-        <property name="sessionValidationSchedulerEnabled" value="false"/>
-        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>-->
-        <property name="sessionDAO" ref="sessionDAO"/>
-        <property name="sessionIdCookieEnabled" value="true"/>
-        <property name="sessionIdCookie" ref="sessionIdCookie"/>
     </bean>
 
     <!-- 继承自AuthorizingRealm的自定义Realm -->
@@ -85,7 +95,6 @@
         <property name="filters">
             <util:map>
                 <entry key="logout" value-ref="logoutFilter"/>
-                <entry key="rememberAuthFilter" value-ref="rememberAuthFilter"/>
             </util:map>
         </property>
         <property name="filterChainDefinitions">
@@ -96,7 +105,8 @@
                 /login.html=anon
                 /manage/login=anon
                 /manage/logout=logout
-                /**=rememberAuthFilter,user
+                /activiti/**=authc
+                /**=user
             </value>
         </property>
     </bean>

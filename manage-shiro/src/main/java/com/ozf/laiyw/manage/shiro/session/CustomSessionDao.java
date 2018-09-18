@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 @Component
 public class CustomSessionDao extends AbstractSessionDAO {
@@ -53,7 +54,7 @@ public class CustomSessionDao extends AbstractSessionDAO {
 
     @Override
     public Collection<Session> getActiveSessions() {
-        Collection<String> stringCollection = (Collection<String>) redisCacheUtils.getCacheMap(shareSessionMapCache);
-        return SerializeUtil.deserializeList(stringCollection);
+        Map<String, String> map = redisCacheUtils.getCacheMap(shareSessionMapCache);
+        return SerializeUtil.deserializeList(map.values());
     }
 }
