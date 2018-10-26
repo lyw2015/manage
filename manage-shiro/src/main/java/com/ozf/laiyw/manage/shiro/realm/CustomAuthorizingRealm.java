@@ -1,7 +1,7 @@
 package com.ozf.laiyw.manage.shiro.realm;
 
 import com.ozf.laiyw.manage.model.User;
-import com.ozf.laiyw.manage.service.inf.UserService;
+import com.ozf.laiyw.manage.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;

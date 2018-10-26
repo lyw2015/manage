@@ -1,7 +1,7 @@
 package com.ozf.laiyw.manage.shiro.filter;
 
 import com.ozf.laiyw.manage.model.User;
-import com.ozf.laiyw.manage.service.inf.UserService;
+import com.ozf.laiyw.manage.service.UserService;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;

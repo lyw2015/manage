@@ -25,7 +25,7 @@ public class ContextFinalizer implements ServletContextListener {
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent sce) {
+    public synchronized void contextDestroyed(ServletContextEvent sce) {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         Driver driver = null;
         try {

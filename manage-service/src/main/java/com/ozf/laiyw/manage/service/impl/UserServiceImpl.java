@@ -2,7 +2,7 @@ package com.ozf.laiyw.manage.service.impl;
 
 import com.ozf.laiyw.manage.dao.mapper.UserMapper;
 import com.ozf.laiyw.manage.model.User;
-import com.ozf.laiyw.manage.service.inf.UserService;
+import com.ozf.laiyw.manage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/rabbit
+     http://www.springframework.org/schema/rabbit/spring-rabbit-1.2.xsd">
+
+    <!--配置connection-factory，指定连接rabbit server参数 -->
+    <rabbit:connection-factory id="connectionFactory" host="${encryption.rabbit.host}" port="${encryption.rabbit.port}"
+                               publisher-confirms="true" publisher-returns="true"
+                               virtual-host="${encryption.rabbit.virtual.host}" username="${encryption.rabbit.username}"
+                               password="${encryption.rabbit.password}"/>
+
+    <!--通过指定下面的 admin 信息，当前 producer 中的 exchange 和 queue 会在 rabbitmq 服务器上自动生成 -->
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <!--定义queue
+        说明：
+        durable:是否持久化，如果想在RabbitMQ退出或崩溃的时候，不会失去所有的queue和消息，
+            需要同时标志队列(queue)和交换机(exchange)是持久化的，即rabbit:queue标签和rabbit:direct-exchange中的durable=true,
+            而消息(message)默认是持久化的可以看类org.springframework.amqp.core.MessageProperties中的属性public static final
+            MessageDeliveryMode DEFAULT_DELIVERY_MODE = MessageDeliveryMode.PERSISTENT
+        exclusive: 仅创建者可以使用的私有队列，断开后自动删除
+        auto_delete: 当所有消费客户端连接断开后，是否自动删除队列
+    -->
+    <rabbit:queue name="queueManageLog" durable="true" auto-delete="false" exclusive="false"/>
+    <rabbit:queue name="queueManageOrder" durable="true" auto-delete="false" exclusive="false"/>
+
+    <!-- 绑定队列,rabbitmq的exchangeType常用的三种模式：direct，fanout，topic三种,我们用direct模式，
+        即rabbit:direct-exchange标签，Direct交换器很简单，如果是Direct类型，就会将消息中的RoutingKey与该Exchange关联的所有
+        Binding中的BindingKey进行比较，如果相等，则发送到该Binding对应的Queue中。有一个需要注意的地方：如果找不到指定的exchange，
+        就会报错。但routing key找不到的话，不会报错，这条消息会直接丢失，所以此处要小心,auto-delete:自动删除，如果为Yes，
+        则该交换机所有队列queue删除后，自动删除交换机，默认为false
+      -->
+    <rabbit:direct-exchange name="directExchangeManage" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding key="log" queue="queueManageLog"/>
+            <rabbit:binding key="order" queue="queueManageOrder"/>
+
+            <rabbit:binding key="logAndOrder" queue="queueManageLog"/>
+            <rabbit:binding key="logAndOrder" queue="queueManageOrder"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!--模糊匹配
+        # 匹配一个或者多个单词
+        * 匹配一个单词
+        当一个队列被绑定为binding key为”#”时，它将会接收所有的消息，此时和fanout类型的exchange很像
+        当binding key不包含”*”和”#”时，这时候就很像direct类型的exchange
+    -->
+    <rabbit:topic-exchange name="topicExchangeManage" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding pattern="*.log.#" queue="queueManageLog"/>
+            <rabbit:binding pattern="*.log.order" queue="queueManageOrder"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <!--fanout类型的Exchange路由规则非常简单，它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中-->
+    <rabbit:fanout-exchange name="fanoutExchangeManage" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="queueManageLog"/>
+            <rabbit:binding queue="queueManageOrder"/>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+    <!--headers类型的Exchange不依赖于routing key与binding key的匹配规则来路由消息，
+        而是根据发送的消息内容中的headers属性进行匹配。
+        在绑定Queue与Exchange时指定一组键值对；当消息发送到Exchange时，RabbitMQ会取到该消息的headers（也是一个键值对的形式），
+        对比其中的键值对是否完全匹配Queue与Exchange绑定时指定的键值对；如果完全匹配则消息会路由到该Queue，
+        否则不会路由到该Queue-->
+    <rabbit:headers-exchange name="headersExchangeManage" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding key="logKey" value="log" queue="queueManageLog"/>
+            <rabbit:binding key="orderKey" value="order" queue="queueManageOrder"/>
+        </rabbit:bindings>
+    </rabbit:headers-exchange>
+
+
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="fanoutExchangeManage"
+                     mandatory="true" confirm-callback="sendConfirmCallbackListener"
+                     return-callback="sendReturnCallBackListener"
+    />
+
+
+    <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象
+        acknowledge:
+            NONE：自动确认
+            AUTO：根据情况确认
+            MANUAL：手动确认
+    -->
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener queues="queueManageLog" ref="logMessageConsumer"/>
+        <rabbit:listener queues="queueManageLog" ref="confirmLogMessageConsumer"/>
+        <rabbit:listener queues="queueManageLog" ref="twoConfirmLogMessageConsumer"/>
+
+        <rabbit:listener queues="queueManageOrder" ref="orderMessageConsumer"/>
+        <rabbit:listener queues="queueManageOrder" ref="confirmOrderMessageConsumer"/>
+    </rabbit:listener-container>
+
+</beans>

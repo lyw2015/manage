@@ -16,6 +16,29 @@ public class DateUtils {
     public static final String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
     public static final String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
     public static final String YYYYMMDD = "yyyyMMdd";
+    public static final String HHMMSSSSS = "HH:mm:ss.SSS";
+
+    public static String formatDateAgo(long dateTime) {
+        StringBuilder sb = new StringBuilder();
+        if (dateTime / 86400000 > 0) {
+            sb.append(dateTime / 86400000).append("天");
+            dateTime = dateTime - (86400000 * (dateTime / 86400000));
+        }
+        if (dateTime / 3600000 > 0) {
+            sb.append(dateTime / 3600000).append("时");
+            dateTime = dateTime - (3600000 * (dateTime / 3600000));
+        }
+        if (dateTime / 60000 > 0) {
+            sb.append(dateTime / 60000).append("分");
+            dateTime = dateTime - (60000 * (dateTime / 60000));
+        }
+        if (dateTime / 1000 > 0) {
+            sb.append(dateTime / 1000).append("秒");
+            dateTime = dateTime - (1000 * (dateTime / 1000));
+        }
+        sb.append(dateTime).append("毫秒");
+        return sb.toString();
+    }
 
     /**
      * 得到当前日期字符串 格式（yyyy-MM-dd）
@@ -29,6 +52,10 @@ public class DateUtils {
      */
     public static String getDate(String pattern) {
         return new SimpleDateFormat(pattern).format(new Date());
+    }
+
+    public static String formatDate(long time, String pattern) {
+        return formatDate(new Date(time), pattern);
     }
 
     /**

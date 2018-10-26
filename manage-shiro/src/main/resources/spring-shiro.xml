@@ -106,6 +106,8 @@
                 /manage/login=anon
                 /manage/logout=logout
                 /activiti/**=authc
+                /mq/**=anon
+                /solr/**=anon
                 /**=user
             </value>
         </property>

@@ -27,6 +27,11 @@
             <artifactId>manage-redis</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.ozf.laiyw.manage</groupId>
+            <artifactId>manage-rabbitmq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!--websocket-->
         <dependency>
             <groupId>org.springframework</groupId>

@@ -15,7 +15,7 @@ import java.util.Map;
 @Component
 public class JwtUtils {
 
-    @Value("${jwt.secret}")
+    @Value("${encryption.jwt.secret}")
     private String secret;
     @Value("${jwt.expire}")
     private long expire;

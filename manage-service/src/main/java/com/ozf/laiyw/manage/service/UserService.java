@@ -1,4 +1,4 @@
-package com.ozf.laiyw.manage.service.inf;
+package com.ozf.laiyw.manage.service;
 
 import com.ozf.laiyw.manage.model.User;
 

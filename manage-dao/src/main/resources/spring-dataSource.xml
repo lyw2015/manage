@@ -17,22 +17,16 @@
 
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:jdbc.properties</value>
-                <value>classpath:redis.properties</value>
-                <value>classpath:app.properties</value>
-            </list>
-        </property>
+          class="com.ozf.laiyw.manage.common.commons.EncryptablePropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:origin.properties"/>
     </bean>
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="driverClassName" value="${dataSource.driverClassName}"/>
-        <property name="url" value="${dataSource.url}"/>
-        <property name="username" value="${dataSource.username}"/>
-        <property name="password" value="${dataSource.password}"/>
+        <property name="url" value="${encryption.dataSource.url}"/>
+        <property name="username" value="${encryption.dataSource.username}"/>
+        <property name="password" value="${encryption.dataSource.password}"/>
 
         <!-- 初始化连接数量 -->
         <property name="initialSize" value="${dataSource.initialSize}"/>

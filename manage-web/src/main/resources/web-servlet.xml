@@ -36,9 +36,18 @@
 
     <!--使用类代理cglib-->
     <aop:aspectj-autoproxy/>
-
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/statics/**"/>
+            <mvc:exclude-mapping path="/plugins/**"/>
+            <mvc:exclude-mapping path="/favicon.ico"/>
+            <bean class="com.ozf.laiyw.manage.common.interceptor.SystemOperationLogInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>

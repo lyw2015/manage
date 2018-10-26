@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/rabbit
+     http://www.springframework.org/schema/rabbit/spring-rabbit-1.2.xsd">
+
+    <!--配置connection-factory，指定连接rabbit server参数 -->
+    <rabbit:connection-factory id="connectionFactory" host="${encryption.rabbit.host}" port="${encryption.rabbit.port}"
+                               virtual-host="${encryption.rabbit.virtual.host}" username="${encryption.rabbit.username}"
+                               password="${encryption.rabbit.password}"/>
+
+    <!--通过指定下面的 admin 信息，当前 producer 中的 exchange 和 queue 会在 rabbitmq 服务器上自动生成 -->
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <rabbit:queue name="queueManageLog" durable="true" auto-delete="false" exclusive="false"/>
+    <rabbit:queue name="queueManageOrder" durable="true" auto-delete="false" exclusive="false"/>
+
+    <rabbit:direct-exchange name="directExchangeManage" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding key="log" queue="queueManageLog"/>
+            <rabbit:binding key="order" queue="queueManageOrder"/>
+
+            <rabbit:binding key="logAndOrder" queue="queueManageLog"/>
+            <rabbit:binding key="logAndOrder" queue="queueManageOrder"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!--  方式一 同步
+        channel-transacted="true"
+        RabbitTemplate的使用案例（同步），由调用者提供外部事务，在模板中配置了channe-transacted=true。
+        通常是首选，因为它是非侵入性的（低耦合）
+    -->
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="directExchangeManage"
+                     channel-transacted="true"/>
+
+
+    <!-- 方式二 异步
+        在容器中配置事务时，如果提供了transactionManager，channelTransaction必须为true；
+        如果为false，外部的事务仍然可以提供给监听容器，造成的影响是在回滚的业务操作中也会提交消息传输的操作。-->
+    <!--<bean id="rabbitTransactionManager" class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>-->
+    <!--transaction-manager="rabbitTransactionManager" channel-transacted="true"-->
+    <!--    使用事务有两个问题：
+        一是会阻塞，发布者必须等待broker处理每个消息。如果发布者知道在broker死掉之前哪些消息没有被处理就足够了。
+        第二个问题是事务是重量级的，每次提交都需要fsync()，需要耗费大量的时间。
+     -->
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener queues="queueManageLog" ref="logMessageConsumer"/>
+        <rabbit:listener queues="queueManageOrder" ref="orderMessageConsumer"/>
+    </rabbit:listener-container>
+
+</beans>

@@ -25,14 +25,12 @@ public class CustomSessionDao extends AbstractSessionDAO {
     protected Serializable doCreate(Session session) {
         Serializable sessionId = generateSessionId(session);
         assignSessionId(session, sessionId);
-        System.out.println("CustomSessionDao.缓存session：" + sessionId);
         redisCacheUtils.addMapData(shareSessionMapCache, sessionId.toString(), SerializeUtil.serialize(session));
         return sessionId;
     }
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        System.out.println("CustomSessionDao.读取session：" + sessionId);
         String StringSession = (String) redisCacheUtils.getMapDataByKey(shareSessionMapCache, sessionId.toString());
         return SerializeUtil.deserialize(StringSession);
     }
@@ -42,13 +40,11 @@ public class CustomSessionDao extends AbstractSessionDAO {
         if (null == session || null == session.getId()) {
             return;
         }
-        System.out.println("CustomSessionDao.更新session：" + session.getId());
         redisCacheUtils.addMapData(shareSessionMapCache, session.getId().toString(), SerializeUtil.serialize(session));
     }
 
     @Override
     public void delete(Session session) {
-        System.out.println("CustomSessionDao.删除session：" + session.getId());
         redisCacheUtils.deleteMapDataByKey(shareSessionMapCache, session.getId().toString());
     }
 

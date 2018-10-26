@@ -15,9 +15,9 @@
     <!-- 配置JedisConnectionFactory -->
     <bean id="jedisConnectionFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-        <property name="hostName" value="${redis.hostName}"/>
-        <property name="port" value="${redis.port}"/>
-        <property name="password" value="${redis.password}"/>
+        <property name="hostName" value="${encryption.redis.hostName}"/>
+        <property name="port" value="${encryption.redis.port}"/>
+        <property name="password" value="${encryption.redis.password}"/>
         <property name="poolConfig" ref="poolConfig"/>
     </bean>
 
