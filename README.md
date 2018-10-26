@@ -30,7 +30,7 @@
 ![manage-app](https://images.gitee.com/uploads/images/2018/1026/153210_e0eb38c8_1486552.png "Module 'manage-app'.png")
 
 #manage-openapi
-![manage-openapi](https://images.gitee.com/uploads/images/2018/1026/153814_64a7dfd1_1486552.png "Module 'manage-openapi'.png")
+![manage-openapi](https://images.gitee.com/uploads/images/2018/1026/153946_d15e3b78_1486552.png "Module 'manage-openapi'.png")
 
 ##### Spring Web Flow
 #manage-cas-server
