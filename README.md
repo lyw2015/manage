@@ -21,8 +21,20 @@
 #### 项目架构
 项目采用模型-视图-控制器模式 (MVC)
 
-####项目结构
+#### 项目结构
+##### Project Modules
+#manage-web
+![manage-web](https://images.gitee.com/uploads/images/2018/1026/152450_460b3e41_1486552.png "Module 'manage-web'.png")
 
+#manage-app
+![manage-app](https://images.gitee.com/uploads/images/2018/1026/153210_e0eb38c8_1486552.png "Module 'manage-app'.png")
+
+#manage-openapi
+![manage-openapi](https://images.gitee.com/uploads/images/2018/1026/153110_db36104a_1486552.png "Module 'manage-openapi'.png")
+
+##### Spring Web Flow
+#manage-cas-server
+![manage-cas-server](https://images.gitee.com/uploads/images/2018/1026/152521_8730dc4e_1486552.png "Module manage-cas-server.png")
 
 #### 项目环境
 Intelli JIDEA
@@ -92,15 +104,13 @@ Web Service框架：CXF
 
 4. 项目访问路径
 
-    后台管理：http://localhost:port/login.html
+    后台管理：[http://localhost:port/login.html](http://)
     
-    单点登陆：http://localhost:port/login
+    单点登陆：[http://localhost:port/login](http://)
 
 #### 效果图
-
-1. xxxx
-2. xxxx
-3. xxxx
+#单点登录
+![单点登录](https://images.gitee.com/uploads/images/2018/1026/152229_4f1e723b_1486552.png "单点登录.png")
 
 #### 参与贡献
 
