@@ -22,7 +22,7 @@
 项目采用模型-视图-控制器模式 (MVC)
 
 #### 项目结构
-#### manage
+#### —manage
 ##### ——manage-activiti    工作流
 ##### ——manage-app    APP接口
 ##### ——manage-cas-server    单点登录服务
