@@ -8,7 +8,7 @@
 
 2，基于Apache CXF实现的WebService对外接口，提供soap和restful两种访问方式
 
-3，整合CAS + Shiro + Redis单点登陆,实现多个系统统一登陆登出
+3，整合CAS + Shiro + Redis单点登陆，实现多个系统统一登陆登出
 
 4，使用Redis + Shiro自定义SessionDAO实现Session共享
 
@@ -22,6 +22,21 @@
 项目采用模型-视图-控制器模式 (MVC)
 
 #### 项目结构
+#### manage
+##### ——manage-activiti    工作流
+##### ——manage-app    APP接口
+##### ——manage-cas-server    单点登录服务
+##### ——manage-common    公共模块
+##### ——manage-dao    持久层
+##### ——manage-model    业务实体
+##### ——manage-openapi    对外接口
+##### ——manage-rabbitmq    消息中间件
+##### ——manage-redis    缓存
+##### ——manage-service    业务逻辑层
+##### ——manage-shiro    权限管理
+##### ——manage-solr    搜索引擎
+##### ——manage-web    后台管理
+
 ##### Project Modules
 #manage-web
 ![manage-web](https://images.gitee.com/uploads/images/2018/1026/152450_460b3e41_1486552.png "Module 'manage-web'.png")
