@@ -1,7 +1,7 @@
 # Manage
 
 #### 项目介绍
-管理系统快速开发框架，集成工作流Activiti、单点登录CAS、权限框架shiro、缓存Redis等常用组件
+Manage系统整合实例，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、JWT、Freemarker等常用框架及组件
 
 #### 项目功能
 1，采用主流的Activiti流程引擎，实现审批业务的自由流转以及自定义表单等功能
