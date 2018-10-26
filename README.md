@@ -8,15 +8,17 @@
 
 2，基于Apache CXF实现的WebService对外接口，提供soap和restful两种访问方式
 
-3，整合CAS + Shiro + Redis单点登陆，实现多个系统统一登陆登出
+3，整合CAS + Shiro + Redis单点登录，实现多个系统统一登录登出以及Remember
 
 4，使用Redis + Shiro自定义SessionDAO实现Session共享
 
 5，使用Solr全文搜索引擎，实现基本的增、删、改、查、关键字分页查询、带高亮的关键字查询等功能
 
-6，APP基于JSON Web Token (JWT)认证，使用Swagger2生成一个具有互动性的API文档控制台
+6，APP基于JSON Web Token (JWT)认证，使用Swagger2生成一个具有互动性的API文档平台
 
-7，采用Shiro实现功能权限
+7，采用Shiro实现权限管理
+
+8，自定义拦截器实现对系统操作的日志记录，包含操作人、时间、IP、响应时间等信息
 
 #### 项目架构
 项目采用模型-视图-控制器模式 (MVC)
