@@ -38,7 +38,11 @@ Redis
 
 缓存：Redis
 
-权限框架：Apache Shiro
+权限框架：Shiro
+
+消息队列：RabbitMQ
+
+搜索引擎：Solr 7.5.0
 
 单点登陆:：CAS 4.2.7
 
