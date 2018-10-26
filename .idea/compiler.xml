@@ -12,11 +12,13 @@
         <module name="manage-common" />
         <module name="manage-dao" />
         <module name="manage-model" />
-        <module name="manage-openApi" />
         <module name="manage-openapi" />
+        <module name="manage-openApi" />
+        <module name="manage-rabbitmq" />
         <module name="manage-redis" />
         <module name="manage-service" />
         <module name="manage-shiro" />
+        <module name="manage-solr" />
         <module name="manage-web" />
       </profile>
     </annotationProcessing>
@@ -30,9 +32,11 @@
       <module name="manage-model" target="1.8" />
       <module name="manage-openApi" target="1.8" />
       <module name="manage-openapi" target="1.8" />
+      <module name="manage-rabbitmq" target="1.8" />
       <module name="manage-redis" target="1.8" />
       <module name="manage-service" target="1.8" />
       <module name="manage-shiro" target="1.8" />
+      <module name="manage-solr" target="1.8" />
       <module name="manage-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>

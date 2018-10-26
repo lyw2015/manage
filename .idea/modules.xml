@@ -10,9 +10,11 @@
       <module fileurl="file://$PROJECT_DIR$/manage-dao/manage-dao.iml" filepath="$PROJECT_DIR$/manage-dao/manage-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/manage-model/manage-model.iml" filepath="$PROJECT_DIR$/manage-model/manage-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/manage-openapi/manage-openapi.iml" filepath="$PROJECT_DIR$/manage-openapi/manage-openapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-rabbitmq/manage-rabbitmq.iml" filepath="$PROJECT_DIR$/manage-rabbitmq/manage-rabbitmq.iml" />
       <module fileurl="file://$PROJECT_DIR$/manage-redis/manage-redis.iml" filepath="$PROJECT_DIR$/manage-redis/manage-redis.iml" />
       <module fileurl="file://$PROJECT_DIR$/manage-service/manage-service.iml" filepath="$PROJECT_DIR$/manage-service/manage-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/manage-shiro/manage-shiro.iml" filepath="$PROJECT_DIR$/manage-shiro/manage-shiro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/manage-solr/manage-solr.iml" filepath="$PROJECT_DIR$/manage-solr/manage-solr.iml" />
       <module fileurl="file://$PROJECT_DIR$/manage-web/manage-web.iml" filepath="$PROJECT_DIR$/manage-web/manage-web.iml" />
     </modules>
   </component>

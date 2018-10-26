@@ -9,9 +9,11 @@
     <file url="file://$PROJECT_DIR$/manage-dao" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manage-model" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manage-openapi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/manage-rabbitmq" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manage-redis" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manage-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manage-shiro" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/manage-solr" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/manage-web" charset="UTF-8" />
   </component>
 </project>
