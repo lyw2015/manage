@@ -20,6 +20,8 @@
         <module>manage-activiti</module>
         <module>manage-cas-server</module>
         <module>manage-shiro</module>
+        <module>manage-rabbitmq</module>
+        <module>manage-solr</module>
     </modules>
 
     <properties>
@@ -37,7 +39,9 @@
         <servlet-api.version>3.1.0</servlet-api.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
-        <httpcomponents.version>4.4.1</httpcomponents.version>
+        <httpcomponents.core.version>4.4.6</httpcomponents.core.version>
+        <httpcomponents.client.version>4.5.6</httpcomponents.client.version>
+        <httpcomponents.mime.version>4.5.6</httpcomponents.mime.version>
         <jackson.version>2.8.5</jackson.version>
         <fastjson.version>1.2.35</fastjson.version>
         <redis.client>2.9.0</redis.client>
@@ -53,6 +57,9 @@
         <spring-cxf.version>3.2.5</spring-cxf.version>
         <ws-rs.version>2.0.1</ws-rs.version>
         <shiro.version>1.3.2</shiro.version>
+        <spring-rabbit.version>1.7.5.RELEASE</spring-rabbit.version>
+        <solr.version>7.5.0</solr.version>
+        <spring-data-solr.version>2.1.14.RELEASE</spring-data-solr.version>
     </properties>
 
     <build>
@@ -197,8 +204,18 @@
             <!-- httpcomponents -->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${httpcomponents.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>${httpcomponents.version}</version>
+                <version>${httpcomponents.client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpcomponents.mime.version}</version>
             </dependency>
             <!-- jackson -->
             <dependency>
