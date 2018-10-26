@@ -103,7 +103,7 @@ Web Service框架：CXF
 测试框架：JUnit4
 
 #### 安装教程
-1. 项目涉及的软件可参照官方提供的方式或者参照本人记录的方式进行安装
+1. 项目涉及的软件可参照官方提供的方式或者以下链接进行安装
 
     Mysql/MariaDB：https://gitee.com/laiyw/codes/4aob15k3xz28g0hpfcelt25
     
