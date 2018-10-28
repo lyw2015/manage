@@ -1,5 +1,6 @@
 package com.ozf.laiyw.manage.web.controller;
 
+import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.model.User;
 import org.apache.shiro.SecurityUtils;
@@ -8,18 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
- * 用户登录
+ * 用户登录/登出
  */
+@SystemLog(description = "登录登出")
 @RequestMapping("/manage")
 @Controller
 public class LoginController {
 
-    @RequestMapping("/index")
-    public String index() {
-        return "index";
-    }
-
+    @SystemLog(description = "用户登录")
     @RequestMapping("/login")
     @ResponseBody
     public WebResult login(User user) {
@@ -39,6 +40,17 @@ public class LoginController {
             return WebResult.errorResult("验证未通过,账户已锁定");
         } catch (ExcessiveAttemptsException eae) {
             return WebResult.errorResult("验证未通过,错误次数过多");
+        }
+    }
+
+    @SystemLog(description = "用户登出")
+    @RequestMapping("/logout")
+    public void logout(HttpServletResponse response) {
+        try {
+            SecurityUtils.getSubject().logout();
+            response.sendRedirect("login.html");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

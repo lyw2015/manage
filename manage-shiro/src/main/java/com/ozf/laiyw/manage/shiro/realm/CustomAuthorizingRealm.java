@@ -25,26 +25,25 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String userName = (String) principals.getPrimaryPrincipal();
+        String userName = ((User) principals.getPrimaryPrincipal()).getUsername();
         System.out.println("doGetAuthorizationInfo=================授权：" + userName);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        //查找设置用户角色以及权限
         simpleAuthorizationInfo.addRoles(userService.findRolesByUserName(userName));
         simpleAuthorizationInfo.addStringPermissions(userService.findPermissionsByUserName(userName));
         return simpleAuthorizationInfo;
     }
 
     /**
+     * 验证
+     *
      * @param token
      * @return
      * @throws AuthenticationException
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String userName = ((UsernamePasswordToken) token).getUsername();
         System.out.println("doGetAuthenticationInfo=================验证：" + userName);
-        //根据用户名查找用户信息
         User user = userService.findByUserName(userName);
         if (null == user) {
             throw new UnknownAccountException();
@@ -53,7 +52,7 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
             throw new LockedAccountException();
         }
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user.getUsername(),
+                user,
                 user.getPassword(),
                 getName()
         );

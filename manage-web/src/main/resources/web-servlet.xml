@@ -30,9 +30,9 @@
     </bean>
 
     <!--自定义异常处理-->
-    <bean class="com.ozf.laiyw.manage.common.exception.CustomHandlerExceptionResoler">
+    <!--<bean class="com.ozf.laiyw.manage.common.exception.CustomHandlerExceptionResoler">
         <property name="errorviewname" value="error"/>
-    </bean>
+    </bean>-->
 
     <!--使用类代理cglib-->
     <aop:aspectj-autoproxy/>
@@ -46,7 +46,7 @@
             <mvc:exclude-mapping path="/statics/**"/>
             <mvc:exclude-mapping path="/plugins/**"/>
             <mvc:exclude-mapping path="/favicon.ico"/>
-            <bean class="com.ozf.laiyw.manage.common.interceptor.SystemOperationLogInterceptor"/>
+            <bean class="com.ozf.laiyw.manage.service.interceptor.SystemOperationLogInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

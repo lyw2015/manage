@@ -22,6 +22,35 @@
                     <webXml>web\WEB-INF\web.xml</webXml>
                 </configuration>
             </plugin>
+            <!--拷贝服务器监控资源文件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.laiyw.monitor</groupId>
+                                    <artifactId>monitor</artifactId>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/
+                                    </outputDirectory>
+                                    <includes>lib/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -74,6 +103,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
+        </dependency>
+        <!--monitor-->
+        <dependency>
+            <groupId>com.laiyw.monitor</groupId>
+            <artifactId>monitor</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

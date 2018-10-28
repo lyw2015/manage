@@ -8,6 +8,20 @@
         <welcome-file>login.html</welcome-file>
     </welcome-file-list>
 
+    <!-- 不使用任何 profiles 或  mbeans -->
+    <context-param>
+        <param-name>spring.profiles.active</param-name>
+        <param-value>dev</param-value>
+    </context-param>
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>dev</param-value>
+    </context-param>
+    <context-param>
+        <param-name>spring.liveBeansView.mbeanDomain</param-name>
+        <param-value>dev</param-value>
+    </context-param>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
@@ -64,6 +78,31 @@
         <url-pattern>/activiti/*</url-pattern>
     </servlet-mapping>
 
+    <!--druid监控页面 -->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <init-param>
+            <!-- 不允许清空统计数据 -->
+            <param-name>resetEnable</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+
+    <!--服务器监控-->
+    <servlet>
+        <servlet-name>MonitorServlet</servlet-name>
+        <servlet-class>com.laiyw.monitor.core.http.MonitorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MonitorServlet</servlet-name>
+        <url-pattern>/monitor/*</url-pattern>
+    </servlet-mapping>
+
     <!-- 中文过滤器 -->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
@@ -104,5 +143,30 @@
         <filter-name>shiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <!-- 设置druid Web关联监控配置 -->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>/druid/*,/monitor/*,/plugins/*,/statics/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--错误页面配置-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/pages/404.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/pages/500.html</location>
+    </error-page>
 
 </web-app>

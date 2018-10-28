@@ -23,6 +23,10 @@ public class User implements Serializable {
     private String password;
     @ApiModelProperty(value = "是否锁定", dataType = "Boolean")
     private Boolean locked;
+    @ApiModelProperty(value = "创建时间", dataType = "String")
+    private String createDate;
+    @ApiModelProperty(value = "头像", dataType = "String")
+    private String headImg;
 
     private Boolean rememberMe = false;
     private List<UserRole> userRoleList;
@@ -73,5 +77,21 @@ public class User implements Serializable {
 
     public void setUserRoleList(List<UserRole> userRoleList) {
         this.userRoleList = userRoleList;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
     }
 }

@@ -25,7 +25,6 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.5" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.5" />
-          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.35" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjrt:1.8.0" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.8.0" />
           <element id="library" level="project" name="Maven: io.swagger:swagger-annotations:1.5.14" />
@@ -60,6 +59,7 @@
           <element id="library" level="project" name="Maven: com.rabbitmq:amqp-client:4.0.3" />
           <element id="library" level="project" name="Maven: org.springframework:spring-websocket:4.3.18.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-messaging:4.3.18.RELEASE" />
+          <element id="library" level="project" name="Maven: eu.bitwalker:UserAgentUtils:1.21" />
           <element id="archive" name="manage-activiti-1.0.0-SNAPSHOT.jar">
             <element id="module-output" name="manage-activiti" />
           </element>
@@ -138,6 +138,9 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.18.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.3.18.RELEASE" />
           <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.23" />
+          <element id="library" level="project" name="Maven: com.laiyw.monitor:monitor:1.0.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: org.hyperic:sigar:1.6.5.132" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.35" />
         </element>
       </element>
       <element id="directory" name="META-INF">
