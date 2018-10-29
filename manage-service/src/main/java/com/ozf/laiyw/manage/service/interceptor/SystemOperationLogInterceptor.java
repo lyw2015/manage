@@ -8,10 +8,12 @@ import com.ozf.laiyw.manage.common.utils.DateUtils;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.Log;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.service.LogService;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,12 +30,19 @@ import java.util.Map;
 public class SystemOperationLogInterceptor implements HandlerInterceptor {
 
     private final Logger logger = Logger.getLogger(this.getClass());
-    private final ThreadLocal<Long> threadLocal = new ThreadLocal<>();
+    private final ThreadLocal<Long> threadLocalTime = new ThreadLocal<>();
+    private final ThreadLocal<String> threadLocalUser = new ThreadLocal<>();
+    @Autowired
+    private LogService logService;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         long beginTime = System.currentTimeMillis();
-        threadLocal.set(beginTime);
+        threadLocalTime.set(beginTime);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if (null != user) {
+            threadLocalUser.set(user.getUsername());
+        }
         logger.info("计时开始：" + DateUtils.formatDate(beginTime, DateUtils.HHMMSSSSS) + " URI：" + httpServletRequest.getRequestURI());
         return true;
     }
@@ -48,21 +57,30 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) throws Exception {
         long endTime = System.currentTimeMillis();
-        long executeTime = endTime - threadLocal.get();
-        threadLocal.remove();
+        long executeTime = endTime - threadLocalTime.get();
+        threadLocalTime.remove();
         Runtime runtime = Runtime.getRuntime();
+
+        //获取操作用户
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String userName = null;
+        if (null != user) {
+            userName = user.getUsername();
+        } else {
+            userName = threadLocalUser.get();
+        }
+        threadLocalUser.remove();
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             if (handlerMethod.hasMethodAnnotation(SystemLog.class)) {
-                saveLog(handlerMethod, httpServletRequest, e, executeTime);
+                saveLog(handlerMethod, httpServletRequest, e, executeTime, userName);
             }
         }
         logger.info("计时结束：" + DateUtils.formatDate(endTime, DateUtils.HHMMSSSSS) + " 用时：" + DateUtils.formatDateAgo(executeTime) + " 总内存：" + ByteUtils.formatByteSize(runtime.totalMemory()) + " 已用内存：" + ByteUtils.formatByteSize(runtime.totalMemory() - runtime.freeMemory()));
     }
 
-    private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, String userName) {
         String ip = AddressUtils.getIpAddress(httpServletRequest);
         String agent = httpServletRequest.getHeader("User-Agent");
         UserAgent userAgent = UserAgent.parseUserAgentString(agent);
@@ -77,9 +95,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         log.setRequestMethod(httpServletRequest.getMethod());
         log.setRequestParameter(getParameter(httpServletRequest));
         log.setOperationTime(DateUtils.getDateTime());
-        if (null != user) {
-            log.setOperationUsername(user.getUsername());
-        }
+        log.setOperationUsername(userName);
         log.setOperationDescription(getLogDescription(handlerMethod));
         log.setResponseTime(DateUtils.formatDateAgo(executeTime));
         boolean isError = null != e;
@@ -87,7 +103,8 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         if (isError) {
             log.setErrorMessage(ExceptionUtils.getStackTrace(e));
         }
-        System.out.println(JSON.toJSONString(log, true));
+        logger.info("save log--->" + JSON.toJSONString(log, true));
+        logService.saveLog(log);
     }
 
     private String getLogDescription(HandlerMethod handlerMethod) {

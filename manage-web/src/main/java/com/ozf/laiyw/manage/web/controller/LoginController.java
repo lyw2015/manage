@@ -9,16 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 /**
  * 用户登录/登出
  */
 @SystemLog(description = "登录登出")
 @RequestMapping("/manage")
 @Controller
-public class LoginController {
+public class LoginController extends BaseController {
 
     @SystemLog(description = "用户登录")
     @RequestMapping("/login")
@@ -45,12 +42,8 @@ public class LoginController {
 
     @SystemLog(description = "用户登出")
     @RequestMapping("/logout")
-    public void logout(HttpServletResponse response) {
-        try {
-            SecurityUtils.getSubject().logout();
-            response.sendRedirect("login.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void logout() {
+        SecurityUtils.getSubject().logout();
+        redirect("login.html");
     }
 }

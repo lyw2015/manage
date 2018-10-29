@@ -71,10 +71,10 @@
         this.cancelClass = 'btn-default';
 
         this.locale = {
-            format: 'MM/DD/YYYY',
+            format: 'YYYY-MM-DD',
             separator: ' - ',
-            applyLabel: 'Apply',
-            cancelLabel: 'Cancel',
+            applyLabel: '应用',
+            cancelLabel: '取消',
             weekLabel: 'W',
             customRangeLabel: 'Custom Range',
             daysOfWeek: moment.weekdaysMin(),

@@ -31,10 +31,6 @@
     <link rel="stylesheet" href="../plugins/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../plugins/AdminLTE/dist/css/AdminLTE.min.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="../plugins/AdminLTE/dist/css/skins/all-skins.min.css">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -49,8 +45,8 @@
         <small>控制面板</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">仪表板</li>
+        <li><i class="fa fa-home"></i> Home</li>
+        <li>仪表板</li>
     </ol>
 </section>
 
@@ -108,7 +104,7 @@
                 <div class="icon">
                     <span class="glyphicon glyphicon-dashboard small"></span>
                 </div>
-                <a onclick="top.addTabs({id:'20014',title: '服务器监控',close: true,url: 'monitor/index.html',urlType: 'relative'});" href="javaScript:void(0)" class="small-box-footer">更多信息<i
+                <a onclick="top.addTabs({id:'20014',title: '服务器监控',close: true,url: 'monitor/server',urlType: 'relative'});" href="javaScript:void(0)" class="small-box-footer">更多信息<i
                         class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -192,7 +188,5 @@
 <script src="../plugins/AdminLTE/plugins/chartjs/Chart.min.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../plugins/AdminLTE/dist/js/dashboard.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../plugins/AdminLTE/dist/js/demo.js"></script>
 </body>
 </html>

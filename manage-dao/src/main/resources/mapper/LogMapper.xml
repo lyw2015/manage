@@ -4,13 +4,59 @@
 <mapper namespace="com.ozf.laiyw.manage.dao.mapper.LogMapper">
 
     <resultMap id="logMap" type="com.ozf.laiyw.manage.model.Log">
-        <id property="id" column="id"/>
-        <result property="username" column="user_name"/>
-        <result property="password" column="user_password"/>
+        <id property="id" column="ml_id"/>
+        <result property="clientIp" column="client_ip"/>
+        <result property="operatingSystemName" column="operating_system_name"/>
+        <result property="browser" column="browser"/>
+        <result property="agent" column="ml_agent"/>
+        <result property="requestURI" column="request_uri"/>
+        <result property="requestMethod" column="request_method"/>
+        <result property="requestParameter" column="request_parameter"/>
+        <result property="operationTime" column="operation_time"/>
+        <result property="operationUsername" column="operation_username"/>
+        <result property="responseTime" column="response_time"/>
+        <result property="isError" column="is_error"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="operationDescription" column="operation_description"/>
     </resultMap>
 
     <select id="queryLog" resultMap="logMap">
-        select * from t_sys_user where user_name = #{userName}
+        select * from t_sys_monitor_log order by operation_time desc
     </select>
+
+    <insert id="saveLog" parameterType="com.ozf.laiyw.manage.model.Log">
+        insert into t_sys_monitor_log(
+          ml_id,
+          client_ip,
+          operating_system_name,
+          browser,
+          ml_agent,
+          request_uri,
+          request_method,
+          request_parameter,
+          operation_time,
+          operation_username,
+          response_time,
+          is_error,
+          error_message,
+          operation_description
+        )
+        values(
+          #{id, jdbcType=VARCHAR},
+          #{clientIp , jdbcType=VARCHAR},
+          #{operatingSystemName , jdbcType=VARCHAR},
+          #{browser , jdbcType=VARCHAR},
+          #{agent, jdbcType=VARCHAR},
+          #{requestURI , jdbcType=VARCHAR},
+          #{requestMethod , jdbcType=VARCHAR},
+          #{requestParameter, jdbcType=VARCHAR},
+          #{operationTime, jdbcType=VARCHAR},
+          #{operationUsername, jdbcType=VARCHAR},
+          #{responseTime, jdbcType=VARCHAR},
+          #{isError, jdbcType=VARCHAR},
+          #{errorMessage, jdbcType=VARCHAR},
+          #{operationDescription, jdbcType=VARCHAR}
+        )
+    </insert>
 
 </mapper>

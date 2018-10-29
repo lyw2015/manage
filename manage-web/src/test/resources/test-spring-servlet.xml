@@ -9,7 +9,7 @@
 
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+          class="com.ozf.laiyw.manage.common.commons.EncryptablePropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:origin.properties</value>
@@ -17,6 +17,6 @@
         </property>
     </bean>
 
-    <context:component-scan base-package="com.ozf.laiyw.manage.solr"/>
+    <context:component-scan base-package="com.ozf.laiyw.manage.redis"/>
 
 </beans>

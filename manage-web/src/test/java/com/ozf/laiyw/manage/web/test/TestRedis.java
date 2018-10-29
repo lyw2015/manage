@@ -33,6 +33,8 @@ public class TestRedis {
     public void hashKey() {
         Set<String> set = redisCacheUtils.redisTemplate.keys("*");
         System.out.println(set);
+        Set list = redisCacheUtils.redisTemplate.boundHashOps("shareSessionMapCache").keys();
+        System.out.println(list);
         redisCacheUtils.redisTemplate.delete(set);
     }
 

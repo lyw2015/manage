@@ -1,8 +1,7 @@
 package com.ozf.laiyw.manage.service;
 
+import com.ozf.laiyw.manage.dao.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.model.Log;
-
-import java.util.List;
 
 /**
  * @Description:
@@ -11,5 +10,7 @@ import java.util.List;
  */
 public interface LogService {
 
-    List<Log> queryLog();
+    PageInfo queryLog(PageInfo pageInfo, Log log);
+
+    int saveLog(Log log);
 }

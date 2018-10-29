@@ -108,7 +108,7 @@
         <property name="patterns">
             <list>
                 <value>com.ozf.laiyw.manage.service.impl.*</value>
-                <value>com.ozf.laiyw.manage.dao.*</value>
+                <value>com.ozf.laiyw.manage.dao.mapper.*</value>
             </list>
         </property>
     </bean>

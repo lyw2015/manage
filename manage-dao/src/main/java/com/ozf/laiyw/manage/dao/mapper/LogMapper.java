@@ -1,8 +1,7 @@
 package com.ozf.laiyw.manage.dao.mapper;
 
+import com.ozf.laiyw.manage.dao.pagehelper.Page;
 import com.ozf.laiyw.manage.model.Log;
-
-import java.util.List;
 
 /**
  * @Description:
@@ -11,5 +10,7 @@ import java.util.List;
  */
 public interface LogMapper {
 
-    List<Log> queryLog();
+    Page<Log> queryLog();
+
+    int saveLog(Log log);
 }
