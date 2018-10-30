@@ -4,13 +4,18 @@
 <mapper namespace="com.ozf.laiyw.manage.dao.mapper.UserMapper">
 
     <resultMap id="userMap" type="com.ozf.laiyw.manage.model.User">
-        <id property="id" column="id" />
+        <id property="id" column="user_id" />
         <result property="username" column="user_name"/>
+        <result property="account" column="user_account"/>
         <result property="password" column="user_password"/>
+        <result property="mailbox" column="user_mailbox"/>
+        <result property="locked" column="user_locked"/>
+        <result property="createDate" column="create_date"/>
+        <result property="headImg" column="user_head_img"/>
     </resultMap>
 
-    <select id="findByUserName" resultMap="userMap">
-        select * from t_sys_user where user_name = #{userName}
+    <select id="findByUserAccount" resultMap="userMap">
+        select * from t_sys_user where user_account = #{userAccount}
     </select>
 
 </mapper>

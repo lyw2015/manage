@@ -1,6 +1,6 @@
 package com.ozf.laiyw.manage.dao.mapper;
 
-import com.ozf.laiyw.manage.dao.pagehelper.Page;
+import com.github.pagehelper.Page;
 import com.ozf.laiyw.manage.model.Log;
 
 /**
@@ -10,7 +10,9 @@ import com.ozf.laiyw.manage.model.Log;
  */
 public interface LogMapper {
 
-    Page<Log> queryLog();
+    Page<Log> queryLog(Log log);
+
+    Log detailLog(String id);
 
     int saveLog(Log log);
 }

@@ -47,7 +47,7 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
         if (!subject.isAuthenticated() && subject.isRemembered() && null == session.getAttribute(sessionUser)) {
             Object principal = subject.getPrincipal();
             if (null != principal) {
-                User user = userService.findByUserName(principal.toString());
+                User user = userService.findByUserAccount(principal.toString());
                 if (null != user) {
                     session.setAttribute(sessionUser, user);
                 }

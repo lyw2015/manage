@@ -17,13 +17,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController extends BaseController {
 
+    @RequestMapping("/getUserInfo")
+    @ResponseBody
+    public WebResult index() {
+        try {
+            User user = (User) SecurityUtils.getSubject().getPrincipal();
+            return WebResult.successResult(user);
+        } catch (Exception e) {
+            return WebResult.errorNetworkAnomalyResult();
+        }
+    }
+
     @SystemLog(description = "用户登录")
     @RequestMapping("/login")
     @ResponseBody
     public WebResult login(User user) {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(
-                    user.getUsername(),
+                    user.getAccount(),
                     user.getPassword(),
                     user.getRememberMe()
             );

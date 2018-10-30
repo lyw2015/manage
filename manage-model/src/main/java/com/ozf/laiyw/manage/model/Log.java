@@ -24,6 +24,10 @@ public class Log {
     private String errorMessage;//异常信息
     private String operationDescription;//操作描述
 
+    //用于查询
+    private String sd;
+    private String ed;
+
     public String getId() {
         return id;
     }
@@ -94,6 +98,10 @@ public class Log {
 
     public void setOperationTime(String operationTime) {
         this.operationTime = operationTime;
+        if (operationTime.contains(" - ")) {
+            this.sd = operationTime.split(" - ")[0];
+            this.ed = operationTime.split(" - ")[1];
+        }
     }
 
     public String getOperationUsername() {
@@ -134,5 +142,21 @@ public class Log {
 
     public void setOperationDescription(String operationDescription) {
         this.operationDescription = operationDescription;
+    }
+
+    public String getSd() {
+        return sd;
+    }
+
+    public void setSd(String sd) {
+        this.sd = sd;
+    }
+
+    public String getEd() {
+        return ed;
+    }
+
+    public void setEd(String ed) {
+        this.ed = ed;
     }
 }

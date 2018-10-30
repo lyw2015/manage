@@ -52,25 +52,19 @@
         <property name="testOnBorrow" value="${dataSource.testOnBorrow}"/>
         <!-- 归还连接时执行validationQuery检测连接是否有效 -->
         <property name="testOnReturn" value="${dataSource.testOnReturn}"/>
+        <!-- 监控支持(stat)，SQL防火墙(wall)；当filters、proxyFilters同时存在时则为组合关系 -->
+        <!-- <property name="filters" value="wall" /> -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter" />
+            </list>
+        </property>
     </bean>
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
-        <property name="plugins">
-            <list>
-                <bean class="com.ozf.laiyw.manage.dao.pagehelper.PageHelper">
-                    <property name="properties">
-                        <props>
-                            <prop key="dialect">mysql</prop>
-                            <prop key="offsetAsPageNum">true</prop>
-                            <prop key="rowBoundsWithCount">true</prop>
-                            <prop key="reasonable">true</prop>
-                        </props>
-                    </property>
-                </bean>
-            </list>
-        </property>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 
     <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">

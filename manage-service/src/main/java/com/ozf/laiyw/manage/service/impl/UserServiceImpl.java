@@ -18,17 +18,17 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User findByUserName(String userName) {
-        return userMapper.findByUserName(userName);
+    public User findByUserAccount(String userAccount) {
+        return userMapper.findByUserAccount(userAccount);
     }
 
     @Override
-    public List<String> findRolesByUserName(String userName) {
+    public List<String> findRolesByUserAccount(String userAccount) {
         return new ArrayList<>();
     }
 
     @Override
-    public List<String> findPermissionsByUserName(String userName) {
+    public List<String> findPermissionsByUserAccount(String userAccount) {
         return new ArrayList<>();
     }
 }

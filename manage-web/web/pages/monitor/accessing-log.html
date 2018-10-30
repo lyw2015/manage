@@ -65,6 +65,7 @@
             <div class="input-group">
                 <div class="input-group-addon">设备名称</div>
                 <input name="operatingSystemName" type="text" class="form-control">
+                <div class="input-group-addon"><i class="fa fa-tv"></i></div>
             </div>
         </div>
         <div class="form-group">
@@ -151,15 +152,7 @@
     })
 
     function searchByCondition() {
-        $tTable.bootstrapTable("refresh", {
-            url: queryUrl,
-            queryParams: function (params) {
-                return {
-                    pageSize: params.limit,
-                    pageNum: (params.offset / params.limit) + 1,
-                }
-            }
-        });
+        $tTable.bootstrapTable("refresh");
     }
 
     function loadData() {
@@ -167,10 +160,7 @@
             url: queryUrl,
             dataField: "list",
             queryParams: function (params) {
-                return {
-                    pageSize: params.limit,
-                    pageNum: (params.offset / params.limit) + 1
-                }
+                return top.serializeParams(params, $("form").serialize())
             },
             cache: false,
             pagination: true,
@@ -185,7 +175,10 @@
             columns: [
                 {
                     field: 'operationDescription',
-                    title: '操作描述'
+                    title: '操作描述',
+                    formatter: function (field, row, index) {
+                        return "<a onclick='detailLog(\"" + row.id + "\")' href='javaScript:void(0)'>" + row.operationDescription + "</a>";
+                    }
                 }, {
                     field: 'requestURI',
                     title: '请求地址'
@@ -216,6 +209,10 @@
                 }
             ]
         });
+    }
+
+    function detailLog(id){
+        top.addTabs({id:'200121', title: '日志详情', close: true, url: 'monitor/detailLog?id=' + id, urlType: 'relative'});
     }
 </script>
 </body>

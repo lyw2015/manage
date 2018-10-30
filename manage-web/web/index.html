@@ -162,7 +162,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="statics/images/default-user/avatar5.png" class="user-image"
                                  alt="User Image">
-                            <span class="hidden-xs">Laiyw</span>
+                            <span class="hidden-xs user_name"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -170,8 +170,8 @@
                                 <img src="statics/images/default-user/avatar5.png" class="img-circle"
                                      alt="User Image">
                                 <p>
-                                    Liayw - Manage 开发者
-                                    <small>2018/08/29 - 至今</small>
+                                    Laiyw - Manage 开发者
+                                    <small>2018/08/31 - 至今</small>
                                 </p>
                             </li>
                             </li>
@@ -199,7 +199,7 @@
                     <img src="statics/images/default-user/avatar5.png" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Laiyw</p>
+                    <p class="user_name"></p>
                     <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
                 </div>
             </div>
@@ -309,7 +309,40 @@
         });
     }
 
+    //序列化表单参数（用于bootstrapTable 分页） params：bootstrapTable参数，serialize表单的序列化值
+    function serializeParams(params, serialize) {
+        var resultParams = {};
+        serialize = decodeURIComponent(serialize, true);
+        //分页参数
+        resultParams.pageSize = params.limit;
+        resultParams.pageNum = (params.offset / params.limit) + 1;
+        resultParams.sortOrder = params.order;
+        //表单参数
+        var nv;
+        $.each(serialize.split("&"), function(ind, val){
+            nv = val.split("=");
+            if(nv[0].indexOf("Time") > -1){//时间经过序列化，空格会序列化成“+”号，此处进行替换
+                nv[1] = nv[1].replace(/\+/g, " ");
+            }
+            resultParams[nv[0]] = nv[1];
+        })
+        return resultParams;
+    }
+
+    function getUserInfo(){
+        $.ajax({
+            type: "post",
+            url: "/manage/getUserInfo",
+            success: function (result) {
+                if (result.success) {
+                    $(".user_name").html(result.data.username)
+                }
+            }
+        });
+    }
+
     $(function () {
+        getUserInfo();
         App.setbasePath("../");
         App.setGlobalImgPath("plugins/AdminLTE/dist/img/");
         addTabs({

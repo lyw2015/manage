@@ -1,6 +1,6 @@
 package com.ozf.laiyw.manage.service;
 
-import com.ozf.laiyw.manage.dao.pagehelper.PageInfo;
+import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.model.Log;
 
 /**
@@ -11,6 +11,8 @@ import com.ozf.laiyw.manage.model.Log;
 public interface LogService {
 
     PageInfo queryLog(PageInfo pageInfo, Log log);
+
+    Log detailLog(String id);
 
     int saveLog(Log log);
 }

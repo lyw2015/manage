@@ -19,10 +19,14 @@ public class User implements Serializable {
     private String id;
     @ApiModelProperty(value = "用户名", dataType = "String")
     private String username;
+    @ApiModelProperty(value = "登录账号", dataType = "String")
+    private String account;
     @ApiModelProperty(value = "密码", dataType = "String")
     private String password;
-    @ApiModelProperty(value = "是否锁定", dataType = "Boolean")
-    private Boolean locked;
+    @ApiModelProperty(value = "邮箱", dataType = "String")
+    private String mailbox;
+    @ApiModelProperty(value = "是否锁定", dataType = "int")
+    private int locked;
     @ApiModelProperty(value = "创建时间", dataType = "String")
     private String createDate;
     @ApiModelProperty(value = "头像", dataType = "String")
@@ -47,6 +51,14 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -55,11 +67,19 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Boolean getLocked() {
+    public String getMailbox() {
+        return mailbox;
+    }
+
+    public void setMailbox(String mailbox) {
+        this.mailbox = mailbox;
+    }
+
+    public int getLocked() {
         return locked;
     }
 
-    public void setLocked(Boolean locked) {
+    public void setLocked(int locked) {
         this.locked = locked;
     }
 

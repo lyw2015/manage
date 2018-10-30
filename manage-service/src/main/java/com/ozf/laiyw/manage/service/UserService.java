@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface UserService {
 
-    User findByUserName(String userName);
+    User findByUserAccount(String userAccount);
 
-    List<String> findRolesByUserName(String userName);
+    List<String> findRolesByUserAccount(String userAccount);
 
-    List<String> findPermissionsByUserName(String userName);
+    List<String> findPermissionsByUserAccount(String userAccount);
 }

@@ -1,8 +1,9 @@
 package com.ozf.laiyw.manage.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.dao.mapper.LogMapper;
-import com.ozf.laiyw.manage.dao.pagehelper.PageHelper;
-import com.ozf.laiyw.manage.dao.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.model.Log;
 import com.ozf.laiyw.manage.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,15 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public PageInfo queryLog(PageInfo pageInfo, Log log) {
-        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-        pageInfo.setList(logMapper.queryLog());
+        Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        pageInfo.setList(logMapper.queryLog(log));
+        pageInfo.setTotal(page.getTotal());
         return pageInfo;
+    }
+
+    @Override
+    public Log detailLog(String id) {
+        return logMapper.detailLog(id);
     }
 
     @Override

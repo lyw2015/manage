@@ -4,5 +4,5 @@ import com.ozf.laiyw.manage.model.User;
 
 public interface UserMapper {
 
-    User findByUserName(String userName);
+    User findByUserAccount(String userAccount);
 }
