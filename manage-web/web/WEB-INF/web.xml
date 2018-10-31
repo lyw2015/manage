@@ -29,7 +29,7 @@
             classpath:spring-redis.xml,
             classpath:spring-activiti.xml,
             classpath:spring-shiro.xml,
-            classpath:spring-rabbitmq-tx.xml,
+            classpath:spring-rabbitmq-config.xml,
             classpath:spring-data-solr.xml,
             classpath:spring-freemarker.xml
         </param-value>
@@ -46,6 +46,10 @@
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
     <!--DispatcherServlet-->

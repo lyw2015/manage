@@ -2,9 +2,12 @@ package com.ozf.laiyw.manage.web.controller;
 
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.common.commons.WebResult;
+import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/manage")
 @Controller
 public class LoginController extends BaseController {
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/getUserInfo")
     @ResponseBody
@@ -39,6 +45,7 @@ public class LoginController extends BaseController {
                     user.getRememberMe()
             );
             SecurityUtils.getSubject().login(token);
+            userService.saveLoginRecord(request.getHeader("User-Agent"), AddressUtils.getIpAddress(request));
             return WebResult.successResult("登录成功");
         } catch (UnknownAccountException uae) {
             return WebResult.errorResult("验证未通过,未知账户");

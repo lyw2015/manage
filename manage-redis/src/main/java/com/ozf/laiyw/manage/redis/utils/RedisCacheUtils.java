@@ -14,6 +14,15 @@ public class RedisCacheUtils<T> {
     public RedisTemplate redisTemplate;
 
     /**
+     * 删除指定key
+     *
+     * @param key
+     */
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
+
+    /**
      * 缓存基本的对象，Integer、String、实体类等
      *
      * @param key

@@ -1,6 +1,5 @@
 package com.ozf.laiyw.manage.service.interceptor;
 
-import com.alibaba.fastjson.JSON;
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.common.utils.ByteUtils;
@@ -61,15 +60,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         threadLocalTime.remove();
         Runtime runtime = Runtime.getRuntime();
 
-        //获取操作用户
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String userName = null;
-        if (null != user) {
-            userName = user.getUsername();
-        } else {
-            userName = threadLocalUser.get();
-        }
-        threadLocalUser.remove();
+        String userName = getUserName();
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -78,6 +69,19 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
             }
         }
         logger.info("计时结束：" + DateUtils.formatDate(endTime, DateUtils.HHMMSSSSS) + " 用时：" + DateUtils.formatDateAgo(executeTime) + " 总内存：" + ByteUtils.formatByteSize(runtime.totalMemory()) + " 已用内存：" + ByteUtils.formatByteSize(runtime.totalMemory() - runtime.freeMemory()));
+    }
+
+    //获取操作用户
+    private String getUserName() {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String userName = null;
+        if (null != user) {
+            userName = user.getUsername();
+        } else {
+            userName = threadLocalUser.get();
+        }
+        threadLocalUser.remove();
+        return userName;
     }
 
     private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, String userName) {
@@ -103,7 +107,6 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         if (isError) {
             log.setErrorMessage(ExceptionUtils.getStackTrace(e));
         }
-        logger.info("save log--->" + JSON.toJSONString(log, true));
         logService.saveLog(log);
     }
 
@@ -125,7 +128,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         String value = null;
         for (String name : parameterMap.keySet()) {
             value = String.join(",", parameterMap.get(name));
-            if (httpServletRequest.getRequestURI().contains("/login") && "password".equals(name)) {
+            if (httpServletRequest.getRequestURI().equals("/login") && "password".equals(name)) {
                 value = "******";
             }
             sb.append(name).append("=").append(value).append("&");

@@ -4,7 +4,7 @@
 <mapper namespace="com.ozf.laiyw.manage.dao.mapper.UserMapper">
 
     <resultMap id="userMap" type="com.ozf.laiyw.manage.model.User">
-        <id property="id" column="user_id" />
+        <id property="id" column="user_id"/>
         <result property="username" column="user_name"/>
         <result property="account" column="user_account"/>
         <result property="password" column="user_password"/>
@@ -14,8 +14,116 @@
         <result property="headImg" column="user_head_img"/>
     </resultMap>
 
+    <resultMap id="loginRecordMap" type="com.ozf.laiyw.manage.model.LoginRecord">
+        <id property="id" column="lr_id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="visitTime" column="visit_time"/>
+        <result property="lastTime" column="last_time"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="logoutTime" column="logout_time"/>
+        <result property="onlineTime" column="online_time"/>
+        <result property="online" column="lr_online"/>
+        <result property="clientIp" column="client_ip"/>
+        <result property="operatingSystemName" column="operating_system_name"/>
+        <result property="browser" column="browser"/>
+    </resultMap>
+
     <select id="findByUserAccount" resultMap="userMap">
         select * from t_sys_user where user_account = #{userAccount}
+    </select>
+
+    <insert id="saveLoginRecord" parameterType="com.ozf.laiyw.manage.model.LoginRecord">
+        insert into t_sys_monitor_login_record(
+          lr_id,
+          session_id,
+          user_name,
+          visit_time,
+          last_time,
+          login_time,
+          logout_time,
+          online_time,
+          lr_online,
+          client_ip,
+          operating_system_name,
+          browser
+        )
+        values(
+          #{id, jdbcType=VARCHAR},
+          #{sessionId , jdbcType=VARCHAR},
+          #{userName , jdbcType=VARCHAR},
+          #{visitTime , jdbcType=VARCHAR},
+          #{lastTime, jdbcType=VARCHAR},
+          #{loginTime , jdbcType=VARCHAR},
+          #{logoutTime , jdbcType=VARCHAR},
+          #{onlineTime, jdbcType=VARCHAR},
+          #{online, jdbcType=VARCHAR},
+          #{clientIp, jdbcType=VARCHAR},
+          #{operatingSystemName, jdbcType=VARCHAR},
+          #{browser, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateLoginRecord" parameterType="com.ozf.laiyw.manage.model.LoginRecord">
+        update t_sys_monitor_login_record
+        <set>
+            <if test="online != null and online != ''">
+                lr_online = #{online , jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName , jdbcType=VARCHAR},
+            </if>
+            <if test="lastTime != null and lastTime != ''">
+                last_time = #{lastTime , jdbcType=VARCHAR},
+            </if>
+            <if test="loginTime != null and loginTime != ''">
+                login_time = #{loginTime , jdbcType=VARCHAR},
+            </if>
+            <if test="logoutTime != null and logoutTime != ''">
+                logout_time = #{logoutTime , jdbcType=VARCHAR},
+            </if>
+            <if test="onlineTime != null and onlineTime != ''">
+                online_time = #{onlineTime , jdbcType=VARCHAR},
+            </if>
+        </set>
+        where session_id = #{sessionId, jdbcType=VARCHAR}
+    </update>
+
+    <select id="findLoginRecordBySessionId" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record where session_id = #{sessionId}
+    </select>
+
+    <select id="onlineUser" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record where lr_online = 'true'
+        <if test="userName != null and userName != ''">
+            <bind name="pattern" value="'%' + userName + '%'"/>
+            and user_name like #{pattern}
+        </if>
+        <if test="clientIp != null and clientIp != ''">
+            <bind name="pattern" value="'%' + clientIp + '%'"/>
+            and client_ip like #{pattern}
+        </if>
+        <if test="operatingSystemName != null and operatingSystemName != ''">
+            <bind name="pattern" value="'%' + operatingSystemName + '%'"/>
+            and operating_system_name like #{pattern}
+        </if>
+        <if test="browser != null and browser != ''">
+            <bind name="pattern" value="'%' + browser + '%'"/>
+            and browser like #{pattern}
+        </if>
+        <if test="loginTime != null and loginTime != ''">
+            and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ >= ]]> date_format(#{sd}, '%Y-%m-%d %H:%i')
+            and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ <= ]]> date_format(#{ed}, '%Y-%m-%d %H:%i')
+        </if>
+        order by visit_time desc
+    </select>
+
+    <select id="countOnline" resultType="java.lang.Integer">
+        select count(0) from t_sys_monitor_login_record where lr_online = 'true'
+    </select>
+
+    <select id="countTodayNewUser" resultType="java.lang.Integer">
+        select count(0) from t_sys_user where create_date like concat(date_format(now(), '%Y-%m-%d'), '%');
     </select>
 
 </mapper>

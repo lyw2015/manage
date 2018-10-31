@@ -35,7 +35,7 @@ public class TestRedis {
         System.out.println(set);
         Set list = redisCacheUtils.redisTemplate.boundHashOps("shareSessionMapCache").keys();
         System.out.println(list);
-        redisCacheUtils.redisTemplate.delete(set);
+        //redisCacheUtils.redisTemplate.delete(set);
     }
 
     @Test

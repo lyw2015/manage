@@ -3,7 +3,9 @@ package com.ozf.laiyw.manage.web.controller;
 import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.model.Log;
+import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.service.LogService;
+import com.ozf.laiyw.manage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,15 @@ public class MonitorController extends BaseController {
 
     @Autowired
     private LogService logService;
+    @Autowired
+    private UserService userService;
+
+    @SystemLog(description = "查看在线用户")
+    @RequestMapping("/onlineUser")
+    @ResponseBody
+    public PageInfo onlineUser(PageInfo pageInfo, LoginRecord loginRecord) {
+        return userService.onlineUser(pageInfo, loginRecord);
+    }
 
     @SystemLog(description = "数据监控")
     @RequestMapping("/druid")
