@@ -282,12 +282,9 @@
 <script src="plugins/AdminLTE/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="plugins/AdminLTE/dist/js/app.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="plugins/AdminLTE/dist/js/demo.js"></script>
-
+<script src="statics/js/index.js"></script>
 <!--tabs-->
 <script src="plugins/AdminLTE/dist/js/app_iframe.js"></script>
-
 <script type="text/javascript">
     //本地搜索菜单
     function search_menu() {
@@ -341,7 +338,23 @@
         });
     }
 
+    var webSocket = null;
+    function initSocket(){
+        if (window.WebSocket){
+            webSocket = new WebSocket('ws://localhost:8080/websocket/socketServer');
+        }
+        webSocket.onopen = function(event) {
+            console.log("open...");
+        }
+        webSocket.onmessage = function(event) {
+            //var obj = JSON.parse(event.data);
+            console.log(event.data);
+        }
+        webSocket.onclose = function(event) {};
+    }
+
     $(function () {
+        initSocket();
         getUserInfo();
         App.setbasePath("../");
         App.setGlobalImgPath("plugins/AdminLTE/dist/img/");

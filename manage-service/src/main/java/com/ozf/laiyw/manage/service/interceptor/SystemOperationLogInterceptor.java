@@ -128,7 +128,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         String value = null;
         for (String name : parameterMap.keySet()) {
             value = String.join(",", parameterMap.get(name));
-            if (httpServletRequest.getRequestURI().equals("/login") && "password".equals(name)) {
+            if (httpServletRequest.getRequestURI().equals("/manage/login") && "password".equals(name)) {
                 value = "******";
             }
             sb.append(name).append("=").append(value).append("&");

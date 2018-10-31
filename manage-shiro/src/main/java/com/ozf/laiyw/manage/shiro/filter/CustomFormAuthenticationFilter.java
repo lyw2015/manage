@@ -1,5 +1,6 @@
 package com.ozf.laiyw.manage.shiro.filter;
 
+import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
 import org.apache.shiro.session.Session;
@@ -12,7 +13,6 @@ import javax.servlet.ServletResponse;
 
 public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 
-    private final String sessionUser = "user";
     @Autowired
     private UserService userService;
 
@@ -44,12 +44,12 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
         Subject subject = getSubject(request, response);
         Session session = subject.getSession();
         //如果 isAuthenticated 为 false 证明不是登录过的，同时 isRememberd 为true 证明是没登陆直接通过记住我功能进来的
-        if (!subject.isAuthenticated() && subject.isRemembered() && null == session.getAttribute(sessionUser)) {
+        if (!subject.isAuthenticated() && subject.isRemembered() && null == session.getAttribute(Constants.SESSION_USER)) {
             Object principal = subject.getPrincipal();
             if (null != principal) {
                 User user = userService.findByUserAccount(principal.toString());
                 if (null != user) {
-                    session.setAttribute(sessionUser, user);
+                    session.setAttribute(Constants.SESSION_USER, user);
                 }
             }
         }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/websocket
+       http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd">
+
+    <!-- websocket服务端对象 -->
+    <bean id="adviceWebSocketHandler" class="com.ozf.laiyw.manage.service.socket.SpringWebSocketHandler"/>
+    <!-- websocket握手拦截器-->
+    <bean id="handlerInterceptor" class="com.ozf.laiyw.manage.service.socket.SpringWebSocketHandlerInterceptor"/>
+
+    <!-- websocket配置, 允许跨域-->
+    <websocket:handlers allowed-origins="*">
+        <!-- websocket请求连接映射 -->
+        <websocket:mapping path="/websocket/socketServer" handler="adviceWebSocketHandler"/>
+        <!-- 握手拦截器-->
+        <websocket:handshake-interceptors>
+            <ref bean="handlerInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
+
+    <!-- 当不支持websocket协议的浏览器使用SockJS推送,SocketJS会执行判断选择websocket、
+         Streaming、polling等协议进行推送-->
+    <!-- SockJs配置,允许跨域-->
+    <websocket:handlers allowed-origins="*">
+        <!-- SockJS协议请求连接映射-->
+        <websocket:mapping path="/sockjs/socketServer" handler="adviceWebSocketHandler"/>
+        <!-- 握手拦截器-->
+        <websocket:handshake-interceptors>
+            <ref bean="handlerInterceptor"/>
+        </websocket:handshake-interceptors>
+        <!-- 启用SockJS -->
+        <websocket:sockjs/>
+    </websocket:handlers>
+
+    <!-- 配置websocket的消息缓冲区大小 -->
+    <bean class="org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean">
+        <!-- 文本消息缓存 -->
+        <property name="maxTextMessageBufferSize" value="8192"/>
+        <!-- 二进制消息缓存-->
+        <property name="maxBinaryMessageBufferSize" value="8192"/>
+    </bean>
+
+</beans>
