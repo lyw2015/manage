@@ -31,4 +31,5 @@ public class EncryptablePropertyPlaceholderConfigurer extends PropertyPlaceholde
             throw new BeanInitializationException(e.getMessage());
         }
     }
+
 }

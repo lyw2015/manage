@@ -21,7 +21,7 @@
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
           class="com.ozf.laiyw.manage.common.commons.EncryptablePropertyPlaceholderConfigurer">
-        <property name="locations" value="classpath:origin.properties"/>
+        <property name="locations" value="file:C:/Users/Laiyw/Documents/Workspace/Manage/origin.properties"/>
     </bean>
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
@@ -56,7 +56,7 @@
         <!-- <property name="filters" value="wall" /> -->
         <property name="proxyFilters">
             <list>
-                <ref bean="stat-filter" />
+                <ref bean="stat-filter"/>
             </list>
         </property>
     </bean>
