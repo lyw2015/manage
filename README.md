@@ -1,16 +1,16 @@
 # Manage
 
 #### 项目介绍
-Manage系统整合实例，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、JWT、Freemarker等常用框架及组件，实现了权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
+Manage系统整合实例，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、ServerMonitor、JWT、Freemarker等常用框架及组件，实现了权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
 
 #### 项目功能
 1，采用主流的Activiti流程引擎，实现审批业务的自由流转以及自定义表单等功能
 
 2，基于Apache CXF实现的WebService对外接口，提供soap和restful两种访问方式
 
-3，整合CAS + Shiro + Redis单点登录，实现多个系统统一登录登出以及Remember
+3，整合CAS + Shiro + Redis单点登录，实现多个系统统一登录登出
 
-4，使用Redis + Shiro自定义SessionDAO实现Session共享
+4，使用Redis + Shiro自定义SessionDAO实现分布式Session共享
 
 5，使用Solr全文搜索引擎，实现基本的增、删、改、查、关键字分页查询、带高亮的关键字查询等功能
 
@@ -18,7 +18,9 @@ Manage系统整合实例，基于核心框架Spring 4.3.18.RELEASE，集成Sprin
 
 7，采用Shiro实现权限管理
 
-8，自定义拦截器实现对系统操作的日志记录，包含操作人、时间、IP、响应时间等信息
+8，集成Druid Monitor、Server Monitor实现对数据/服务器的监控
+
+9，实现系统操作日志记录以及在线用户、新增用户、访客等统计功能
 
 #### 项目架构
 项目采用模型-视图-控制器模式 (MVC)
@@ -101,6 +103,8 @@ Web Service框架：CXF
 认证机制：JSON Web Token (JWT)
 
 日志组件：Log4j
+
+监控组件：Druid Monitor、Server Monitor
 
 测试框架：JUnit4
 
