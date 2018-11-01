@@ -146,7 +146,7 @@ Web Service框架：CXF
 ![单点登录](https://images.gitee.com/uploads/images/2018/1026/152229_4f1e723b_1486552.png "单点登录.png")
 
 #首页
-![首页](https://images.gitee.com/uploads/images/2018/1101/144803_0fb50d75_1486552.png "首页.png")
+![首页](https://images.gitee.com/uploads/images/2018/1101/194200_1bf44cfb_1486552.png "首页.png")
 
 #在线用户
 ![在线用户](https://images.gitee.com/uploads/images/2018/1101/141757_cfe36642_1486552.png "在线用户.png")
