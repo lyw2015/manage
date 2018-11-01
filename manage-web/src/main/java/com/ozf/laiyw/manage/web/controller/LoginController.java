@@ -6,7 +6,10 @@ import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,28 +26,12 @@ public class LoginController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/getUserInfo")
-    @ResponseBody
-    public WebResult index() {
-        try {
-            User user = (User) SecurityUtils.getSubject().getPrincipal();
-            return WebResult.successResult(user);
-        } catch (Exception e) {
-            return WebResult.errorNetworkAnomalyResult();
-        }
-    }
-
     @SystemLog(description = "用户登录")
     @RequestMapping("/login")
     @ResponseBody
     public WebResult login(User user) {
         try {
-            UsernamePasswordToken token = new UsernamePasswordToken(
-                    user.getAccount(),
-                    user.getPassword(),
-                    user.getRememberMe()
-            );
-            SecurityUtils.getSubject().login(token);
+            userService.login(user);
             userService.saveLoginRecord(request.getHeader("User-Agent"), AddressUtils.getIpAddress(request));
             return WebResult.successResult("登录成功");
         } catch (UnknownAccountException uae) {

@@ -1,10 +1,16 @@
 package com.ozf.laiyw.manage.service.socket;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
-import com.ozf.laiyw.manage.common.utils.DateUtils;
+import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.service.MessageService;
 import org.apache.log4j.Logger;
-import org.springframework.web.socket.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,26 +26,33 @@ public class SpringWebSocketHandler implements WebSocketHandler {
     private final Logger logger = Logger.getLogger(this.getClass());
     private final String separator = "_";
     private static Map<String, WebSocketSession> userSocketSessionMap;
+    @Autowired
+    @Qualifier("manageMessageServiceImpl")
+    private MessageService messageService;
 
     static {
         userSocketSessionMap = new HashMap<String, WebSocketSession>();
     }
 
+    private User getCurrentThreadUser(WebSocketSession webSocketSession) {
+        return ((User) webSocketSession.getAttributes().get(Constants.SESSION_USER));
+    }
+
     //连接成功时触发
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
-        User user = ((User) webSocketSession.getAttributes().get(Constants.SESSION_USER));
+        User user = getCurrentThreadUser(webSocketSession);
         String key = user.getId() + separator + webSocketSession.getId();
         if (userSocketSessionMap.get(key) == null) {
             userSocketSessionMap.put(key, webSocketSession);
         }
-        //当用户登录后，把离线消息推送给用户
-        webSocketSession.sendMessage(new TextMessage(DateUtils.getDateTime()));
+        messageService.socketSendOffLineMessagesToUser(user, webSocketSession);
     }
 
     //关闭连接时触发
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
+        logger.debug("Close WebSocket--->" + getCurrentThreadUser(webSocketSession).getUsername());
         closeWebSocketSession(webSocketSession);
     }
 
@@ -54,6 +67,7 @@ public class SpringWebSocketHandler implements WebSocketHandler {
     //消息传输错误处理
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable exception) throws Exception {
+        logger.error("Error Close WebSocket--->" + getCurrentThreadUser(webSocketSession).getUsername());
         if (webSocketSession.isOpen()) {
             webSocketSession.close();
         }
@@ -70,6 +84,10 @@ public class SpringWebSocketHandler implements WebSocketHandler {
                 break;
             }
         }
+    }
+
+    public void sendMessageToUsers(Message message) {
+        messageService.socketSendMessageToUsers(message, userSocketSessionMap);
     }
 
     @Override

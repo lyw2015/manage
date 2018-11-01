@@ -42,7 +42,6 @@
 
 <section class="content">
     <form onsubmit="return false" class="form-inline col-xs-12" style="line-height: 40px; margin-bottom: 5px;">
-
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon">用户名称</div>
@@ -146,7 +145,10 @@
                     title: '最后操作时间'
                 }, {
                     field: 'onlineTime',
-                    title: '在线时长'
+                    title: '在线时长',
+                    formatter: function (field, row, index) {
+                        return row.onlineTime.replace("0毫秒", "");
+                    }
                 },{
                     field: 'clientIp',
                     title: '客户端IP'

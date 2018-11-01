@@ -20,4 +20,8 @@ public interface UserMapper {
     List<LoginRecord> onlineUser(LoginRecord loginRecord);
 
     int countOnline();
+
+    int countTodayTuest();
+
+    List<LoginRecord> guestRecord(LoginRecord loginRecord);
 }

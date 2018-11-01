@@ -27,6 +27,13 @@ public class MonitorController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @SystemLog(description = "查看访客记录")
+    @RequestMapping("/guestRecord")
+    @ResponseBody
+    public PageInfo guestRecord(PageInfo pageInfo, LoginRecord loginRecord) {
+        return userService.guestRecord(pageInfo, loginRecord);
+    }
+
     @SystemLog(description = "查看在线用户")
     @RequestMapping("/onlineUser")
     @ResponseBody

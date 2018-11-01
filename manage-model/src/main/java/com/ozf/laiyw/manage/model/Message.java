@@ -1,5 +1,7 @@
 package com.ozf.laiyw.manage.model;
 
+import java.util.List;
+
 /**
  * @Description:
  * @Auther: Laiyw
@@ -8,13 +10,18 @@ package com.ozf.laiyw.manage.model;
 public class Message {
 
     private String id;
-    private String title;
-    private String context;
+    private int fromUserId;
+    private String fromUserName;
+    private List<String> toUserIds;
+    private Object data;//推送数据
+    private String date;//推送时间
 
-    public Message(String id, String title, String context) {
-        this.id = id;
-        this.title = title;
-        this.context = context;
+    public Message() {
+
+    }
+
+    public Message(Object data) {
+        this.data = data;
     }
 
     public String getId() {
@@ -25,19 +32,43 @@ public class Message {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public int getFromUserId() {
+        return fromUserId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setFromUserId(int fromUserId) {
+        this.fromUserId = fromUserId;
     }
 
-    public String getContext() {
-        return context;
+    public String getFromUserName() {
+        return fromUserName;
     }
 
-    public void setContext(String context) {
-        this.context = context;
+    public void setFromUserName(String fromUserName) {
+        this.fromUserName = fromUserName;
+    }
+
+    public List<String> getToUserIds() {
+        return toUserIds;
+    }
+
+    public void setToUserIds(List<String> toUserIds) {
+        this.toUserIds = toUserIds;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

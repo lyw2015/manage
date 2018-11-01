@@ -1,6 +1,5 @@
 package com.ozf.laiyw.manage.service.impl;
 
-import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.dao.mapper.TestMapper;
 import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.rabbitmq.producer.MessageService;
@@ -26,7 +25,7 @@ public class TestMessageTxImpl implements TestService {
     @Override
     public String testFind() {
         String context = testMapper.testFind();
-        messageService.sendMessage(new Message(StringUtils.randUUID(), "标题", context), "log");
+        messageService.sendMessage(new Message(context), "log");
         return context;
     }
 }

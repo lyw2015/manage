@@ -126,4 +126,38 @@
         select count(0) from t_sys_user where create_date like concat(date_format(now(), '%Y-%m-%d'), '%');
     </select>
 
+    <select id="countTodayTuest" resultType="java.lang.Integer">
+        select count(0) from (
+          select count(0) from t_sys_monitor_login_record where login_time like concat(date_format(now(), '%Y-%m-%d'), '%')
+              group by user_name,client_ip,operating_system_name,browser
+        ) counttemp
+    </select>
+
+    <select id="guestRecord" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record
+        <where>
+            <if test="userName != null and userName != ''">
+                <bind name="pattern" value="'%' + userName + '%'"/>
+                and user_name like #{pattern}
+            </if>
+            <if test="clientIp != null and clientIp != ''">
+                <bind name="pattern" value="'%' + clientIp + '%'"/>
+                and client_ip like #{pattern}
+            </if>
+            <if test="operatingSystemName != null and operatingSystemName != ''">
+                <bind name="pattern" value="'%' + operatingSystemName + '%'"/>
+                and operating_system_name like #{pattern}
+            </if>
+            <if test="browser != null and browser != ''">
+                <bind name="pattern" value="'%' + browser + '%'"/>
+                and browser like #{pattern}
+            </if>
+            <if test="loginTime != null and loginTime != ''">
+                and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ >= ]]> date_format(#{sd}, '%Y-%m-%d %H:%i')
+                and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ <= ]]> date_format(#{ed}, '%Y-%m-%d %H:%i')
+            </if>
+        </where>
+        order by visit_time desc
+    </select>
+
 </mapper>

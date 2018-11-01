@@ -202,7 +202,14 @@
                     title: '浏览器'
                 }, {
                     field: 'isError',
-                    title: '是否异常'
+                    title: '是否异常',
+                    align: 'center',
+                    formatter: function (field, row, index) {
+                        if(row.isError == 'false'){
+                            return '<i class="fa fa-circle text-success">';
+                        }
+                        return '<i class="fa fa-circle text-danger">';
+                    }
                 }, {
                     field: 'responseTime',
                     title: '响应时间'

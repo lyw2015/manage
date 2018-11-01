@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface UserService {
 
+    void login(User user);
+
     //统计今天新增用户数量
     int countTodayNewUser();
 
@@ -30,4 +32,10 @@ public interface UserService {
 
     //统计当前在线用户数
     int countOnline();
+
+    //统计今日访客
+    int countTodayTuest();
+
+    //访客统计
+    PageInfo guestRecord(PageInfo pageInfo, LoginRecord loginRecord);
 }

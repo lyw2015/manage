@@ -208,7 +208,8 @@
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                        <button type="button" name="search" id="search-btn" class="btn btn-flat" onclick="search_menu()">
+                        <button type="button" name="search" id="search-btn" class="btn btn-flat"
+                                onclick="search_menu()">
                             <i class="fa fa-search"></i>
                         </button>
                     </span>
@@ -286,6 +287,41 @@
 <!--tabs-->
 <script src="plugins/AdminLTE/dist/js/app_iframe.js"></script>
 <script type="text/javascript">
+    var webSocket = null;
+    var iframe = null;
+
+        function initSocket() {
+        iframe = findIframeById(getActivePageId());
+        if (window.WebSocket) {
+            webSocket = new WebSocket('ws://localhost:8080/websocket/socketServer');
+        }
+        webSocket.onopen = function (event) {
+        }
+        webSocket.onmessage = function (event) {
+            if (event.data) {
+                setValue(JSON.parse(event.data));
+            }
+        }
+        webSocket.onclose = function (event) {
+        };
+    }
+
+    function setValue(data) {//data:message
+        data = data.data;
+        if (data.username) {
+            $(".user_name").html(data.username);
+        }
+        if (data.newuser != 0) {
+            $(iframe.contents().find(".dashboard-tadoy-new")).html(data.newuser);
+        }
+        if (data.onlineuser != 0) {
+            $(iframe.contents().find(".dashboard-oneline")).html(data.onlineuser);
+        }
+        if (data.todayguest != 0) {
+            $(iframe.contents().find(".dashboard-tadoy-guest")).html(data.todayguest);
+        }
+    }
+
     //本地搜索菜单
     function search_menu() {
         //要搜索的值
@@ -316,9 +352,9 @@
         resultParams.sortOrder = params.order;
         //表单参数
         var nv;
-        $.each(serialize.split("&"), function(ind, val){
+        $.each(serialize.split("&"), function (ind, val) {
             nv = val.split("=");
-            if(nv[0].indexOf("Time") > -1){//时间经过序列化，空格会序列化成“+”号，此处进行替换
+            if (nv[0].indexOf("Time") > -1) {//时间经过序列化，空格会序列化成“+”号，此处进行替换
                 nv[1] = nv[1].replace(/\+/g, " ");
             }
             resultParams[nv[0]] = nv[1];
@@ -326,46 +362,19 @@
         return resultParams;
     }
 
-    function getUserInfo(){
-        $.ajax({
-            type: "post",
-            url: "/manage/getUserInfo",
-            success: function (result) {
-                if (result.success) {
-                    $(".user_name").html(result.data.username)
-                }
-            }
-        });
-    }
-
-    var webSocket = null;
-    function initSocket(){
-        if (window.WebSocket){
-            webSocket = new WebSocket('ws://localhost:8080/websocket/socketServer');
-        }
-        webSocket.onopen = function(event) {
-            console.log("open...");
-        }
-        webSocket.onmessage = function(event) {
-            //var obj = JSON.parse(event.data);
-            console.log(event.data);
-        }
-        webSocket.onclose = function(event) {};
-    }
-
     $(function () {
-        initSocket();
-        getUserInfo();
         App.setbasePath("../");
         App.setGlobalImgPath("plugins/AdminLTE/dist/img/");
         addTabs({
-            id: '10008',
+            id: '0000',
             title: '仪表盘',
             close: false,
             url: 'pages/dashboard.html',
             urlType: "relative"
         });
         App.fixIframeCotent();
+
+        initSocket();
 
         $("input[name=q]").keyup(function (event) {
             if (event.keyCode == 13) {
@@ -429,7 +438,7 @@
                         targetType: "iframe-tab"
                     }
                 ]
-            },{
+            }, {
                 id: "3001",
                 text: "系统异常",
                 icon: "fa fa-close",
