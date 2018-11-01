@@ -290,7 +290,7 @@
     var webSocket = null;
     var iframe = null;
 
-        function initSocket() {
+    function initSocket() {
         iframe = findIframeById(getActivePageId());
         if (window.WebSocket) {
             webSocket = new WebSocket('ws://localhost:8080/websocket/socketServer');
@@ -389,11 +389,48 @@
                 icon: "fa fa-pagelines",
                 url: "pages/template.xml.html",
                 targetType: "iframe-tab"
-            },
-            {
+            }, {
+                id: "4001",
+                text: "组织机构",
+                icon: "fa fa-arrows",
+                children: [
+                    {
+                        id: "40011",
+                        text: "机构管理",
+                        icon: "fa fa-bars",
+                        url: "",
+                        targetType: "iframe-tab"
+                    }, {
+                        id: "40012",
+                        text: "角色管理",
+                        icon: "fa fa-object-group",
+                        url: "",
+                        targetType: "iframe-tab"
+                    }, {
+                        id: "40013",
+                        text: "用户管理",
+                        icon: "fa fa-users",
+                        url: "",
+                        targetType: "iframe-tab"
+                    }
+                ]
+            }, {
+                id: "5001",
+                text: "系统设置",
+                icon: "fa fa-cogs",
+                children: [
+                    {
+                        id: "50011",
+                        text: "菜单管理",
+                        icon: "fa fa-tree",
+                        url: "",
+                        targetType: "iframe-tab"
+                    }
+                ]
+            }, {
                 id: "2001",
                 text: "系统监控",
-                icon: "fa fa-asterisk",
+                icon: "fa fa-dashboard",
                 children: [
                     {
                         id: "20011",

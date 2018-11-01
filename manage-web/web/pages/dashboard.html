@@ -18,17 +18,6 @@
     <!-- Date Picker -->
     <link rel="stylesheet"
           href="../plugins/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- daterangepicker -->
-    <link rel="stylesheet"
-          href="../plugins/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- morris -->
-    <link rel="stylesheet"
-          href="../plugins/AdminLTE/plugins/morris/morris.css">
-    <!-- wysihtml5 -->
-    <link rel="stylesheet"
-          href="../plugins/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <!-- jvectormap -->
-    <link rel="stylesheet" href="../plugins/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../plugins/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -38,7 +27,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" style="background-color: #ecf0f5 ">
 <section class="content-header">
     <h1>
         仪表板
@@ -76,7 +65,8 @@
                 <div class="icon">
                     <span class="glyphicon glyphicon-user small"></span>
                 </div>
-                <a onclick="top.addTabs({id:'20011',title: '在线用户',close: true,url: 'pages/monitor/online-user.html',urlType: 'relative'});" href="javaScript:void(0)" class="small-box-footer">更多信息<i
+                <a onclick="top.addTabs({id:'20011',title: '在线用户',close: true,url: 'pages/monitor/online-user.html',urlType: 'relative'});"
+                   href="javaScript:void(0)" class="small-box-footer">更多信息<i
                         class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -90,7 +80,8 @@
                 <div class="icon">
                     <span class="glyphicon glyphicon-eye-open small"></span>
                 </div>
-                <a onclick="top.addTabs({id:'20016',title: '访客统计',close: true,url: 'pages/monitor/guest.html',urlType: 'relative'});" href="javaScript:void(0)" class="small-box-footer">更多信息<i
+                <a onclick="top.addTabs({id:'20016',title: '访客统计',close: true,url: 'pages/monitor/guest.html',urlType: 'relative'});"
+                   href="javaScript:void(0)" class="small-box-footer">更多信息<i
                         class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -104,7 +95,8 @@
                 <div class="icon">
                     <span class="glyphicon glyphicon-dashboard small"></span>
                 </div>
-                <a onclick="top.addTabs({id:'20014',title: '服务器监控',close: true,url: 'monitor/server',urlType: 'relative'});" href="javaScript:void(0)" class="small-box-footer">更多信息<i
+                <a onclick="top.addTabs({id:'20014',title: '服务器监控',close: true,url: 'monitor/server',urlType: 'relative'});"
+                   href="javaScript:void(0)" class="small-box-footer">更多信息<i
                         class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -114,28 +106,31 @@
     <div class="row">
         <!-- 左边 -->
         <section class="col-xs-12 col-sm-8 col-md-7 connectedSortable">
-            <!-- Custom tabs (Charts with tabs)-->
-            <div class="nav-tabs-custom">
-                <!-- Tabs within a box -->
-                <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a href="#revenue-chart" data-toggle="tab">Area</a></li>
-                    <li><a href="#sales-chart" data-toggle="tab">Donut</a></li>
-                    <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
-                </ul>
-                <div class="tab-content no-padding">
-                    <!-- Morris chart - Sales -->
-                    <div class="chart tab-pane active" id="revenue-chart"
-                         style="position: relative; height: 300px;"></div>
-                    <div class="chart tab-pane" id="sales-chart"
-                         style="position: relative; height: 300px;"></div>
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <i class="fa fa-line-chart"></i>
+                    <h3 class="box-title">近7天访问量统计</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool"><i class="fa fa-refresh"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="lineChart" style="height: 229px;"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
         <!-- 右边-->
         <section class=" col-xs-12 col-sm-4 col-md-5 connectedSortable">
-            <!-- 日历 -->
             <div class="box box-solid bg-green-gradient">
-                <div class="box-header">
+                <div class="box-header with-border">
                     <i class="fa fa-calendar"></i>
                     <h3 class="box-title">日历</h3>
                     <div class="pull-right box-tools">
@@ -151,7 +146,6 @@
                     <div id="calendar" style="width: 100%"></div>
                 </div>
             </div>
-
         </section>
     </div>
 </section>
@@ -170,18 +164,6 @@
 <!-- datepicker -->
 <script src="../plugins/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 <script src="../plugins/AdminLTE/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
-<!-- daterangepicker -->
-<script src="../plugins/AdminLTE/plugins/daterangepicker/moment.js"></script>
-<script src="../plugins/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
-<!-- morris -->
-<script src="../plugins/AdminLTE/plugins/morris/morris.min.js"></script>
-<!-- knob -->
-<script src="../plugins/AdminLTE/plugins/knob/jquery.knob.js"></script>
-<!-- wysihtml5 -->
-<script src="../plugins/AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<!-- jvectormap -->
-<script src="../plugins/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="../plugins/AdminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 <!-- SlimScroll 1.3.0 -->
 <script src="../plugins/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- ChartJS 1.0.1 -->
