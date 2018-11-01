@@ -1,7 +1,7 @@
 # Manage
 
 #### 项目介绍
-Manage系统整合实例，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、ServerMonitor、JWT、Freemarker等常用框架及组件，实现了权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
+Manage系统整合实例，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、ServerMonitor、JWT、Freemarker、监控组件Monitor等常用框架及组件，实现了权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
 
 #### 项目功能
 1，采用主流的Activiti流程引擎，实现审批业务的自由流转以及自定义表单等功能
