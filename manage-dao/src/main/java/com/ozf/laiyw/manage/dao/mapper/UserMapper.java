@@ -2,8 +2,10 @@ package com.ozf.laiyw.manage.dao.mapper;
 
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper {
 
@@ -24,4 +26,7 @@ public interface UserMapper {
     int countTodayTuest();
 
     List<LoginRecord> guestRecord(LoginRecord loginRecord);
+
+    //统计两个时间点间的访问量
+    List<Map<String, Integer>> countUserGuest(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }

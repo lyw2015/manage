@@ -128,7 +128,7 @@
 
     <select id="countTodayTuest" resultType="java.lang.Integer">
         select count(0) from (
-          select count(0) from t_sys_monitor_login_record where login_time like concat(date_format(now(), '%Y-%m-%d'), '%')
+          select count(0) from t_sys_monitor_login_record where last_time like concat(date_format(now(), '%Y-%m-%d'), '%')
               group by user_name,client_ip,operating_system_name,browser
         ) counttemp
     </select>
@@ -158,6 +158,15 @@
             </if>
         </where>
         order by visit_time desc
+    </select>
+
+    <select id="countUserGuest" resultType="java.util.HashMap">
+        select date_format(last_time, '%m-%d') lrtime, count(0) lrcount from (
+          select last_time from t_sys_monitor_login_record
+            where date_format(last_time, '%Y-%m-%d') <![CDATA[ >= ]]> date_format(#{startDate}, '%Y-%m-%d')
+                and date_format(last_time, '%Y-%m-%d') <![CDATA[ <= ]]> date_format(#{endDate}, '%Y-%m-%d')
+            group by user_name,client_ip,operating_system_name,browser,date_format(last_time, '%Y-%m-%d'),user_name) tempdata
+        group by date_format(last_time, '%Y-%m-%d') order by last_time asc
     </select>
 
 </mapper>

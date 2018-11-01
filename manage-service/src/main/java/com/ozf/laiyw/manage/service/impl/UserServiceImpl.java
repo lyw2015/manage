@@ -21,8 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -35,6 +34,39 @@ public class UserServiceImpl implements UserService {
     private MessageService messageService;
     @Autowired
     private SpringWebSocketHandler handler;
+
+    @Override
+    public Map<String, Integer> countUserGuest() {
+        Date before = DateUtils.getBeforeDayDate(6);
+        Date current = new Date();
+        List<Map<String, Integer>> list = userMapper.countUserGuest(DateUtils.formatDateTime(before), DateUtils.formatDateTime(current));
+        Map<String, Integer> resultMap = new HashMap<>();
+        for (Map map : list) {
+            resultMap.put(map.get("lrtime").toString(), Integer.valueOf(map.get("lrcount").toString()));
+        }
+        String md = null;
+        while (before.compareTo(current) < 1) {
+            md = DateUtils.formatDate(before, "MM-dd");
+            if (!resultMap.containsKey(md)) {
+                resultMap.put(md, 0);
+            }
+            before = new Date(before.getTime() + 1000 * 60 * 60 * 24);
+        }
+        return sortMap(resultMap);
+    }
+
+    private Map<String, Integer> sortMap(Map<String, Integer> map) {
+        Map<String, Integer> sortMap = new TreeMap<>(new MapKeyComparator());
+        sortMap.putAll(map);
+        return sortMap;
+    }
+
+    class MapKeyComparator implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            return o1.compareTo(o2);
+        }
+    }
 
     @Override
     public void login(User user) {
@@ -70,6 +102,11 @@ public class UserServiceImpl implements UserService {
     public int saveLoginRecord(String header, String clientIp) {
         try {
             Session session = SecurityUtils.getSubject().getSession();
+            //如果登录之后再进行登录则不进行保存操作
+            LoginRecord exist = userMapper.findLoginRecordBySessionId(session.getId().toString());
+            if (null != exist) {
+                return 0;
+            }
             UserAgent userAgent = UserAgent.parseUserAgentString(header);
 
             LoginRecord loginRecord = new LoginRecord();

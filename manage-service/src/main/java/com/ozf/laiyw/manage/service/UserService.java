@@ -5,8 +5,12 @@ import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
+
+    //统计每天的访客记录
+    Map<String, Integer> countUserGuest();
 
     void login(User user);
 

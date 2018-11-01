@@ -358,4 +358,16 @@ public class DateUtils {
         return new Date(beginDate.getTime() + time.longValue());
     }
 
+    /**
+     * 获取指定天数之前的日期
+     *
+     * @param number
+     * @return
+     */
+    public static Date getBeforeDayDate(int number) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -number);//日期回滚7天
+        return calendar.getTime();
+    }
+
 }

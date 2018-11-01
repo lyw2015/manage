@@ -16,7 +16,12 @@ $(function () {
         todayHighlight: true
     });
 
+    countUserGuest(lineChart);
+});
+
+function canvasLine(labels, data) {
     var lineChartOptions = {
+        showScale: true,
         scaleShowGridLines: false,// 在图标上显示网状表格
         bezierCurve: true,// 线条是否弯曲
         pointDot: true,// 显示数据线上的坐标点
@@ -27,7 +32,7 @@ $(function () {
 
     var lineChart = new Chart($("#lineChart").get(0).getContext("2d"));
     lineChart.Line({
-        labels: ["10-26", "10-27", "10-28", "10-29", "10-30", "10-31", "11-01"],
+        labels: labels,
         datasets: [
             {
                 label: "访问量",
@@ -37,9 +42,26 @@ $(function () {
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [28, 6, 0, 19, 22, 1, 4]
+                data: data
             }
         ]
     }, lineChartOptions);
+}
 
-});
+function countUserGuest() {
+    $.ajax({
+        type: "get",
+        url: "/monitor/countUserGuest",
+        success: function (result) {
+            if (result) {
+                var labels = [];
+                var data = [];
+                for (var key in result) {
+                    labels.push(key);
+                    data.push(result[key])
+                }
+                canvasLine(labels, data);
+            }
+        }
+    });
+}

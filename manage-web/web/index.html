@@ -292,9 +292,9 @@
 
     function initSocket() {
         iframe = findIframeById(getActivePageId());
-        if (window.WebSocket) {
+        //if (window.WebSocket) {
             webSocket = new WebSocket('ws://localhost:8080/websocket/socketServer');
-        }
+        //}
         webSocket.onopen = function (event) {
         }
         webSocket.onmessage = function (event) {

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 /**
  * @Description:
  * @Auther: Laiyw
@@ -26,6 +28,12 @@ public class MonitorController extends BaseController {
     private LogService logService;
     @Autowired
     private UserService userService;
+
+    @RequestMapping("/countUserGuest")
+    @ResponseBody
+    public Map<String, Integer> countUserGuest() {
+        return userService.countUserGuest();
+    }
 
     @SystemLog(description = "查看访客记录")
     @RequestMapping("/guestRecord")
