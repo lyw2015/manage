@@ -130,8 +130,20 @@ Web Service框架：CXF
     单点登陆：[http://localhost:port/login](http://)
 
 #### 效果图
+#管理后台登录
+![管理后台登录](https://images.gitee.com/uploads/images/2018/1101/141049_60c7bc9b_1486552.png "管理后台登录.png")
+
 #单点登录
 ![单点登录](https://images.gitee.com/uploads/images/2018/1026/152229_4f1e723b_1486552.png "单点登录.png")
+
+#在线用户
+![在线用户](https://images.gitee.com/uploads/images/2018/1101/141757_cfe36642_1486552.png "在线用户.png")
+
+#访问日志
+![访问日志](https://images.gitee.com/uploads/images/2018/1101/141700_c0fb5a2c_1486552.png "访问日志.png")
+
+#服务器监控
+![服务器监控](https://images.gitee.com/uploads/images/2018/1101/141940_23c7e6e0_1486552.png "服务器监控.png")
 
 #### 参与贡献
 
