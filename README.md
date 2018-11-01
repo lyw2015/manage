@@ -109,7 +109,7 @@ Web Service框架：CXF
 测试框架：JUnit4
 
 #### 在线演示
-地址：[http://119.29.190.136:8080/login.html](http://)
+地址：http://119.29.190.136:8080/login.html
 
 账号：admin
 
