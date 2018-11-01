@@ -108,7 +108,14 @@ Web Service框架：CXF
 
 测试框架：JUnit4
 
-#### 安装教程
+#### 在线演示
+地址：[http://119.29.190.136:8080/login.html](http://)
+
+账号：admin
+
+密码：123456
+
+#### 本地安装
 1. 项目涉及的软件可参照官方提供的方式或者以下链接进行安装
 
     Mysql/MariaDB：https://gitee.com/laiyw/codes/4aob15k3xz28g0hpfcelt25
