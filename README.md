@@ -130,7 +130,9 @@ Web Service框架：CXF
 
 3. 修改manage-common/src/main/resources/origin.properties文件，更改相应的数据源、Redis、RabbitMQ、Solr配置信息；如果使用SSO，则需要修改manage-cas-server/web/WEB-INF/cas.properties配置文件中的数据源
 
-4. 项目访问路径
+4. 修改manage-dao/src/main/resources/spring-dataSource.xml中Properties文件载入地址
+
+5. 项目访问路径
 
     后台管理：[http://localhost:port/login.html](http://)
     
