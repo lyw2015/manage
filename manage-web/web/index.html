@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="plugins/AdminLTE/dist/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="plugins/AdminLTE/dist/css/ionicons.min.css">
+    <!-- toastr -->
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="plugins/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -176,6 +178,10 @@
                             </li>
                             </li>
                             <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="javascript:addTabs({id:'user_info_panel',title: '个人中心',close: true,url: 'pages/user-info.html',urlType: 'relative'});"
+                                       class="btn btn-default btn-flat">个人中心</a>
+                                </div>
                                 <div class="pull-right">
                                     <a href="/manage/logout" class="btn btn-default btn-flat">退出登录</a>
                                 </div>
@@ -201,6 +207,7 @@
                 <div class="pull-left info">
                     <p class="user_name"></p>
                     <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                    <a href="/manage/logout"><i class="fa fa-sign-out text-red"></i> 注销</a>
                 </div>
             </div>
             <!-- search form -->
@@ -245,7 +252,7 @@
             <button class="roll-nav roll-right fullscreen" onclick="App.handleFullScreen()"><i
                     class="fa fa-arrows-alt"></i></button>
         </div>
-        <div class="content-iframe " style="background-color: #ffffff; ">
+        <div class="content-iframe ">
             <div class="tab-content " id="tab-content"></div>
         </div>
     </div>
@@ -281,47 +288,14 @@
 <script src="plugins/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="plugins/AdminLTE/plugins/fastclick/fastclick.js"></script>
+<!-- toastr -->
+<script src="plugins/toastr/toastr.min.js"></script>
 <!-- AdminLTE App -->
 <script src="plugins/AdminLTE/dist/js/app.js"></script>
 <script src="statics/js/index.js"></script>
 <!--tabs-->
 <script src="plugins/AdminLTE/dist/js/app_iframe.js"></script>
 <script type="text/javascript">
-    var webSocket = null;
-    var iframe = null;
-
-    function initSocket() {
-        iframe = findIframeById(getActivePageId());
-        //if (window.WebSocket) {
-            webSocket = new WebSocket('ws://localhost:8080/websocket/socketServer');
-        //}
-        webSocket.onopen = function (event) {
-        }
-        webSocket.onmessage = function (event) {
-            if (event.data) {
-                setValue(JSON.parse(event.data));
-            }
-        }
-        webSocket.onclose = function (event) {
-        };
-    }
-
-    function setValue(data) {//data:message
-        data = data.data;
-        if (data.username) {
-            $(".user_name").html(data.username);
-        }
-        if (data.newuser != 0) {
-            $(iframe.contents().find(".dashboard-tadoy-new")).html(data.newuser);
-        }
-        if (data.onlineuser != 0) {
-            $(iframe.contents().find(".dashboard-oneline")).html(data.onlineuser);
-        }
-        if (data.todayguest != 0) {
-            $(iframe.contents().find(".dashboard-tadoy-guest")).html(data.todayguest);
-        }
-    }
-
     //本地搜索菜单
     function search_menu() {
         //要搜索的值
@@ -340,6 +314,10 @@
                 $a.click();//.css("border", "1px solid");
             }
         });
+    }
+
+    function setUserInfo(data){
+        $(".user_name").html(data.username);
     }
 
     //序列化表单参数（用于bootstrapTable 分页） params：bootstrapTable参数，serialize表单的序列化值
@@ -366,15 +344,13 @@
         App.setbasePath("../");
         App.setGlobalImgPath("plugins/AdminLTE/dist/img/");
         addTabs({
-            id: '0000',
+            id: 'dashboard_panel',
             title: '仪表盘',
             close: false,
             url: 'pages/dashboard.html',
             urlType: "relative"
         });
         App.fixIframeCotent();
-
-        initSocket();
 
         $("input[name=q]").keyup(function (event) {
             if (event.keyCode == 13) {

@@ -9,6 +9,18 @@ import java.util.Map;
 
 public interface UserService {
 
+    List<LoginRecord> getUserLoginRecordsByDay(String day);
+
+    List<Map<String, String>> getUserLoginRecordDate();
+
+    LoginRecord getUserLastLoginRecord();
+
+    //修改用户密码
+    int updateUserPwd(String oldpassword, String newpassword);
+
+    //修改用户信息
+    int updateUserInfo(User user);
+
     //统计每天的访客记录
     Map<String, Integer> countUserGuest();
 

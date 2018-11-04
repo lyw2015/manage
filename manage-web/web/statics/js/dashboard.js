@@ -16,8 +16,46 @@ $(function () {
         todayHighlight: true
     });
 
+    initSocket();
     countUserGuest(lineChart);
 });
+
+function initSocket() {
+    var webSocket;
+    if ('WebSocket' in window || 'MozWebSocket' in window) {
+        webSocket = new WebSocket('ws://192.168.1.101:8080/websocket/socketServer');
+    } else {
+        webSocket = new SockJS("http://192.168.1.101:8080/sockjs/socketServer");
+    }
+
+    webSocket.onopen = function (event) {
+    }
+    webSocket.onerror = function (event) {
+    }
+    webSocket.onmessage = function (event) {
+        if (event.data) {
+            setValue(JSON.parse(event.data));
+        }
+    }
+    webSocket.onclose = function (event) {
+    };
+}
+
+function setValue(data) {//data:message
+    data = data.data;
+    if (data.account) {
+       parent.setUserInfo(data)
+    }
+    if (data.newuser != 0) {
+        $(".dashboard-tadoy-new").html(data.newuser);
+    }
+    if (data.onlineuser != 0) {
+        $(".dashboard-oneline").html(data.onlineuser);
+    }
+    if (data.todayguest != 0) {
+        $(".dashboard-tadoy-guest").html(data.todayguest);
+    }
+}
 
 function canvasLine(labels, data) {
     var lineChartOptions = {

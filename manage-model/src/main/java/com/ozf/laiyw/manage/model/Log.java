@@ -11,13 +11,16 @@ public class Log {
 
     private String id;
     private String clientIp;//客户端IP
-    private String operatingSystemName;//设备名称
+    private String deviceType;//设备类型 Computer/Mobile
+    private String groupName;//设备分组 Windows/Android
+    private String operatingSystemName;//操作系统
     private String browser;//浏览器
     private String agent;//用户代理
     private String requestURI;//请求地址
     private String requestMethod;//请求方法
     private String requestParameter;//请求参数
     private String operationTime;//操作时间
+    private String userAccount;//用户账号
     private String operationUsername;//操作用户
     private String responseTime;//响应时间
     private String isError;//是否异常
@@ -42,6 +45,30 @@ public class Log {
 
     public void setClientIp(String clientIp) {
         this.clientIp = clientIp;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 
     public String getOperatingSystemName() {

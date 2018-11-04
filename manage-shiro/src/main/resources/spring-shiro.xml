@@ -16,6 +16,8 @@
         <!--cookie的name，默认Cookie名称是JSESSIONID 与SERVLET容器名冲突, 如JETTY, TOMCAT
             当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失 -->
         <constructor-arg name="name" value="manage.session.id"/>
+        <!-- JSESSIONID的path为/用于多个系统共享JSESSIONID -->
+        <!-- <property name="path" value="/"/> -->
         <property name="httpOnly" value="true"/>
         <!--maxAge=-1 表示浏览器关闭时失效此Cookie-->
         <property name="maxAge" value="-1"/>
@@ -27,7 +29,7 @@
     -->
     <bean id="sessionManager" class="com.ozf.laiyw.manage.shiro.core.ShiroWebSessionManager">
         <!-- 设置全局会话超时时间，默认30分钟(1800000) -->
-        <property name="globalSessionTimeout" value="1800000"/>
+        <property name="globalSessionTimeout" value="${shiro.session.effective.time}"/>
         <!-- 是否删除无效Session，默认也是开启 -->
         <property name="deleteInvalidSessions" value="true"/>
         <!--登录页面不携带sessionid 1.3.2+版本熟悉-->
@@ -37,9 +39,9 @@
         <property name="sessionIdCookieEnabled" value="true"/>
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
         <!--开启会话验证器-->
-        <property name="sessionValidationSchedulerEnabled" value="true"/>
-        <!--调度时间间隔，单位毫秒  5分钟-->
-        <property name="sessionValidationInterval" value="300000"/>
+        <property name="sessionValidationSchedulerEnabled" value="${shiro.session.validation.scheduler.enabled}"/>
+        <!--调度时间间隔-->
+        <property name="sessionValidationInterval" value="${shiro.session.validation.interval}"/>
     </bean>
 
     <!--rememberMeCookie 即记住我的Cookie，保存时长7 天-->

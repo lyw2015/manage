@@ -20,6 +20,7 @@ public class TestController extends BaseController {
 
     @SystemLog(description = "admin:query,admin:test")
     @RequiresPermissions(value = {"admin:query", "admin:test"})
+
     @RequestMapping("/test")
     @ResponseBody
     public String test() {

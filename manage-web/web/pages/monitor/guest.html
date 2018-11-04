@@ -57,7 +57,7 @@
         </div>
         <div class="form-group">
             <div class="input-group">
-                <div class="input-group-addon">设备名称</div>
+                <div class="input-group-addon">操作系统</div>
                 <input name="operatingSystemName" type="text" class="form-control">
                 <div class="input-group-addon"><i class="fa fa-tv"></i></div>
             </div>
@@ -101,10 +101,10 @@
     var $tTable, queryUrl = '/monitor/guestRecord';
     $(function () {
         $("input[name='loginTime']").daterangepicker({
-            timePicker:true,
-            startDate:false,
-            showDropdowns:true,
-            timePicker24Hour:true,
+            timePicker: true,
+            startDate: false,
+            showDropdowns: true,
+            timePicker24Hour: true,
             locale: {
                 format: 'YYYY-MM-DD HH:mm'
             }
@@ -136,7 +136,10 @@
             columns: [
                 {
                     field: 'userName',
-                    title: '用户名称'
+                    title: '用户名称/账号',
+                    formatter: function (field, row, index) {
+                        return row.userName + "/" + row.userAccount;
+                    }
                 }, {
                     field: 'loginTime',
                     title: '登录时间'
@@ -144,7 +147,9 @@
                     field: 'onlineTime',
                     title: '在线时长',
                     formatter: function (field, row, index) {
-                        return row.onlineTime.replace("0毫秒", "");
+                        if (row.onlineTime)
+                            return row.onlineTime.replace("0毫秒", "");
+                        return row.onlineTime;
                     }
                 }, {
                     field: 'logoutTime',
@@ -152,22 +157,28 @@
                 }, {
                     field: 'lastTime',
                     title: '最后操作时间'
-                },{
+                }, {
                     field: 'online',
                     title: '是否在线',
                     align: 'center',
                     formatter: function (field, row, index) {
-                        if(row.online == 'false'){
+                        if (row.online == 'false') {
                             return '<i class="fa fa-circle text-danger">';
                         }
                         return '<i class="fa fa-circle text-success">';
                     }
-                },{
+                }, {
                     field: 'clientIp',
                     title: '客户端IP'
                 }, {
+                    field: 'deviceType',
+                    title: '设备类型'
+                }, {
+                    field: 'groupName',
+                    title: '系统类型'
+                }, {
                     field: 'operatingSystemName',
-                    title: '设备名称'
+                    title: '操作系统'
                 }, {
                     field: 'browser',
                     title: '浏览器'

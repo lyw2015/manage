@@ -57,16 +57,8 @@
         </div>
         <div class="form-group">
             <div class="input-group">
-                <div class="input-group-addon">设备名称</div>
-                <input name="operatingSystemName" type="text" class="form-control">
-                <div class="input-group-addon"><i class="fa fa-tv"></i></div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon">浏览器</div>
-                <input name="browser" type="text" class="form-control">
-                <div class="input-group-addon"><i class="fa fa-internet-explorer"></i></div>
+                <div class="input-group-addon">设备类型</div>
+                <input name="deviceType" type="text" class="form-control">
             </div>
         </div>
         <div class="form-group">
@@ -101,10 +93,10 @@
     var $tTable, queryUrl = '/monitor/onlineUser';
     $(function () {
         $("input[name='loginTime']").daterangepicker({
-            timePicker:true,
-            startDate:false,
-            showDropdowns:true,
-            timePicker24Hour:true,
+            timePicker: true,
+            startDate: false,
+            showDropdowns: true,
+            timePicker24Hour: true,
             locale: {
                 format: 'YYYY-MM-DD HH:mm'
             }
@@ -136,7 +128,10 @@
             columns: [
                 {
                     field: 'userName',
-                    title: '用户名称'
+                    title: '用户名称/账号',
+                    formatter: function (field, row, index) {
+                        return row.userName + "/" + row.userAccount;
+                    }
                 }, {
                     field: 'loginTime',
                     title: '登录时间'
@@ -147,17 +142,16 @@
                     field: 'onlineTime',
                     title: '在线时长',
                     formatter: function (field, row, index) {
-                        return row.onlineTime.replace("0毫秒", "");
+                        if (row.onlineTime)
+                            return row.onlineTime.replace("0毫秒", "");
+                        return row.onlineTime;
                     }
-                },{
+                }, {
                     field: 'clientIp',
                     title: '客户端IP'
                 }, {
-                    field: 'operatingSystemName',
-                    title: '设备名称'
-                }, {
-                    field: 'browser',
-                    title: '浏览器'
+                    field: 'deviceType',
+                    title: '设备类型'
                 }
             ]
         });

@@ -6,6 +6,8 @@
     <resultMap id="logMap" type="com.ozf.laiyw.manage.model.Log">
         <id property="id" column="ml_id"/>
         <result property="clientIp" column="client_ip"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="groupName" column="group_name"/>
         <result property="operatingSystemName" column="operating_system_name"/>
         <result property="browser" column="browser"/>
         <result property="agent" column="ml_agent"/>
@@ -13,6 +15,7 @@
         <result property="requestMethod" column="request_method"/>
         <result property="requestParameter" column="request_parameter"/>
         <result property="operationTime" column="operation_time"/>
+        <result property="userAccount" column="user_account"/>
         <result property="operationUsername" column="operation_username"/>
         <result property="responseTime" column="response_time"/>
         <result property="isError" column="is_error"/>
@@ -29,7 +32,7 @@
             </if>
             <if test="operationUsername != null and operationUsername != ''">
                 <bind name="pattern" value="'%' + operationUsername + '%'"/>
-                and operation_username like #{pattern}
+                and (operation_username like #{pattern} or user_account like #{pattern})
             </if>
             <if test="clientIp != null and clientIp != ''">
                 <bind name="pattern" value="'%' + clientIp + '%'"/>
@@ -70,6 +73,8 @@
         insert into t_sys_monitor_log(
           ml_id,
           client_ip,
+          device_type,
+          group_name,
           operating_system_name,
           browser,
           ml_agent,
@@ -77,6 +82,7 @@
           request_method,
           request_parameter,
           operation_time,
+          user_account,
           operation_username,
           response_time,
           is_error,
@@ -86,6 +92,8 @@
         values(
           #{id, jdbcType=VARCHAR},
           #{clientIp , jdbcType=VARCHAR},
+          #{deviceType, jdbcType=VARCHAR},
+          #{groupName, jdbcType=VARCHAR},
           #{operatingSystemName , jdbcType=VARCHAR},
           #{browser , jdbcType=VARCHAR},
           #{agent, jdbcType=VARCHAR},
@@ -93,6 +101,7 @@
           #{requestMethod , jdbcType=VARCHAR},
           #{requestParameter, jdbcType=VARCHAR},
           #{operationTime, jdbcType=VARCHAR},
+          #{userAccount, jdbcType=VARCHAR},
           #{operationUsername, jdbcType=VARCHAR},
           #{responseTime, jdbcType=VARCHAR},
           #{isError, jdbcType=VARCHAR},

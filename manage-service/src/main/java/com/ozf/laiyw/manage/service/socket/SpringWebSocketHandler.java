@@ -12,6 +12,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.io.EOFException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -67,7 +68,10 @@ public class SpringWebSocketHandler implements WebSocketHandler {
     //消息传输错误处理
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable exception) throws Exception {
-        logger.error("Error Close WebSocket--->" + getCurrentThreadUser(webSocketSession).getUsername());
+        //客户端断开异常
+        if (!(exception instanceof EOFException) && !"The client aborted the connection.".equals(exception.getMessage())) {
+            logger.error("Error Close WebSocket--->" + getCurrentThreadUser(webSocketSession).getUsername());
+        }
         if (webSocketSession.isOpen()) {
             webSocketSession.close();
         }

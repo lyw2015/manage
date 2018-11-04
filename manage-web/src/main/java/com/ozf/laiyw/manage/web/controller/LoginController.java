@@ -5,7 +5,7 @@ import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
-import org.apache.shiro.SecurityUtils;
+import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -48,7 +48,7 @@ public class LoginController extends BaseController {
     @SystemLog(description = "用户登出")
     @RequestMapping("/logout")
     public void logout() {
-        SecurityUtils.getSubject().logout();
+        ShiroUtils.getSubject().logout();
         redirect("login.html");
     }
 }

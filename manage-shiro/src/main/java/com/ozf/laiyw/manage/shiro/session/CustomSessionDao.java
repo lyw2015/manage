@@ -1,13 +1,13 @@
 package com.ozf.laiyw.manage.shiro.session;
 
+import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.DateUtils;
 import com.ozf.laiyw.manage.common.utils.SerializeUtil;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
-import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
+import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.ValidatingSession;
@@ -22,16 +22,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 @Component
 public class CustomSessionDao extends AbstractSessionDAO {
 
-    private final Logger logger = Logger.getLogger(this.getClass());
     @Value("${session.shareSessionMapCache}")
     private String shareSessionMapCache;
     @Value("${rabbitmq.queue.key}")
     private String queueKey;
+    @Value("${shiro.session.effective.time}")
+    private Integer effectiveTime;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
     @Autowired
@@ -75,7 +77,7 @@ public class CustomSessionDao extends AbstractSessionDAO {
     }
 
     private boolean isChange() {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        User user = ShiroUtils.getCurrentUser();
         if (null != user) {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String requestUri = request.getRequestURI();
@@ -104,8 +106,14 @@ public class CustomSessionDao extends AbstractSessionDAO {
     private void updateLoginRecord(Session session, boolean isDelete) {
         LoginRecord loginRecord = new LoginRecord();
         if (isDelete) {//退出
-            loginRecord.setOnline("false");
-            loginRecord.setLogoutTime(DateUtils.getDateTime());
+            loginRecord.setOnline(Boolean.FALSE.toString());
+            Date logoutDate = new Date();
+            //session过期时间
+            Date invalidDate = new Date(session.getLastAccessTime().getTime() + effectiveTime * Constants.ONE_MINUTE);
+            if (invalidDate.before(logoutDate)) {
+                logoutDate = invalidDate;
+            }
+            loginRecord.setLogoutTime(DateUtils.formatDateTime(logoutDate));
         }
         loginRecord.setSessionId(session.getId().toString());
         loginRecord.setLastTime(DateUtils.formatDateTime(session.getLastAccessTime()));//最后操作时间

@@ -1,7 +1,7 @@
 package com.ozf.laiyw.manage.service.socket;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
-import org.apache.shiro.SecurityUtils;
+import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
@@ -19,7 +19,7 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        attributes.put(Constants.SESSION_USER, SecurityUtils.getSubject().getPrincipal());
+        attributes.put(Constants.SESSION_USER, ShiroUtils.getCurrentUser());
         return true;
     }
 }

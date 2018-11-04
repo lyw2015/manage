@@ -1,14 +1,18 @@
 package com.ozf.laiyw.manage.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * @Description:访问记录
  * @Auther: Laiyw
  * @Date: 2018/10/30 17:54
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginRecord {
 
     private String id;
     private String sessionId;
+    private String userAccount;//用户账号
     private String userName;//用户名
     private String visitTime;//访问时间（Session创建时间）
     private String lastTime;//最后操作时间
@@ -17,12 +21,17 @@ public class LoginRecord {
     private String onlineTime;//在线时长
     private String online;//是否在线 默认为false
     private String clientIp;//客户端IP
-    private String operatingSystemName;//设备名称
+    private String deviceType;//设备类型 Computer/Mobile
+    private String groupName;//设备分组 Windows/Android
+    private String operatingSystemName;//操作系统
     private String browser;//浏览器
 
     //用于查询
     private String sd;
     private String ed;
+    private String year;
+    private String month;
+    private String day;
 
     public String getId() {
         return id;
@@ -38,6 +47,14 @@ public class LoginRecord {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
     }
 
     public String getUserName() {
@@ -108,6 +125,22 @@ public class LoginRecord {
         this.clientIp = clientIp;
     }
 
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
     public String getOperatingSystemName() {
         return operatingSystemName;
     }
@@ -138,5 +171,29 @@ public class LoginRecord {
 
     public void setEd(String ed) {
         this.ed = ed;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 }

@@ -96,8 +96,8 @@ public class MessageServiceImpl implements MessageService {
             }
             return false;
         } catch (IOException e) {
-            logger.error(JSON.toJSONString(message));
-            logger.error("push socket message error", e);
+            logger.error("push socket message error--->" + e.getMessage());
+            logger.error("data--->" + JSON.toJSONString(message));
             return false;
         }
     }

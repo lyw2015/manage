@@ -63,7 +63,7 @@
             <div class="form-group col-xs-6">
                 <div class="input-group">
                     <div class="input-group-addon">操作用户</div>
-                    <input value="${log.operationUsername}" type="text" class="form-control">
+                    <input value="${log.operationUsername}/${log.userAccount}" type="text" class="form-control">
                 </div>
             </div>
             <div class="form-group col-xs-6">
@@ -74,7 +74,19 @@
             </div>
             <div class="form-group col-xs-6">
                 <div class="input-group">
-                    <div class="input-group-addon">设备名称</div>
+                    <div class="input-group-addon">设备类型</div>
+                    <input value="${log.deviceType}" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <div class="input-group">
+                    <div class="input-group-addon">系统类型</div>
+                    <input value="${log.groupName}" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <div class="input-group">
+                    <div class="input-group-addon">操作系统</div>
                     <input value="${log.operatingSystemName}" type="text" class="form-control">
                 </div>
             </div>

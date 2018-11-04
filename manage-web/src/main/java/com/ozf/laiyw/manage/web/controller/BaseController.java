@@ -1,7 +1,5 @@
 package com.ozf.laiyw.manage.web.controller;
 
-import com.ozf.laiyw.manage.model.User;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,12 +34,4 @@ public class BaseController {
         }
     }
 
-    /**
-     * 获取当前登录用户信息
-     *
-     * @return
-     */
-    protected User getCurrentUser() {
-        return (User) SecurityUtils.getSubject().getPrincipal();
-    }
 }

@@ -9,6 +9,16 @@ import java.util.Map;
 
 public interface UserMapper {
 
+    List<LoginRecord> getUserLoginRecordsByDay(@Param("userAccount") String userAccount, @Param("day") String day);
+
+    List<Map<String, String>> getUserLoginRecordDate(String userAccount);
+
+    LoginRecord getLastLoginRecord(String userAccount);
+
+    int updateUserPwd(@Param("id") String id, @Param("password") String password);
+
+    int updateUserInfo(User user);
+
     int countTodayNewUser();
 
     User findByUserAccount(String userAccount);

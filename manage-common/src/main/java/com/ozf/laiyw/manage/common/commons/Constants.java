@@ -2,6 +2,8 @@ package com.ozf.laiyw.manage.common.commons;
 
 public class Constants {
 
+    public static final Long ONE_MINUTE = 1000 * 60L;
+
     public static final String UTF_8 = "UTF-8";
 
     public static final String SESSION_USER = "user";

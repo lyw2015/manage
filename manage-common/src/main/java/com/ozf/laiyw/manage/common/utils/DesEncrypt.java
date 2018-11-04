@@ -5,7 +5,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import java.security.SecureRandom;
-import java.util.Properties;
 
 /**
  * @Description:
@@ -22,21 +21,6 @@ public class DesEncrypt {
      * 加密算法,可用 DES,DESede,Blowfish.
      */
     private final static String ALGORITHM = "DES";
-
-    /**
-     * 工具，用于加密字符串
-     *
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        Properties properties = new Properties();
-        properties.load(DesEncrypt.class.getResourceAsStream("/origin.properties"));
-        for (Object key : properties.keySet()) {
-            if (key.toString().startsWith("encryption")) {
-                System.out.println(key + "=" + DesEncrypt.decrypt(String.valueOf(properties.get(key)), PASSWORD_CRYPT_KEY));
-            }
-        }
-    }
 
     /**
      * 对用DES加密过的数据进行解密.

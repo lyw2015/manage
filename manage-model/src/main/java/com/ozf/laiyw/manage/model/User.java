@@ -1,5 +1,7 @@
 package com.ozf.laiyw.manage.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ozf.laiyw.manage.model.vo.UserRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,18 +15,25 @@ import java.util.List;
  */
 @XmlRootElement//cxf
 @ApiModel(value = "User", description = "用户")//swagger2
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable {
 
     @ApiModelProperty(value = "ID", dataType = "String")
+    @JsonIgnore
     private String id;
     @ApiModelProperty(value = "用户名", dataType = "String")
     private String username;
     @ApiModelProperty(value = "登录账号", dataType = "String")
     private String account;
     @ApiModelProperty(value = "密码", dataType = "String")
+    @JsonIgnore
     private String password;
     @ApiModelProperty(value = "邮箱", dataType = "String")
     private String mailbox;
+    @ApiModelProperty(value = "电话号码", dataType = "String")
+    private String phone;
+    @ApiModelProperty(value = "性别", dataType = "String")
+    private String sex;
     @ApiModelProperty(value = "是否锁定", dataType = "int")
     private int locked;
     @ApiModelProperty(value = "创建时间", dataType = "String")
@@ -73,6 +82,22 @@ public class User implements Serializable {
 
     public void setMailbox(String mailbox) {
         this.mailbox = mailbox;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public int getLocked() {

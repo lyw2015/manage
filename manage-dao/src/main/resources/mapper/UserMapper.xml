@@ -9,6 +9,8 @@
         <result property="account" column="user_account"/>
         <result property="password" column="user_password"/>
         <result property="mailbox" column="user_mailbox"/>
+        <result property="phone" column="user_phone"/>
+        <result property="sex" column="user_sex"/>
         <result property="locked" column="user_locked"/>
         <result property="createDate" column="create_date"/>
         <result property="headImg" column="user_head_img"/>
@@ -17,6 +19,7 @@
     <resultMap id="loginRecordMap" type="com.ozf.laiyw.manage.model.LoginRecord">
         <id property="id" column="lr_id"/>
         <result property="sessionId" column="session_id"/>
+        <result property="userAccount" column="user_account"/>
         <result property="userName" column="user_name"/>
         <result property="visitTime" column="visit_time"/>
         <result property="lastTime" column="last_time"/>
@@ -25,6 +28,8 @@
         <result property="onlineTime" column="online_time"/>
         <result property="online" column="lr_online"/>
         <result property="clientIp" column="client_ip"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="groupName" column="group_name"/>
         <result property="operatingSystemName" column="operating_system_name"/>
         <result property="browser" column="browser"/>
     </resultMap>
@@ -37,6 +42,7 @@
         insert into t_sys_monitor_login_record(
           lr_id,
           session_id,
+          user_account,
           user_name,
           visit_time,
           last_time,
@@ -45,12 +51,15 @@
           online_time,
           lr_online,
           client_ip,
+          device_type,
+          group_name,
           operating_system_name,
           browser
         )
         values(
           #{id, jdbcType=VARCHAR},
           #{sessionId , jdbcType=VARCHAR},
+          #{userAccount , jdbcType=VARCHAR},
           #{userName , jdbcType=VARCHAR},
           #{visitTime , jdbcType=VARCHAR},
           #{lastTime, jdbcType=VARCHAR},
@@ -59,6 +68,8 @@
           #{onlineTime, jdbcType=VARCHAR},
           #{online, jdbcType=VARCHAR},
           #{clientIp, jdbcType=VARCHAR},
+          #{deviceType, jdbcType=VARCHAR},
+          #{groupName, jdbcType=VARCHAR},
           #{operatingSystemName, jdbcType=VARCHAR},
           #{browser, jdbcType=VARCHAR}
         )
@@ -70,14 +81,8 @@
             <if test="online != null and online != ''">
                 lr_online = #{online , jdbcType=VARCHAR},
             </if>
-            <if test="userName != null and userName != ''">
-                user_name = #{userName , jdbcType=VARCHAR},
-            </if>
             <if test="lastTime != null and lastTime != ''">
                 last_time = #{lastTime , jdbcType=VARCHAR},
-            </if>
-            <if test="loginTime != null and loginTime != ''">
-                login_time = #{loginTime , jdbcType=VARCHAR},
             </if>
             <if test="logoutTime != null and logoutTime != ''">
                 logout_time = #{logoutTime , jdbcType=VARCHAR},
@@ -97,19 +102,15 @@
         select * from t_sys_monitor_login_record where lr_online = 'true'
         <if test="userName != null and userName != ''">
             <bind name="pattern" value="'%' + userName + '%'"/>
-            and user_name like #{pattern}
+            and (user_name like #{pattern} or user_account like #{pattern})
         </if>
         <if test="clientIp != null and clientIp != ''">
             <bind name="pattern" value="'%' + clientIp + '%'"/>
             and client_ip like #{pattern}
         </if>
-        <if test="operatingSystemName != null and operatingSystemName != ''">
-            <bind name="pattern" value="'%' + operatingSystemName + '%'"/>
-            and operating_system_name like #{pattern}
-        </if>
-        <if test="browser != null and browser != ''">
-            <bind name="pattern" value="'%' + browser + '%'"/>
-            and browser like #{pattern}
+        <if test="deviceType != null and deviceType != ''">
+            <bind name="pattern" value="'%' + deviceType + '%'"/>
+            and device_type like #{pattern}
         </if>
         <if test="loginTime != null and loginTime != ''">
             and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ >= ]]> date_format(#{sd}, '%Y-%m-%d %H:%i')
@@ -129,7 +130,7 @@
     <select id="countTodayTuest" resultType="java.lang.Integer">
         select count(0) from (
           select count(0) from t_sys_monitor_login_record where last_time like concat(date_format(now(), '%Y-%m-%d'), '%')
-              group by user_name,client_ip,operating_system_name,browser
+              group by user_account,client_ip,operating_system_name,browser
         ) counttemp
     </select>
 
@@ -138,7 +139,7 @@
         <where>
             <if test="userName != null and userName != ''">
                 <bind name="pattern" value="'%' + userName + '%'"/>
-                and user_name like #{pattern}
+                and (user_name like #{pattern} or user_account like #{pattern})
             </if>
             <if test="clientIp != null and clientIp != ''">
                 <bind name="pattern" value="'%' + clientIp + '%'"/>
@@ -165,8 +166,53 @@
           select last_time from t_sys_monitor_login_record
             where date_format(last_time, '%Y-%m-%d') <![CDATA[ >= ]]> date_format(#{startDate}, '%Y-%m-%d')
                 and date_format(last_time, '%Y-%m-%d') <![CDATA[ <= ]]> date_format(#{endDate}, '%Y-%m-%d')
-            group by user_name,client_ip,operating_system_name,browser,date_format(last_time, '%Y-%m-%d'),user_name) tempdata
+            group by user_account,client_ip,operating_system_name,browser,date_format(last_time, '%Y-%m-%d')) tempdata
         group by date_format(last_time, '%Y-%m-%d') order by last_time asc
+    </select>
+
+    <update id="updateUserInfo">
+        update t_sys_user set
+          user_name = #{username , jdbcType=VARCHAR},
+          user_sex = #{sex , jdbcType=VARCHAR},
+          user_mailbox = #{mailbox , jdbcType=VARCHAR},
+          user_phone = #{phone , jdbcType=VARCHAR}
+        where user_id = #{id}
+    </update>
+
+    <update id="updateUserPwd">
+        update t_sys_user set user_password = #{password} where user_id = #{id}
+    </update>
+
+    <select id="getLastLoginRecord" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record where logout_time is not null and user_account = #{userAccount} order by login_time desc limit 1
+    </select>
+
+    <select id="getUserLoginRecordDate" resultType="java.util.Map">
+        select
+            count(0) lr_count,
+            concat(date_format(login_time, '%Y'), '-order') lr_login_time
+        from t_sys_monitor_login_record lr
+        where user_account = #{userAccount} and lr_online = 'false' group by lr_login_time
+        union
+        select
+            count(0) lr_count,
+            concat(date_format(login_time, '%Y-%m'), '-order') lr_login_time
+        from t_sys_monitor_login_record
+        where user_account = #{userAccount} and lr_online = 'false' group by lr_login_time
+        union
+        select
+            count(0) lr_count,
+            date_format(login_time, '%Y-%m-%d') lr_login_time
+        from t_sys_monitor_login_record
+        where user_account = #{userAccount} and lr_online = 'false' group by lr_login_time  order by lr_login_time desc
+    </select>
+
+    <select id="getUserLoginRecordsByDay" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record
+          where user_account = #{userAccount}
+          and date_format(login_time, '%Y-%m-%d') = #{day}
+          and lr_online = 'false'
+          order by login_time desc
     </select>
 
 </mapper>

@@ -8,10 +8,10 @@ import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.Log;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.LogService;
+import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -30,7 +30,8 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
 
     private final Logger logger = Logger.getLogger(this.getClass());
     private final ThreadLocal<Long> threadLocalTime = new ThreadLocal<>();
-    private final ThreadLocal<String> threadLocalUser = new ThreadLocal<>();
+    private final ThreadLocal<User> threadLocalUser = new ThreadLocal<>();
+    private final String PASSWORDFIELDNAME = "password";
     @Autowired
     private LogService logService;
 
@@ -38,9 +39,9 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         long beginTime = System.currentTimeMillis();
         threadLocalTime.set(beginTime);
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        User user = ShiroUtils.getCurrentUser();
         if (null != user) {
-            threadLocalUser.set(user.getUsername());
+            threadLocalUser.set(user);
         }
         logger.info("计时开始：" + DateUtils.formatDate(beginTime, DateUtils.HHMMSSSSS) + " URI：" + httpServletRequest.getRequestURI());
         return true;
@@ -60,31 +61,28 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         threadLocalTime.remove();
         Runtime runtime = Runtime.getRuntime();
 
-        String userName = getUserName();
+        User user = getUser();
 
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            if (handlerMethod.hasMethodAnnotation(SystemLog.class)) {
-                saveLog(handlerMethod, httpServletRequest, e, executeTime, userName);
+            if (handlerMethod.hasMethodAnnotation(SystemLog.class) && null != user) {
+                saveLog(handlerMethod, httpServletRequest, e, executeTime, user);
             }
         }
         logger.info("计时结束：" + DateUtils.formatDate(endTime, DateUtils.HHMMSSSSS) + " 用时：" + DateUtils.formatDateAgo(executeTime) + " 总内存：" + ByteUtils.formatByteSize(runtime.totalMemory()) + " 已用内存：" + ByteUtils.formatByteSize(runtime.totalMemory() - runtime.freeMemory()));
     }
 
     //获取操作用户
-    private String getUserName() {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String userName = null;
-        if (null != user) {
-            userName = user.getUsername();
-        } else {
-            userName = threadLocalUser.get();
+    private User getUser() {
+        User user = ShiroUtils.getCurrentUser();
+        if (null == user) {
+            user = threadLocalUser.get();
         }
         threadLocalUser.remove();
-        return userName;
+        return user;
     }
 
-    private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, String userName) {
+    private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, User user) {
         String ip = AddressUtils.getIpAddress(httpServletRequest);
         String agent = httpServletRequest.getHeader("User-Agent");
         UserAgent userAgent = UserAgent.parseUserAgentString(agent);
@@ -92,6 +90,8 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         Log log = new Log();
         log.setId(StringUtils.randUUID());
         log.setClientIp(ip);
+        log.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
+        log.setGroupName(userAgent.getOperatingSystem().getGroup().getName());
         log.setOperatingSystemName(userAgent.getOperatingSystem().getName());
         log.setBrowser(userAgent.getBrowser().getName());
         log.setAgent(agent);
@@ -99,7 +99,8 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         log.setRequestMethod(httpServletRequest.getMethod());
         log.setRequestParameter(getParameter(httpServletRequest));
         log.setOperationTime(DateUtils.getDateTime());
-        log.setOperationUsername(userName);
+        log.setUserAccount(user.getAccount());
+        log.setOperationUsername(user.getUsername());
         log.setOperationDescription(getLogDescription(handlerMethod));
         log.setResponseTime(DateUtils.formatDateAgo(executeTime));
         boolean isError = null != e;
@@ -128,7 +129,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         String value = null;
         for (String name : parameterMap.keySet()) {
             value = String.join(",", parameterMap.get(name));
-            if (httpServletRequest.getRequestURI().equals("/manage/login") && "password".equals(name)) {
+            if (name.contains(PASSWORDFIELDNAME)) {
                 value = "******";
             }
             sb.append(name).append("=").append(value).append("&");

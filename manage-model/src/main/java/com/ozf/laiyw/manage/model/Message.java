@@ -1,5 +1,6 @@
 package com.ozf.laiyw.manage.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,12 @@ public class Message {
     }
 
     public Message(Object data) {
+        this.data = data;
+    }
+
+    public Message(String userId, Object data) {
+        toUserIds = new ArrayList<>();
+        toUserIds.add(userId);
         this.data = data;
     }
 

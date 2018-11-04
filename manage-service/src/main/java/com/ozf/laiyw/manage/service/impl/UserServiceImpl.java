@@ -11,10 +11,10 @@ import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.MessageService;
 import com.ozf.laiyw.manage.service.UserService;
+import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
 import com.ozf.laiyw.manage.service.socket.SpringWebSocketHandler;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.log4j.Logger;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,44 @@ public class UserServiceImpl implements UserService {
     private MessageService messageService;
     @Autowired
     private SpringWebSocketHandler handler;
+
+    @Override
+    public List<LoginRecord> getUserLoginRecordsByDay(String day) {
+        return userMapper.getUserLoginRecordsByDay(ShiroUtils.getCurrentUser().getAccount(), day);
+    }
+
+    @Override
+    public List<Map<String, String>> getUserLoginRecordDate() {
+        return userMapper.getUserLoginRecordDate(ShiroUtils.getCurrentUser().getAccount());
+    }
+
+    @Override
+    public LoginRecord getUserLastLoginRecord() {
+        return userMapper.getLastLoginRecord(ShiroUtils.getCurrentUser().getAccount());
+    }
+
+    @Override
+    public int updateUserPwd(String oldpassword, String newpassword) {
+        User user = ShiroUtils.getCurrentUser();
+        if (!oldpassword.equals(user.getPassword())) {
+            return -1;
+        }
+        return userMapper.updateUserPwd(ShiroUtils.getCurrentUser().getId(), newpassword);
+    }
+
+    @Override
+    public int updateUserInfo(User user) {
+        User current = ShiroUtils.getCurrentUser();
+        user.setId(current.getId());
+        int count = userMapper.updateUserInfo(user);
+        logger.debug("update user info row--->" + count);
+        if (count == 1) {
+            current = findByUserAccount(current.getAccount());
+            ShiroUtils.refreshUser(current);
+            handler.sendMessageToUsers(new Message(user.getId(), current));
+        }
+        return count;
+    }
 
     @Override
     public Map<String, Integer> countUserGuest() {
@@ -75,7 +113,7 @@ public class UserServiceImpl implements UserService {
                 user.getPassword(),
                 user.getRememberMe()
         );
-        SecurityUtils.getSubject().login(token);
+        ShiroUtils.getSubject().login(token);
     }
 
     @Override
@@ -101,21 +139,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public int saveLoginRecord(String header, String clientIp) {
         try {
-            Session session = SecurityUtils.getSubject().getSession();
+            Session session = ShiroUtils.getSubject().getSession();
             //如果登录之后再进行登录则不进行保存操作
             LoginRecord exist = userMapper.findLoginRecordBySessionId(session.getId().toString());
             if (null != exist) {
                 return 0;
             }
             UserAgent userAgent = UserAgent.parseUserAgentString(header);
+            User user = ShiroUtils.getCurrentUser();
 
             LoginRecord loginRecord = new LoginRecord();
             loginRecord.setId(StringUtils.randUUID());
-            loginRecord.setOnline("true");
+            loginRecord.setOnline(Boolean.TRUE.toString());
             loginRecord.setClientIp(clientIp);
+            loginRecord.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
+            loginRecord.setGroupName(userAgent.getOperatingSystem().getGroup().getName());
             loginRecord.setOperatingSystemName(userAgent.getOperatingSystem().getName());
             loginRecord.setBrowser(userAgent.getBrowser().getName());
-            loginRecord.setUserName(((User) SecurityUtils.getSubject().getPrincipal()).getUsername());
+            loginRecord.setUserAccount(user.getAccount());
+            loginRecord.setUserName(user.getUsername());
 
             loginRecord.setSessionId(session.getId().toString());
             loginRecord.setVisitTime(DateUtils.formatDateTime(session.getStartTimestamp()));//访问时间
@@ -135,11 +177,15 @@ public class UserServiceImpl implements UserService {
         LoginRecord exist = userMapper.findLoginRecordBySessionId(loginRecord.getSessionId());
         if (null == exist)
             return 0;
-        long uptime = DateUtils.parseDate(loginRecord.getLastTime(), DateUtils.YYYY_MM_DD_HH_MM_SS).getTime()
+        String lastTime = loginRecord.getLastTime();
+        if (Boolean.FALSE.toString().equals(loginRecord.getOnline())) {
+            lastTime = loginRecord.getLogoutTime();
+        }
+        long uptime = DateUtils.parseDate(lastTime, DateUtils.YYYY_MM_DD_HH_MM_SS).getTime()
                 - DateUtils.parseDate(exist.getLoginTime(), DateUtils.YYYY_MM_DD_HH_MM_SS).getTime();
         loginRecord.setOnlineTime(DateUtils.formatDateAgo(uptime));
-        userMapper.updateLoginRecord(loginRecord);
-        if ("false".equals(loginRecord.getOnline())) {
+        int count = userMapper.updateLoginRecord(loginRecord);
+        if (Boolean.FALSE.toString().equals(loginRecord.getOnline()) && count == 1) {
             handler.sendMessageToUsers(new Message(messageService.getSocketMessage()));
         }
         return 1;
