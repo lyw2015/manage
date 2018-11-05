@@ -60,9 +60,9 @@ Intelli JIDEA
 
 Maven
 
-Jdk1.7
+Jdk1.8
 
-Tomcat7
+Tomcat8
 
 MariaDB
 
@@ -142,14 +142,11 @@ Web Service框架：CXF
 #管理后台登录
 ![管理后台登录](https://images.gitee.com/uploads/images/2018/1101/141049_60c7bc9b_1486552.png "管理后台登录.png")
 
-#单点登录
-![单点登录](https://images.gitee.com/uploads/images/2018/1026/152229_4f1e723b_1486552.png "单点登录.png")
-
 #首页
-![首页](https://images.gitee.com/uploads/images/2018/1101/194200_1bf44cfb_1486552.png "首页.png")
+![首页](https://images.gitee.com/uploads/images/2018/1105/123540_dd8f2beb_1486552.png "首页.png")
 
-#在线用户
-![在线用户](https://images.gitee.com/uploads/images/2018/1101/141757_cfe36642_1486552.png "在线用户.png")
+#个人中心
+![个人中心](https://images.gitee.com/uploads/images/2018/1105/123653_1a1fd2ff_1486552.png "个人中心.png")
 
 #访问日志
 ![访问日志](https://images.gitee.com/uploads/images/2018/1101/144304_f9d2c81b_1486552.png "访问日志.png")
