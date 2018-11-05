@@ -3,6 +3,7 @@ package com.ozf.laiyw.manage.service;
 import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
+import eu.bitwalker.useragentutils.UserAgent;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,6 @@ public interface UserService {
     //统计每天的访客记录
     Map<String, Integer> countUserGuest();
 
-    void login(User user);
-
     //统计今天新增用户数量
     int countTodayNewUser();
 
@@ -38,7 +37,7 @@ public interface UserService {
     List<String> findPermissionsByUserAccount(String userAccount);
 
     //保存访问记录
-    int saveLoginRecord(String header, String clientIp);
+    int saveLoginRecord(UserAgent userAgent, String clientIp);
 
     //修改访问记录
     int updateLoginRecord(LoginRecord loginRecord);

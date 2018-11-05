@@ -6,6 +6,8 @@ import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
+import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -31,8 +33,15 @@ public class LoginController extends BaseController {
     @ResponseBody
     public WebResult login(User user) {
         try {
-            userService.login(user);
-            userService.saveLoginRecord(request.getHeader("User-Agent"), AddressUtils.getIpAddress(request));
+            UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+            CustomUsernamePasswordToken token = new CustomUsernamePasswordToken(
+                    user.getAccount(),
+                    user.getPassword(),
+                    user.getRememberMe(),
+                    userAgent.getOperatingSystem().getDeviceType().getName()
+            );
+            ShiroUtils.getSubject().login(token);
+            userService.saveLoginRecord(userAgent, AddressUtils.getIpAddress(request));
             return WebResult.successResult("登录成功");
         } catch (UnknownAccountException uae) {
             return WebResult.errorResult("验证未通过,未知账户");
@@ -41,7 +50,9 @@ public class LoginController extends BaseController {
         } catch (LockedAccountException lae) {
             return WebResult.errorResult("验证未通过,账户已锁定");
         } catch (ExcessiveAttemptsException eae) {
-            return WebResult.errorResult("验证未通过,错误次数过多");
+            return WebResult.errorResult(eae.getMessage());
+        } catch (Exception e) {
+            return WebResult.errorNetworkAnomalyResult();
         }
     }
 

@@ -15,7 +15,6 @@ import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
 import com.ozf.laiyw.manage.service.socket.SpringWebSocketHandler;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.log4j.Logger;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,16 +106,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(User user) {
-        UsernamePasswordToken token = new UsernamePasswordToken(
-                user.getAccount(),
-                user.getPassword(),
-                user.getRememberMe()
-        );
-        ShiroUtils.getSubject().login(token);
-    }
-
-    @Override
     public int countTodayNewUser() {
         return userMapper.countTodayNewUser();
     }
@@ -137,7 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int saveLoginRecord(String header, String clientIp) {
+    public int saveLoginRecord(UserAgent userAgent, String clientIp) {
         try {
             Session session = ShiroUtils.getSubject().getSession();
             //如果登录之后再进行登录则不进行保存操作
@@ -145,7 +134,6 @@ public class UserServiceImpl implements UserService {
             if (null != exist) {
                 return 0;
             }
-            UserAgent userAgent = UserAgent.parseUserAgentString(header);
             User user = ShiroUtils.getCurrentUser();
 
             LoginRecord loginRecord = new LoginRecord();
