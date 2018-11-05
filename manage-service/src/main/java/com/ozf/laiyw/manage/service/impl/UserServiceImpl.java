@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserPwd(String oldpassword, String newpassword) {
         User user = ShiroUtils.getCurrentUser();
-        if (!oldpassword.equals(user.getPassword())) {
+        if (!user.getPassword().equals(ShiroUtils.getHashPassword(oldpassword, user.getAccount()))) {
             return -1;
         }
-        return userMapper.updateUserPwd(ShiroUtils.getCurrentUser().getId(), newpassword);
+        return userMapper.updateUserPwd(ShiroUtils.getCurrentUser().getId(), ShiroUtils.getHashPassword(newpassword, user.getAccount()));
     }
 
     @Override

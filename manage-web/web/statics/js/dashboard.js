@@ -23,9 +23,9 @@ $(function () {
 function initSocket() {
     var webSocket;
     if ('WebSocket' in window || 'MozWebSocket' in window) {
-        webSocket = new WebSocket('ws://192.168.1.101:8080/websocket/socketServer');
+        webSocket = new WebSocket('ws://192.168.0.100:8080/websocket/socketServer');
     } else {
-        webSocket = new SockJS("http://192.168.1.101:8080/sockjs/socketServer");
+        webSocket = new SockJS("http://192.168.0.100:8080/sockjs/socketServer");
     }
 
     webSocket.onopen = function (event) {

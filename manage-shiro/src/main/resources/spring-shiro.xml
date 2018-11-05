@@ -58,7 +58,16 @@
     </bean>
 
     <!-- 继承自AuthorizingRealm的自定义Realm -->
-    <bean id="customAuthorizingRealm" class="com.ozf.laiyw.manage.shiro.realm.CustomAuthorizingRealm"/>
+    <bean id="customAuthorizingRealm" class="com.ozf.laiyw.manage.shiro.realm.CustomAuthorizingRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 加密的方式 -->
+                <constructor-arg index="0" type="java.lang.String" value="${shiro.encryption.method}"/>
+                <!-- 加密的次数，默认是1次 -->
+                <property name="hashIterations" value="${shiro.encryption.hashiterations}"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="sessionManager" ref="sessionManager"></property>
