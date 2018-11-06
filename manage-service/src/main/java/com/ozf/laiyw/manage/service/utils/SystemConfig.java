@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ozf.laiyw.manage.common.commons.Constants;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Map;
  */
 public class SystemConfig {
 
+    private static Map<String, String> dataMap = new HashMap<>();
     //是否开启单用户在线数校验
     private static Boolean saovalidate;
     //单个账号最多可在线数
@@ -25,6 +27,7 @@ public class SystemConfig {
     private static Integer againlogin;
 
     public static void set(Map<String, String> map) {
+        setDataMap(map);
         loginRule(JSON.parseObject(map.get(Constants.LOGIN_RULE)));
     }
 
@@ -34,6 +37,18 @@ public class SystemConfig {
         setLenvalidate(jsonObject.getBoolean("lenvalidate"));
         setErrornumber(jsonObject.getInteger("errornumber"));
         setAgainlogin(jsonObject.getInteger("againlogin"));
+    }
+
+    public static String getDataByType(String type) {
+        return dataMap.get(type);
+    }
+
+    public static Map<String, String> getDataMap() {
+        return dataMap;
+    }
+
+    public static void setDataMap(Map<String, String> dataMap) {
+        SystemConfig.dataMap = dataMap;
     }
 
     public static Boolean getSaovalidate() {
