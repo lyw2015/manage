@@ -8,7 +8,7 @@ import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.Log;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.LogService;
-import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;

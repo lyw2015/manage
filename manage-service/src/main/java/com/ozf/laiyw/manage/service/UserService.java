@@ -10,6 +10,9 @@ import java.util.Map;
 
 public interface UserService {
 
+    //获取用户登录信息（是否登录）
+    List<LoginRecord> getOnlineUserByAccount(String userAccount);
+
     List<LoginRecord> getUserLoginRecordsByDay(String day);
 
     List<Map<String, String>> getUserLoginRecordDate();

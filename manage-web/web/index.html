@@ -316,7 +316,7 @@
         });
     }
 
-    function setUserInfo(data){
+    function setUserInfo(data) {
         $(".user_name").html(data.username);
     }
 
@@ -363,7 +363,7 @@
                 id: "1001",
                 text: "页面模板",
                 icon: "fa fa-pagelines",
-                url: "pages/template.xml.html",
+                url: "pages/template.html",
                 targetType: "iframe-tab"
             }, {
                 id: "4001",
@@ -397,6 +397,13 @@
                 children: [
                     {
                         id: "50011",
+                        text: "系统配置",
+                        icon: "fa fa-asterisk",
+                        url: "pages/system/setting.html",
+                        targetType: "iframe-tab"
+                    },
+                    {
+                        id: "50012",
                         text: "菜单管理",
                         icon: "fa fa-tree",
                         url: "",
@@ -460,13 +467,13 @@
                         id: "30011",
                         text: "404 Error",
                         icon: "fa fa-eye-slash",
-                        url: "pages/404.html",
+                        url: "pages/system/404.html",
                         targetType: "iframe-tab"
                     },
                     {
                         id: "30012",
                         text: "500 Error",
-                        url: "pages/500.html",
+                        url: "pages/system/500.html",
                         targetType: "iframe-tab",
                         icon: "fa fa-frown-o"
                     }

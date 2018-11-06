@@ -1,7 +1,7 @@
 package com.ozf.laiyw.manage.service.socket;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
-import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;

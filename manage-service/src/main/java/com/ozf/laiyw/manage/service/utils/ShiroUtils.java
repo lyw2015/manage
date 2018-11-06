@@ -1,4 +1,4 @@
-package com.ozf.laiyw.manage.service.shiro;
+package com.ozf.laiyw.manage.service.utils;
 
 import com.ozf.laiyw.manage.model.User;
 import org.apache.shiro.SecurityUtils;

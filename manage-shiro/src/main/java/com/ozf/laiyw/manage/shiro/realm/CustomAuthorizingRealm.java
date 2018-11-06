@@ -27,7 +27,6 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String account = ((User) principals.getPrimaryPrincipal()).getAccount();
-        System.out.println("doGetAuthorizationInfo=================授权：" + account);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRoles(userService.findRolesByUserAccount(account));
         simpleAuthorizationInfo.addStringPermissions(userService.findPermissionsByUserAccount(account));
@@ -44,13 +43,12 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String account = ((UsernamePasswordToken) token).getUsername();
-        System.out.println("doGetAuthenticationInfo=================验证：" + account);
         User user = userService.findByUserAccount(account);
         if (null == user) {
-            throw new UnknownAccountException();
+            throw new UnknownAccountException("验证未通过,未知账户");
         }
         if (Boolean.TRUE.equals(user.getLocked() == 1)) {
-            throw new LockedAccountException();
+            throw new LockedAccountException("验证未通过,账户已锁定");
         }
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user,

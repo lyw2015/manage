@@ -7,7 +7,7 @@ import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
-import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.ValidatingSession;

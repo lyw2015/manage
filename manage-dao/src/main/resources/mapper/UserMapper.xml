@@ -215,4 +215,11 @@
           order by login_time desc
     </select>
 
+    <select id="getOnlineUserByAccount" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record
+          where user_account = #{userAccount}
+          and lr_online = 'true'
+          order by login_time desc
+    </select>
+
 </mapper>

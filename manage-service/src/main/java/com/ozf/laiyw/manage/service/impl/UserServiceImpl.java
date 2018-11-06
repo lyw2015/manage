@@ -11,7 +11,7 @@ import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.MessageService;
 import com.ozf.laiyw.manage.service.UserService;
-import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import com.ozf.laiyw.manage.service.socket.SpringWebSocketHandler;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.log4j.Logger;
@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
     private MessageService messageService;
     @Autowired
     private SpringWebSocketHandler handler;
+
+    @Override
+    public List<LoginRecord> getOnlineUserByAccount(String userAccount) {
+        return userMapper.getOnlineUserByAccount(userAccount);
+    }
 
     @Override
     public List<LoginRecord> getUserLoginRecordsByDay(String day) {

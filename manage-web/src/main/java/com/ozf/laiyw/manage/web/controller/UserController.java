@@ -4,7 +4,7 @@ import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
-import com.ozf.laiyw.manage.service.shiro.ShiroUtils;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
