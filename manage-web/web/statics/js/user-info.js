@@ -29,16 +29,18 @@ function collapseLoginRecord(button, groupClass, boolean) {
 }
 
 function loadLoginReocrdData(button, day) {
+    $("#user_info_overlay").show();
     $.ajax({
         type: "get",
-        data:{
-          day: day
+        data: {
+            day: day
         },
         url: "/personal/getUserLoginRecordsByDay",
         success: function (result) {
+            $("#user_info_overlay").hide();
             if (result.success) {
                 var html = "";
-                $.each(result.data, function(ind, val){
+                $.each(result.data, function (ind, val) {
                     html += buildDayHtml(val, day);
                 });
                 $(button).parent().parent().after(html);
@@ -49,58 +51,58 @@ function loadLoginReocrdData(button, day) {
     });
 }
 
-function buildHtml(count,day) {
+function buildHtml(count, day) {
     var color;
-    if(day.length == 4){
+    if (day.length == 4) {
         color = "bg-red";
-    }else if(day.length == 7){
+    } else if (day.length == 7) {
         color = "bg-green";
-    }else if(day.length == 10){
+    } else if (day.length == 10) {
         color = "bg-aqua";
     }
 
-    return '<li class="time-label '+(day.length != 4 ? day.substring(0, day.lastIndexOf("-")) : "")+'" style="'+(day.length == 10 ? "display: none;" : "")+'">' +
-                '<span class="' + color + '">' + day + '</span><a class="badge bg-yellow badge-number">' + count + '</a>' +
-                '<div class="pull-right">' +
-                    '<button type="button" class="btn btn-box-tool" onclick="collapseLoginRecord(this, \'' + day + '\', true)">' +
-                        '<i class = "'+(day.length == 4 ? "fa fa-minus" : "fa fa-plus")+'"></i>' +
-                    '</button>' +
-                '</div>'+
-            '</li>';
+    return '<li class="time-label ' + (day.length != 4 ? day.substring(0, day.lastIndexOf("-")) : "") + '" style="' + (day.length == 10 ? "display: none;" : "") + '">' +
+        '<span class="' + color + '">' + day + '</span><a class="badge bg-yellow badge-number">' + count + '</a>' +
+        '<div class="pull-right">' +
+        '<button type="button" class="btn btn-box-tool" onclick="collapseLoginRecord(this, \'' + day + '\', true)">' +
+        '<i class = "' + (day.length == 4 ? "fa fa-minus" : "fa fa-plus") + '"></i>' +
+        '</button>' +
+        '</div>' +
+        '</li>';
 }
 
-function buildDayHtml(data, day){
-    return '<li class="' + day + '">'+
-                '<i class="'+(data.deviceType == "Mobile" ? "fa fa-mobile bg-purple" : "fa fa-tv bg-blue" )+'"></i>'+
-                '<div class="timeline-item no-border">'+
-                    '<h3 class="timeline-header no-border">'+
-                        '<a>'+data.clientIp+'</a>'+
-                        '<span class="pull-right">'+data.loginTime+'</span>'+
-                    '</h3>'+
-                    '<div class="timeline-body">'+
-                        '<ul class="list-group">'+
-                            '<li class="list-group-item">'+
-                            '<span class="pull-right">'+data.deviceType+'</span>系统类型'+
-                            '</li>'+
-                            '<li class="list-group-item">'+
-                            '<span class="pull-right">'+data.browser+'</span>浏览器'+
-                            '</li>'+
-                            '<li class="list-group-item">'+
-                            '<span class="pull-right">'+(data.onlineTime ? data.onlineTime.replace("0毫秒","") : "-")+'</span>在线时长'+
-                            '</li>'+
-                        '</ul>'+
-                    '</div>'+
-                '</div>'+
-            '</li>';
+function buildDayHtml(data, day) {
+    return '<li class="' + day + '">' +
+        '<i class="' + (data.deviceType == "Mobile" ? "fa fa-mobile bg-purple" : "fa fa-tv bg-blue" ) + '"></i>' +
+        '<div class="timeline-item no-border">' +
+        '<h3 class="timeline-header no-border">' +
+        '<a>' + data.clientIp + '</a>' +
+        '<span class="pull-right">' + data.loginTime + '</span>' +
+        '</h3>' +
+        '<div class="timeline-body">' +
+        '<ul class="list-group">' +
+        '<li class="list-group-item">' +
+        '<span class="pull-right">' + data.deviceType + '</span>系统类型' +
+        '</li>' +
+        '<li class="list-group-item">' +
+        '<span class="pull-right">' + data.browser + '</span>浏览器' +
+        '</li>' +
+        '<li class="list-group-item">' +
+        '<span class="pull-right">' + (data.onlineTime ? data.onlineTime.replace("0毫秒", "") : "-") + '</span>在线时长' +
+        '</li>' +
+        '</ul>' +
+        '</div>' +
+        '</div>' +
+        '</li>';
 }
 
 function setLoginRecords(data) {
     var html = '';
-    $.each(data, function(ind ,val){
-        html += buildHtml(val.lr_count, val.lr_login_time.replace("-order",""))
+    $.each(data, function (ind, val) {
+        html += buildHtml(val.lr_count, val.lr_login_time.replace("-order", ""))
     })
     html += '<li><i class="fa fa-clock-o bg-gray"></i></li>';
-    $("#loginLogTab > ul").append(html);
+    $("#loginLogTab > ul").empty().append(html);
 }
 
 function updateUserPwd() {
@@ -113,6 +115,7 @@ function updateUserPwd() {
                 parent.toastr.error("新密码长度不能小于6位")
                 return false;
             }
+            $("#user_info_overlay").show();
             $.ajax({
                 type: "post",
                 data: {
@@ -121,6 +124,7 @@ function updateUserPwd() {
                 },
                 url: "/personal/updateUserPwd",
                 success: function (result) {
+                    $("#user_info_overlay").hide();
                     if (result.success) {
                         if (result.data == -1) {
                             parent.toastr.error("密码修改失败，旧密码错误！");
@@ -160,6 +164,7 @@ function renderingUser() {
         type: "get",
         url: "/personal/getUserInfo",
         success: function (result) {
+            $("#user_info_overlay").hide();
             if (result.success) {
                 setUserInfo(result.data["userInfo"]);
                 setLoginRecord(result.data["loginRecord"]);
@@ -178,11 +183,13 @@ function updateUserInfo() {
     }
     var data = $("#form-user-info").serialize()
     //decodeURIComponent(data, true);
+    $("#user_info_overlay").show();
     $.ajax({
         type: "post",
         data: data,
         url: "/personal/updateUserInfo",
         success: function (data) {
+            $("#user_info_overlay").hide();
             if (data.success) {
                 renderingUser();
                 parent.toastr.success("用户信息修改成功！");

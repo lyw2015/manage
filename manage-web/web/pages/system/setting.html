@@ -62,6 +62,7 @@
                         <label style="margin-left: 10px">
                             <input type="radio" name="saovalidate" value="false" checked>关闭
                         </label>
+                        <span class="help-block ">如果开启，则用户登录时会检测该账号的在线数，当该账号在线数已达到配置数，则该账号不可在其他设备登录！</span>
                     </div>
                 </div>
                 <div class="form-group col-xs-12">
@@ -79,6 +80,7 @@
                         <label style="margin-left: 10px">
                             <input type="radio" name="lenvalidate" value="false" checked>关闭
                         </label>
+                        <span class="help-block ">如果开启，则用户登录失败时会进行校验，当连续失败次数达到配置数时，该账号在配置时间内不可再进行登录！</span>
                     </div>
                 </div>
                 <div class="form-group col-xs-12">
@@ -88,7 +90,7 @@
                     </div>
                 </div>
                 <div class="form-group col-xs-12">
-                    <label class="col-sm-3 control-label">超过错误次数锁定账号时间</label>
+                    <label class="col-sm-3 control-label">锁定账号时间</label>
                     <div class="input-group col-sm-9">
                         <input type="number" min="1" name="againlogin" class="form-control">
                         <div class="input-group-addon">分钟</div>
@@ -96,11 +98,62 @@
                 </div>
             </form>
         </div>
+        <div id="login_overlay" class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
         <div class="box-footer text-center">
             <button onclick="changeLoginRule()" type="button" class="btn btn-primary">更新</button>
         </div>
     </div>
 
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">邮件服务
+                <small>邮件服务异常时，系统中涉及邮件发送的相关功能将不可用</small>
+            </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <form id="config_email_server" onsubmit="return false" class="form-horizontal col-xs-12">
+                <div class="form-group col-xs-12">
+                    <label class="col-sm-3 control-label">服务器地址</label>
+                    <div class="input-group col-sm-9">
+                        <input type="text" name="host" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-sm-3 control-label">端口</label>
+                    <div class="input-group col-sm-9">
+                        <input type="text" name="port" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-sm-3 control-label">账号</label>
+                    <div class="input-group col-sm-9">
+                        <input type="text" name="username" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-sm-3 control-label">授权码</label>
+                    <div class="input-group col-sm-9">
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="email_overlay" class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <div class="box-footer text-center">
+            <button onclick="testConnection()" type="button" class="btn btn-info">测试</button>
+            <button onclick="changeEmailServer()" type="button" class="btn btn-primary" style="margin-left: 20px">更新
+            </button>
+        </div>
+    </div>
 </section>
 <!-- jQuery 2.2.3 -->
 <script src="../../plugins/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -132,7 +185,6 @@
         });
         return serializeObj;
     };
-
     $(function () {
         $(':radio').iCheck({
             checkboxClass: 'icheckbox_flat-green',
@@ -140,6 +192,46 @@
         });
         loadSystemConfig();
     })
+
+    function changeEmailServer() {
+        if (!$("input[name='host']").val() || !$("input[name='port']").val() || !$("input[name='username']").val() || !$("input[name='password']").val()) {
+            parent.toastr.error("请填写完整表单");
+            return false;
+        }
+        $("#email_overlay").show();
+        $.ajax({
+            type: "post",
+            data: {
+                jsondata: JSON.stringify($("#config_email_server").serializeJson())
+            },
+            url: "/system/updateEmailServerConfig",
+            success: function (result) {
+                $("#email_overlay").hide();
+                if (result.success) {
+                    parent.toastr.success("邮件服务配置更新成功")
+                } else {
+                    parent.toastr.error(result.message);
+                }
+            }
+        });
+    }
+
+    function testConnection() {
+        $("#email_overlay").show();
+        $.ajax({
+            type: "post",
+            data: $("#config_email_server").serialize(),
+            url: "/system/testConnection",
+            success: function (result) {
+                $("#email_overlay").hide();
+                if (result.message == 'success') {
+                    parent.toastr.success("邮件服务可用")
+                } else {
+                    parent.toastr.error(result.message);
+                }
+            }
+        });
+    }
 
     function changeLoginRule() {
         if (!$("input[name='saonumber']").val() || !$("input[name='errornumber']").val() || !$("input[name='againlogin']").val()) {
@@ -150,6 +242,7 @@
             parent.toastr.error("请填写大于0的值");
             return false;
         }
+        $("#login_overlay").show();
         $.ajax({
             type: "post",
             data: {
@@ -157,6 +250,7 @@
             },
             url: "/system/updateLoginRuleConfig",
             success: function (result) {
+                $("#login_overlay").hide();
                 if (result.success) {
                     parent.toastr.success("登录规则更新成功")
                 } else {
@@ -175,13 +269,24 @@
         $("input[name='againlogin']").val(data.againlogin);
     }
 
+    function emailServer(data) {
+        data = JSON.parse(data);
+        $("input[name='host']").val(data.host);
+        $("input[name='port']").val(data.port);
+        $("input[name='username']").val(data.username);
+        $("input[name='password']").val(data.password);
+    }
+
     function loadSystemConfig() {
         $.ajax({
             type: "get",
             url: "/system/getConfigs",
             success: function (result) {
+                $("#login_overlay").hide();
+                $("#email_overlay").hide();
                 if (result.success) {
                     loginRule(result.data['LOGIN_RULE']);
+                    emailServer(result.data['EMAIL_SERVER']);
                 } else {
                     parent.toastr.error(result.message);
                 }

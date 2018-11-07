@@ -3,7 +3,7 @@ package com.ozf.laiyw.manage.shiro.matcher;
 import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.service.UserService;
-import com.ozf.laiyw.manage.service.utils.SystemConfig;
+import com.ozf.laiyw.manage.common.commons.SystemConfig;
 import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
 import com.ozf.laiyw.manage.shiro.exception.ExcessiveOnlineSingleAccountException;
 import org.apache.shiro.authc.AuthenticationInfo;

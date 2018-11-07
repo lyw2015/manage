@@ -2,7 +2,7 @@ package com.ozf.laiyw.manage.service.impl;
 
 import com.ozf.laiyw.manage.dao.mapper.SystemMapper;
 import com.ozf.laiyw.manage.service.SystemService;
-import com.ozf.laiyw.manage.service.utils.SystemConfig;
+import com.ozf.laiyw.manage.common.commons.SystemConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

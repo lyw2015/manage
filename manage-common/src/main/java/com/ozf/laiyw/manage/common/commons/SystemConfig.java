@@ -1,8 +1,7 @@
-package com.ozf.laiyw.manage.service.utils;
+package com.ozf.laiyw.manage.common.commons;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ozf.laiyw.manage.common.commons.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +14,8 @@ import java.util.Map;
 public class SystemConfig {
 
     private static Map<String, String> dataMap = new HashMap<>();
+
+    //----------------------------登录规则
     //是否开启单用户在线数校验
     private static Boolean saovalidate;
     //单个账号最多可在线数
@@ -25,10 +26,27 @@ public class SystemConfig {
     private static Integer errornumber;
     //超过错误次数锁定账号时间
     private static Integer againlogin;
+    //----------------------------邮箱服务
+    //服务器地址
+    private static String host;
+    //端口
+    private static Integer port;
+    //发送人邮箱地址
+    private static String username;
+    //发送人邮箱授权码
+    private static String password;
 
     public static void set(Map<String, String> map) {
         setDataMap(map);
         loginRule(JSON.parseObject(map.get(Constants.LOGIN_RULE)));
+        emailServer(JSON.parseObject(map.get(Constants.EMAIL_SERVER)));
+    }
+
+    public static void emailServer(JSONObject jsonObject) {
+        setHost(jsonObject.getString("host"));
+        setPort(jsonObject.getInteger("port"));
+        setUsername(jsonObject.getString("username"));
+        setPassword(jsonObject.getString("password"));
     }
 
     public static void loginRule(JSONObject jsonObject) {
@@ -89,5 +107,37 @@ public class SystemConfig {
 
     public static void setAgainlogin(Integer againlogin) {
         SystemConfig.againlogin = againlogin;
+    }
+
+    public static String getHost() {
+        return host;
+    }
+
+    public static void setHost(String host) {
+        SystemConfig.host = host;
+    }
+
+    public static Integer getPort() {
+        return port;
+    }
+
+    public static void setPort(Integer port) {
+        SystemConfig.port = port;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        SystemConfig.username = username;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        SystemConfig.password = password;
     }
 }

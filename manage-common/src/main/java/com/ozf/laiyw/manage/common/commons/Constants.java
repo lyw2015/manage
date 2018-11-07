@@ -3,6 +3,7 @@ package com.ozf.laiyw.manage.common.commons;
 public class Constants {
 
     public static final String LOGIN_RULE = "LOGIN_RULE";
+    public static final String EMAIL_SERVER = "EMAIL_SERVER";
 
     public static final Long ONE_MINUTE = 1000 * 60L;
 

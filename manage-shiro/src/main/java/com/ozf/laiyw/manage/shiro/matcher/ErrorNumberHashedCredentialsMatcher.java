@@ -2,7 +2,7 @@ package com.ozf.laiyw.manage.shiro.matcher;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
-import com.ozf.laiyw.manage.service.utils.SystemConfig;
+import com.ozf.laiyw.manage.common.commons.SystemConfig;
 import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

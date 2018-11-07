@@ -26,7 +26,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        .badge-number{
+        .badge-number {
             vertical-align: top;
             margin: -8px 0px 0px -10px;
         }
@@ -82,99 +82,111 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#userInfoTab" data-toggle="tab">个人信息</a></li>
-                <li><a href="#updatePasswordTab" data-toggle="tab">密码修改</a></li>
-                <li><a href="#loginLogTab" data-toggle="tab">登录日志</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="active tab-pane" id="userInfoTab">
-                    <form id="form-user-info" onsubmit="return false" class="form-horizontal">
-                        <div class="form-group">
-                            <label for="account" class="col-sm-2 control-label">账号</label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input type="text" class="form-control" disabled id="account">
-                            </div>
+        <div class="box no-border" style="margin-top: -10px;">
+            <div class="box-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#userInfoTab" data-toggle="tab">个人信息</a></li>
+                        <li><a href="#updatePasswordTab" data-toggle="tab">密码修改</a></li>
+                        <li><a href="#loginLogTab" data-toggle="tab">登录日志</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="userInfoTab">
+                            <form id="form-user-info" onsubmit="return false" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="account" class="col-sm-2 control-label">账号</label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input type="text" class="form-control" disabled id="account">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-2 control-label">
+                                        <i class="text-red">*</i>
+                                        用户名
+                                    </label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input type="text" name="username" class="form-control" id="username"
+                                               placeholder="用户名">
+                                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-2 control-label">性别</label>
+                                    <div class="input-group col-sm-8" style="margin-top: 5px">
+                                        <label>
+                                            <input type="radio" name="sex" value="男" checked>男
+                                        </label>
+                                        <label style="margin-left: 10px">
+                                            <input type="radio" name="sex" value="女">女
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mailbox" class="col-sm-2 control-label">邮箱</label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input name="mailbox" class="form-control" id="mailbox" placeholder="邮箱">
+                                        <span class="help-block ">邮箱可用于找回密码及快捷登录，建议设置哦！</span>
+                                        <!--<div class="input-group-addon"><i class="fa fa-envelope"></i></div>-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="col-sm-2 control-label">电话号码</label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input type="text" name="phone" class="form-control" id="phone"
+                                               placeholder="电话号码">
+                                        <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-9 col-sm-8">
+                                        <button onclick="updateUserInfo()" type="button" class="btn btn-primary">修改
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label">
-                                <i class="text-red">*</i>
-                                用户名
-                            </label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input type="text" name="username" class="form-control" id="username" placeholder="用户名">
-                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label">性别</label>
-                            <div class="input-group col-sm-8" style="margin-top: 5px">
-                                <label>
-                                    <input type="radio" name="sex" value="男" checked>男
-                                </label>
-                                <label style="margin-left: 10px">
-                                    <input type="radio" name="sex" value="女">女
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="mailbox" class="col-sm-2 control-label">邮箱</label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input name="mailbox" class="form-control" id="mailbox" placeholder="邮箱">
-                                <span class="help-block ">邮箱可用于找回密码及快捷登录，建议设置哦！</span>
-                                <!--<div class="input-group-addon"><i class="fa fa-envelope"></i></div>-->
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone" class="col-sm-2 control-label">电话号码</label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input type="text" name="phone" class="form-control" id="phone" placeholder="电话号码">
-                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-sm-8">
-                                <button onclick="updateUserInfo()" type="button" class="btn btn-primary">修改</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
 
-                <!--密码修改-->
-                <div class="tab-pane" id="updatePasswordTab">
-                    <form onsubmit="return false" class="form-horizontal">
-                        <div class="form-group">
-                            <label for="oldpwd" class="col-sm-2 control-label">旧密码</label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input type="password" class="form-control" id="oldpwd" placeholder="旧密码">
-                            </div>
+                        <!--密码修改-->
+                        <div class="tab-pane" id="updatePasswordTab">
+                            <form onsubmit="return false" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="oldpwd" class="col-sm-2 control-label">旧密码</label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input type="password" class="form-control" id="oldpwd" placeholder="旧密码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newpwd" class="col-sm-2 control-label">新密码</label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input type="password" class="form-control" id="newpwd" placeholder="新密码">
+                                        <span class="help-block">请避免设置过于简单的密码！</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmnewpwd" class="col-sm-2 control-label">确认新密码</label>
+                                    <div class="input-group col-xs-12 col-sm-8">
+                                        <input type="password" class="form-control" id="confirmnewpwd"
+                                               placeholder="确认新密码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-9 col-sm-8">
+                                        <button onclick="updateUserPwd()" type="button" class="btn btn-primary">修改
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="newpwd" class="col-sm-2 control-label">新密码</label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input type="password" class="form-control" id="newpwd" placeholder="新密码">
-                                <span class="help-block">请避免设置过于简单的密码！</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmnewpwd" class="col-sm-2 control-label">确认新密码</label>
-                            <div class="input-group col-xs-12 col-sm-8">
-                                <input type="password" class="form-control" id="confirmnewpwd" placeholder="确认新密码">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-9 col-sm-8">
-                                <button onclick="updateUserPwd()" type="button" class="btn btn-primary">修改</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
 
-                <!--登录日志-->
-                <div class="tab-pane" id="loginLogTab">
-                    <ul class="timeline timeline-inverse"></ul>
+                        <!--登录日志-->
+                        <div class="tab-pane" id="loginLogTab">
+                            <ul class="timeline timeline-inverse"></ul>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div id="user_info_overlay" class="overlay">
+                <i class="fa fa-refresh fa-spin"></i>
             </div>
         </div>
     </div>
