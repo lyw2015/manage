@@ -151,8 +151,7 @@ Web Service框架：CXF
 ![个人中心](https://images.gitee.com/uploads/images/2018/1105/123653_1a1fd2ff_1486552.png "个人中心.png")
 
 #系统基础设置
-![登录设置](https://images.gitee.com/uploads/images/2018/1107/133411_eb480211_1486552.png "登录设置.png")
-![邮件服务设置](https://images.gitee.com/uploads/images/2018/1107/133438_48d8d0b5_1486552.png "邮件服务设置.png")
+![系统基础设置](https://images.gitee.com/uploads/images/2018/1107/133749_c24d6144_1486552.png "系统基础设置.png")
 
 #访问日志
 ![访问日志](https://images.gitee.com/uploads/images/2018/1101/144304_f9d2c81b_1486552.png "访问日志.png")
