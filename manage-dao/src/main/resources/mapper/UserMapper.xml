@@ -35,7 +35,7 @@
     </resultMap>
 
     <select id="findByUserAccount" resultMap="userMap">
-        select * from t_sys_user where user_account = #{userAccount}
+        select * from t_sys_user where user_account = #{userAccount} or user_mailbox = #{userAccount}
     </select>
 
     <insert id="saveLoginRecord" parameterType="com.ozf.laiyw.manage.model.LoginRecord">
@@ -220,6 +220,10 @@
           where user_account = #{userAccount}
           and lr_online = 'true'
           order by login_time desc
+    </select>
+
+    <select id="getUserByEmail" resultMap="userMap">
+        select * from t_sys_user where user_mailbox = #{email}
     </select>
 
 </mapper>

@@ -42,6 +42,7 @@ public class User implements Serializable {
     private String headImg;
 
     private Boolean rememberMe = false;
+    private String verificationCode;
     private List<UserRole> userRoleList;
 
     public String getId() {
@@ -138,5 +139,13 @@ public class User implements Serializable {
 
     public void setHeadImg(String headImg) {
         this.headImg = headImg;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

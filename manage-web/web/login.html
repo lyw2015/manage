@@ -38,11 +38,11 @@
     <div class="login-box-body">
         <form id="frm" method="post">
             <div class="form-group has-feedback">
-                <input id="account" name="account" value="admin" type="text" class="form-control" placeholder="Account">
+                <input id="account" name="account" value="admin" type="text" class="form-control" placeholder="账号/邮箱">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input id="passwd" name="password" value="123456" type="password" class="form-control" placeholder="Password">
+                <input id="passwd" name="password" value="123456" type="password" class="form-control" placeholder="密码">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="row">
@@ -64,9 +64,41 @@
             </div>
         </div>
         <div class="social-auth-links text-center">
-            <a href="javaScript:void(0)" class="btn btn-block btn-social btn-facebook btn-flat">
+            <button data-toggle="modal" data-target="#emailModal"
+                    class="btn btn-block btn-social btn-facebook btn-flat">
                 <i class="glyphicon glyphicon-envelope"></i>邮箱快速登录
-            </a>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="emailModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">邮箱验证登录</h4>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="return false" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-2 control-label">邮箱</label>
+                        <div class="col-xs-8">
+                            <input type="email" name="email" class="form-control">
+                            <span class="help-block ">登录账号所绑定的邮箱！</span>
+                        </div>
+                        <button onclick="getverificationCode()" class="btn btn-info">获取</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-2 control-label">验证码</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="verificationCode" class="form-control">
+                        </div>
+                        <button onclick="emailLogin()" type="button" class="btn btn-primary">验证</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -93,6 +125,49 @@
             }
         });
     });
+
+    function emailLogin() {
+        if (!$("input[name='email']").val()) {
+            toastr.error("请输入邮箱");
+            return false;
+        }
+        if (!$("input[name='verificationCode']").val()) {
+            toastr.error("请输入验证码");
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            data: {
+                mailbox: $("input[name='email']").val(),
+                verificationCode: $("input[name='verificationCode']").val()
+            },
+            url: "/manage/verificationCodeLogin",
+            success: function (data) {
+                if (data.success) {
+                    location.href = "index.html";
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+    }
+
+    function getverificationCode() {
+        if (!$("input[name='email']").val()) {
+            toastr.error("请输入邮箱");
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            data: {
+                email: $("input[name='email']").val()
+            },
+            url: "/manage/getVerificationCode",
+            success: function (result) {
+                toastr.info(result.message)
+            }
+        });
+    }
 
     function submitForm() {
         if (!$("#account").val() || !$("#passwd").val()) {

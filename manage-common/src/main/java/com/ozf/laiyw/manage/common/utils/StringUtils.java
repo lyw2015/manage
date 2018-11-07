@@ -1,6 +1,7 @@
 package com.ozf.laiyw.manage.common.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Random;
 import java.util.UUID;
 
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
@@ -63,4 +64,25 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
+    /**
+     * 随机验证码
+     *
+     * @param number 生成位数
+     * @return
+     */
+    public static String randomCode(int number) {
+        StringBuffer codeNum = new StringBuffer();
+        int[] code = new int[3];
+        Random random = new Random();
+        for (int i = 0; i < number; i++) {
+            int num = random.nextInt(10) + 48;
+            int uppercase = random.nextInt(26) + 65;
+            int lowercase = random.nextInt(26) + 97;
+            code[0] = num;
+            code[1] = uppercase;
+            code[2] = lowercase;
+            codeNum.append((char) code[random.nextInt(3)]);
+        }
+        return codeNum.toString();
+    }
 }

@@ -105,7 +105,8 @@
                 /favicon.ico=anon
                 /login.html=anon
                 /manage/login=anon
-                /activiti/**=authc
+                /manage/verificationCodeLogin=anon
+                /manage/getVerificationCode=anon
                 /**=user
             </value>
         </property>

@@ -1,9 +1,9 @@
 package com.ozf.laiyw.manage.shiro.matcher;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
-import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.common.commons.SystemConfig;
-import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
+import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -30,12 +30,11 @@ public class ErrorNumberHashedCredentialsMatcher extends HashedCredentialsMatche
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        if (!SystemConfig.getLenvalidate() || Constants.SUPER_USER_ACCOUNT.equals(((CustomUsernamePasswordToken) token).getUsername())) {
+        User user = (User) info.getPrincipals().getPrimaryPrincipal();
+        if (!SystemConfig.getLenvalidate() || Constants.SUPER_USER_ACCOUNT.equals(user.getAccount())) {
             return super.doCredentialsMatch(token, info);
         }
-        CustomUsernamePasswordToken customUsernamePasswordToken = (CustomUsernamePasswordToken) token;
-        //String loginDeviceType = customUsernamePasswordToken.getLoginDeviceType();
-        String key = PREFIX + customUsernamePasswordToken.getUsername();
+        String key = PREFIX + user.getUsername();
         AtomicInteger atomicInteger = new AtomicInteger(0);
         Integer value = (Integer) redisCacheUtils.getCacheObject(key);
         if (null != value) {
@@ -44,7 +43,7 @@ public class ErrorNumberHashedCredentialsMatcher extends HashedCredentialsMatche
         if (atomicInteger.get() >= SystemConfig.getErrornumber()) {
             throw new ExcessiveAttemptsException("验证未通过,错误次数已达" + SystemConfig.getErrornumber() + "次，请" + SystemConfig.getAgainlogin() + "分钟后重试");
         }
-        boolean matches = super.doCredentialsMatch(customUsernamePasswordToken, info);
+        boolean matches = super.doCredentialsMatch(token, info);
         if (matches) {
             redisCacheUtils.delete(key);
         } else {

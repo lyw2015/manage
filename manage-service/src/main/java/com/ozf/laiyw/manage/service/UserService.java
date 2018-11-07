@@ -10,6 +10,12 @@ import java.util.Map;
 
 public interface UserService {
 
+    User getUserByEmail(String email);
+
+    boolean checkVerificationCode(String email, String verificationCode);
+
+    String getVerificationCode(String email);
+
     //获取用户登录信息（是否登录）
     List<LoginRecord> getOnlineUserByAccount(String userAccount);
 

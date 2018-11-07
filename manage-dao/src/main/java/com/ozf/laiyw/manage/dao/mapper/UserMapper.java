@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface UserMapper {
 
+    User getUserByEmail(String email);
+
     List<LoginRecord> getOnlineUserByAccount(String userAccount);
 
     List<LoginRecord> getUserLoginRecordsByDay(@Param("userAccount") String userAccount, @Param("day") String day);

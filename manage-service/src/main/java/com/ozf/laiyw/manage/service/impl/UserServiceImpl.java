@@ -3,24 +3,29 @@ package com.ozf.laiyw.manage.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.DateUtils;
+import com.ozf.laiyw.manage.common.utils.EmailUtils;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.dao.mapper.UserMapper;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.MessageService;
 import com.ozf.laiyw.manage.service.UserService;
-import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import com.ozf.laiyw.manage.service.socket.SpringWebSocketHandler;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.log4j.Logger;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -33,6 +38,40 @@ public class UserServiceImpl implements UserService {
     private MessageService messageService;
     @Autowired
     private SpringWebSocketHandler handler;
+    @Autowired
+    private RedisCacheUtils redisCacheUtils;
+    @Value("${verificationCode.effective.time}")
+    private Integer vcetime;
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userMapper.getUserByEmail(email);
+    }
+
+    @Override
+    public boolean checkVerificationCode(String email, String verificationCode) {
+        String cacheCode = String.valueOf(redisCacheUtils.getCacheObject(Constants.VERIFICATION_CODE_PREFIX + email));
+        if (verificationCode.equals(cacheCode)) {
+            redisCacheUtils.delete(Constants.VERIFICATION_CODE_PREFIX + email);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getVerificationCode(String email) {
+        User user = getUserByEmail(email);
+        if (null == user) {
+            return "该邮箱尚未绑定账号";
+        }
+        String verificationCode = StringUtils.randomCode(6);
+        boolean bl = EmailUtils.send(email, verificationCode, vcetime);
+        if (!bl) {
+            return Constants.ERROR_MESSAGE_NETWORK_ANOMALY;
+        }
+        redisCacheUtils.setCacheObject(Constants.VERIFICATION_CODE_PREFIX + email, verificationCode, vcetime, TimeUnit.MINUTES);
+        return "邮件发送成功";
+    }
 
     @Override
     public List<LoginRecord> getOnlineUserByAccount(String userAccount) {

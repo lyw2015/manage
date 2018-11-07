@@ -10,6 +10,7 @@ public class Constants {
     public static final String UTF_8 = "UTF-8";
 
     public static final String SESSION_USER = "user";
+    public static final String VERIFICATION_CODE_PREFIX = "verification_code_";
 
     //超级管理员账号
     public static final String SUPER_USER_ACCOUNT = "admin";
@@ -19,4 +20,5 @@ public class Constants {
     public static final String ERROR_MESSAGE_NETWORK_ANOMALY = "网络异常，请稍后重试！";
     public static final String ERROR_MESSAGE_LACK_OF_PARAMETER = "请求参数不足！";
     public static final String ERROR_MESSAGE_INVALID_VOUCHER = "凭证失效，请重新登录！";
+    public static final String INCORRECTCREDENTIALSEXCEPTION = "验证未通过,错误的凭证！";
 }

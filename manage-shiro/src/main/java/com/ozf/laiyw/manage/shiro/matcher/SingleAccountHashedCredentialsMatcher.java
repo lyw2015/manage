@@ -1,10 +1,10 @@
 package com.ozf.laiyw.manage.shiro.matcher;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
-import com.ozf.laiyw.manage.model.LoginRecord;
-import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.common.commons.SystemConfig;
-import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
+import com.ozf.laiyw.manage.model.LoginRecord;
+import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.shiro.exception.ExcessiveOnlineSingleAccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -28,13 +28,13 @@ public class SingleAccountHashedCredentialsMatcher extends ErrorNumberHashedCred
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        if (!SystemConfig.getSaovalidate() || Constants.SUPER_USER_ACCOUNT.equals(((CustomUsernamePasswordToken) token).getUsername())) {
+        User user = (User) info.getPrincipals().getPrimaryPrincipal();
+        if (!SystemConfig.getSaovalidate() || Constants.SUPER_USER_ACCOUNT.equals(user.getAccount())) {
             return super.doCredentialsMatch(token, info);
         }
-        CustomUsernamePasswordToken customUsernamePasswordToken = (CustomUsernamePasswordToken) token;
-        boolean matches = super.doCredentialsMatch(customUsernamePasswordToken, info);
+        boolean matches = super.doCredentialsMatch(token, info);
         if (matches) {
-            List<LoginRecord> recordList = userService.getOnlineUserByAccount(customUsernamePasswordToken.getUsername());
+            List<LoginRecord> recordList = userService.getOnlineUserByAccount(user.getUsername());
             if (recordList.size() >= SystemConfig.getSaonumber()) {
                 throw new ExcessiveOnlineSingleAccountException("验证未通过,当前账号在线数已达上限");
             }

@@ -44,7 +44,7 @@ public class EmailUtils {
         return mailSender;
     }
 
-    public static void send(String to, String verificationCode) {
+    public static boolean send(String to, String verificationCode, Integer vcetime) {
         try {
             JavaMailSender mailSender = getJavaMailSender();
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -58,16 +58,16 @@ public class EmailUtils {
                     "</head><body>" +
                     "<p>你好！</p>" +
                     "<p>验证码：" + verificationCode + "</p>" +
-                    "<p>该验证码仅限本次操作有效。为了保障您的账户安全，请勿向他人泄漏验证码信息。</p>" +
+                    "<p>该验证码" + vcetime + "分钟内有效。为了保障您的账户安全，请勿向他人泄漏验证码信息。</p>" +
                     "</body></html>";
 
             helper.setText(html, true);
 
             mailSender.send(mimeMessage);
-            logger.debug("邮件发送成功!");
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("邮件发送失败", e);
+            logger.error("邮件发送失败--->" + to, e);
+            return false;
         }
     }
 }

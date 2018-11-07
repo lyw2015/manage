@@ -1,7 +1,10 @@
 package com.ozf.laiyw.manage.shiro.realm;
 
+import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
+import com.ozf.laiyw.manage.service.utils.ShiroUtils;
+import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -36,13 +39,14 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
     /**
      * 验证
      *
-     * @param token
+     * @param authenticationToken
      * @return
      * @throws AuthenticationException
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String account = ((UsernamePasswordToken) token).getUsername();
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        CustomUsernamePasswordToken token = (CustomUsernamePasswordToken) authenticationToken;
+        String account = (String) token.getPrincipal();
         User user = userService.findByUserAccount(account);
         if (null == user) {
             throw new UnknownAccountException("验证未通过,未知账户");
@@ -50,12 +54,13 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
         if (Boolean.TRUE.equals(user.getLocked() == 1)) {
             throw new LockedAccountException("验证未通过,账户已锁定");
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+        return new SimpleAuthenticationInfo(
                 user,
-                user.getPassword(),
-                ByteSource.Util.bytes(user.getAccount()),
+                StringUtils.isNotEmpty(token.getVerificationAccount()) ? ShiroUtils.getHashPassword(account, account) : user.getPassword(),
+                ByteSource.Util.bytes(StringUtils.isNotEmpty(token.getVerificationAccount()) ? account : user.getAccount()),
                 getName()
         );
-        return authenticationInfo;
     }
+
+
 }
