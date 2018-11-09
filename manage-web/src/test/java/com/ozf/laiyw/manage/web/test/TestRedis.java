@@ -31,9 +31,29 @@ public class TestRedis {
         }
     }
 
+
+
+    @Test
+    public void allKey(){
+       /* Set<String> set = redisCacheUtils.keys(new StringBuffer("*").append("*").append("*").toString());
+        System.out.println(set);*/
+       try {
+           String key = "shareSessionMapCache";
+           //Object value = redisCacheUtils.getCacheObject(key);
+           //List list = redisCacheUtils.getCacheList(key);
+           //Set set = redisCacheUtils.getCacheSet(key);
+           //Map map =  redisCacheUtils.getCacheMap(key);
+          Object object = redisCacheUtils.redisTemplate.opsForValue().get("shareSessionMapCache");
+           System.out.println(object);
+       }catch (Exception e){
+           System.out.println(e.getClass().getSimpleName());
+           System.out.println(e.getMessage());
+       }
+    }
+
     @Test
     public void hashKey() {
-        Set<String> set = redisCacheUtils.redisTemplate.keys("*");
+        Set<String> set = redisCacheUtils.keys("*");
         System.out.println(set);
         Set list = redisCacheUtils.redisTemplate.boundHashOps("shareSessionMapCache").keys();
         System.out.println(list);

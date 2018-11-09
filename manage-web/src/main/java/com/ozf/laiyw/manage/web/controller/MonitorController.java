@@ -2,17 +2,20 @@ package com.ozf.laiyw.manage.web.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
+import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.model.Log;
 import com.ozf.laiyw.manage.model.LoginRecord;
+import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.LogService;
 import com.ozf.laiyw.manage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description:
@@ -28,6 +31,57 @@ public class MonitorController extends BaseController {
     private LogService logService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisCacheUtils redisCacheUtils;
+
+    @SystemLog(description = "查看缓存")
+    @RequestMapping("/getCacheKeysByCond")
+    @ResponseBody
+    public PageInfo getCacheKeysByCond(PageInfo pageInfo, @RequestParam(required = false, defaultValue = "*") String key) {
+        Set keys = redisCacheUtils.keys(new StringBuffer("*").append(key).append("*").toString());
+        pageInfo.setList(new ArrayList(keys));
+        pageInfo.setTotal(keys.size());
+        return pageInfo;
+    }
+
+    @RequestMapping("/getValueByKey")
+    @ResponseBody
+    public String getValueByKey(String mapKey, String dataKey) {
+        return (String) redisCacheUtils.getMapDataByKey(mapKey, dataKey);
+    }
+
+    @SystemLog(description = "删除Map中缓存Key")
+    @RequestMapping("/removeMapKey")
+    @ResponseBody
+    public WebResult removeMapKey(String mapKey, String dataKey) {
+        redisCacheUtils.deleteMapDataByKey(mapKey, dataKey);
+        return WebResult.successResult();
+    }
+
+    @SystemLog(description = "删除缓存")
+    @RequestMapping("/removeKey")
+    @ResponseBody
+    public WebResult removeKey(String key) {
+        redisCacheUtils.delete(key);
+        return WebResult.successResult();
+    }
+
+    @RequestMapping("/getCacheSonKeys")
+    @ResponseBody
+    public PageInfo getCacheSonKeys(PageInfo pageInfo, String key) {
+        Object values = redisCacheUtils.getByKey(key);
+        if (null == values) {
+            pageInfo.setList(new ArrayList());
+            return pageInfo;
+        }
+        if (values instanceof Collection) {
+            pageInfo.setList(new ArrayList((Collection) values));
+            pageInfo.setTotal(((Collection) values).size());
+            return pageInfo;
+        }
+        pageInfo.setList(Arrays.asList(values));
+        return pageInfo;
+    }
 
     @RequestMapping("/countUserGuest")
     @ResponseBody

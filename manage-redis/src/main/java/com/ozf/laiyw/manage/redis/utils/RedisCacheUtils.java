@@ -13,6 +13,30 @@ public class RedisCacheUtils<T> {
     @Autowired
     public RedisTemplate redisTemplate;
 
+    public Object getByKey(String key) {
+        try {
+            return getCacheObject(key);
+        } catch (Exception oe) {
+            try {
+                return getCacheList(key);
+            } catch (Exception le) {
+                try {
+                    return getCacheSet(key);
+                } catch (Exception se) {
+                    try {
+                        return getCacheMap(key).keySet();
+                    } catch (Exception me) {
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+
+    public Set keys(Object pattern) {
+        return redisTemplate.keys(pattern);
+    }
+
     /**
      * 删除指定key
      *
