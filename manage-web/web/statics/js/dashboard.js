@@ -20,12 +20,18 @@ $(function () {
     countUserGuest(lineChart);
 });
 
+function getIPAndPort() {
+    var path = window.document.location.href;
+    var localhostPaht = path.substring(0, path.indexOf(window.document.location.pathname));
+    return localhostPaht.replace("http", "");
+}
+
 function initSocket() {
     var webSocket;
     if ('WebSocket' in window || 'MozWebSocket' in window) {
-        webSocket = new WebSocket('ws://192.168.0.100:8080/websocket/socketServer');
+        webSocket = new WebSocket('ws' + getIPAndPort() + '/websocket/socketServer');
     } else {
-        webSocket = new SockJS("http://192.168.0.100:8080/sockjs/socketServer");
+        webSocket = new SockJS("http" + getIPAndPort() + "/sockjs/socketServer");
     }
 
     webSocket.onopen = function (event) {
@@ -44,7 +50,7 @@ function initSocket() {
 function setValue(data) {//data:message
     data = data.data;
     if (data.account) {
-       parent.setUserInfo(data)
+        parent.setUserInfo(data)
     }
     if (data.newuser != 0) {
         $(".dashboard-tadoy-new").html(data.newuser);

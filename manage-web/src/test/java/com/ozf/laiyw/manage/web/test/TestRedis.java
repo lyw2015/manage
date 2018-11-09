@@ -1,8 +1,10 @@
 package com.ozf.laiyw.manage.web.test;
 
 import com.alibaba.fastjson.JSON;
+import com.ozf.laiyw.manage.common.utils.SerializeUtil;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
+import org.apache.shiro.session.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,15 @@ public class TestRedis {
         System.out.println(set);
         Set list = redisCacheUtils.redisTemplate.boundHashOps("shareSessionMapCache").keys();
         System.out.println(list);
-        //redisCacheUtils.redisTemplate.delete(set);
+       // redisCacheUtils.redisTemplate.delete(set);
+        Map<String, String> map = redisCacheUtils.getCacheMap("shareSessionMapCache");
+        List<Session> sessionList = SerializeUtil.deserializeList(map.values());
+        for (Session session : sessionList) {
+            System.out.println(session.getId() + "--->" + session.getTimeout());
+            /*if(!"68fa46a6-a49b-49bf-801e-cbf4ef49f7a7".equals(session.getId())){
+                redisCacheUtils.deleteMapDataByKey("shareSessionMapCache",session.getId().toString());
+            }*/
+        }
     }
 
     @Test

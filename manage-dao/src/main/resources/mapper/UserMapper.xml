@@ -94,8 +94,16 @@
         where session_id = #{sessionId, jdbcType=VARCHAR}
     </update>
 
+    <update id="updateLoginRecordSessionIdBySessionId">
+        update t_sys_monitor_login_record set session_id = #{newSessionId} where session_id = #{oldSessionId}
+    </update>
+
     <select id="findLoginRecordBySessionId" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record where session_id = #{sessionId}
+        select * from t_sys_monitor_login_record where session_id = #{sessionId} and lr_online = 'true'
+    </select>
+
+    <select id="findLoginRecordByCond" resultMap="loginRecordMap">
+        select * from t_sys_monitor_login_record where lr_online = 'true' and client_ip = #{clientIp} and operating_system_name = #{operatingSystemName} and browser = #{browser}
     </select>
 
     <select id="onlineUser" resultMap="loginRecordMap">

@@ -173,9 +173,10 @@ public class UserServiceImpl implements UserService {
     public int saveLoginRecord(UserAgent userAgent, String clientIp) {
         try {
             Session session = ShiroUtils.getSubject().getSession();
-            //如果登录之后再进行登录则不进行保存操作
-            LoginRecord exist = userMapper.findLoginRecordBySessionId(session.getId().toString());
+            //当前浏览器是否已登录  果当前为在线状态 再进行登录则不进行保存操作
+            LoginRecord exist = userMapper.findLoginRecordByCond(clientIp, userAgent.getOperatingSystem().getName(), userAgent.getBrowser().getName());
             if (null != exist) {
+                userMapper.updateLoginRecordSessionIdBySessionId(session.getId().toString(), exist.getSessionId());
                 return 0;
             }
             User user = ShiroUtils.getCurrentUser();

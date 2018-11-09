@@ -10,6 +10,7 @@ import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,10 @@ public class LoginController extends BaseController {
 
     private WebResult executeLogin(UsernamePasswordToken token) {
         try {
-            UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+            if (token.isRememberMe()) {
+                SecurityUtils.getSubject().getSession().setTimeout(Constants.REMEMBERMECOOKIE_MAXAGE);
+            }
+            UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader(Constants.USER_AGENT));
             ShiroUtils.getSubject().login(token);
             userService.saveLoginRecord(userAgent, AddressUtils.getIpAddress(request));
             return WebResult.successResult("登录成功");

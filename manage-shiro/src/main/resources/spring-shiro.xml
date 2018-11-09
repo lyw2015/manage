@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- 会话ID生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
@@ -45,10 +45,11 @@
     </bean>
 
     <!--rememberMeCookie 即记住我的Cookie，保存时长7 天-->
-    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+    <bean id="rememberMeCookie" class="com.ozf.laiyw.manage.shiro.core.RememberMeCookie">
         <constructor-arg value="rememberMe"/>
         <property name="httpOnly" value="true"/>
-        <property name="maxAge" value="604800"/><!-- 7天-->
+        <!-- 7天  分钟    已在RememberMeCookie构造中设置-->
+        <!--<property name="maxAge" value="${shiro.rememberme.cookie.maxage}"/>-->
     </bean>
 
     <!-- rememberMe管理器,cipherKey是加密rememberMe Cookie的密钥；默认AES算法；-->
@@ -85,29 +86,30 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
 
-    <!--<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
-        <property name="redirectUrl" value="/login.html"/>
-    </bean>-->
-
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <!-- Shiro的核心安全接口,这个属性是必须的 -->
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login.html"/>
-        <!-- <property name="filters">
-             <util:map>
-                 <entry key="logout" value-ref="logoutFilter"/>
-             </util:map>
-         </property>-->
+        <property name="filters">
+            <util:map>
+                <entry key="userFilter">
+                    <bean class="com.ozf.laiyw.manage.shiro.filter.UserFilter"/>
+                </entry>
+                <entry key="authcFilter">
+                    <bean class="com.ozf.laiyw.manage.shiro.filter.AuthcFilter"/>
+                </entry>
+            </util:map>
+        </property>
         <property name="filterChainDefinitions">
             <value>
-                /statics/**=anon
-                /plugins/**=anon
-                /favicon.ico=anon
-                /login.html=anon
-                /manage/login=anon
-                /manage/verificationCodeLogin=anon
-                /manage/getVerificationCode=anon
-                /**=user
+                /statics/** = anon
+                /plugins/** = anon
+                /favicon.ico = anon
+                /manage/login = anon
+                /manage/verificationCodeLogin = anon
+                /manage/getVerificationCode = anon
+                /personal/** = authcFilter
+                /** = userFilter
             </value>
         </property>
     </bean>

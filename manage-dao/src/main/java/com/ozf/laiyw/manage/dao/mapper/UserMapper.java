@@ -33,6 +33,10 @@ public interface UserMapper {
 
     LoginRecord findLoginRecordBySessionId(String sessionId);
 
+    LoginRecord findLoginRecordByCond(@Param("clientIp") String clientIp, @Param("operatingSystemName") String operatingSystemName, @Param("browser") String browser);
+
+    int updateLoginRecordSessionIdBySessionId(@Param("newSessionId") String newSessionId, @Param("oldSessionId") String oldSessionId);
+
     List<LoginRecord> onlineUser(LoginRecord loginRecord);
 
     int countOnline();

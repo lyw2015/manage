@@ -1,6 +1,7 @@
 package com.ozf.laiyw.manage.service.interceptor;
 
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
+import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.common.utils.ByteUtils;
 import com.ozf.laiyw.manage.common.utils.DateUtils;
@@ -84,7 +85,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
 
     private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, User user) {
         String ip = AddressUtils.getIpAddress(httpServletRequest);
-        String agent = httpServletRequest.getHeader("User-Agent");
+        String agent = httpServletRequest.getHeader(Constants.USER_AGENT);
         UserAgent userAgent = UserAgent.parseUserAgentString(agent);
 
         Log log = new Log();
