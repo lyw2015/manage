@@ -42,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private RedisCacheUtils redisCacheUtils;
     @Value("${verificationCode.effective.time}")
     private Integer vcetime;
+    @Value("${session.shareSessionMapCache}")
+    private String shareSessionMapCache;
 
     @Override
     public User getUserByEmail(String email) {
@@ -173,11 +175,17 @@ public class UserServiceImpl implements UserService {
     public int saveLoginRecord(UserAgent userAgent, String clientIp) {
         try {
             Session session = ShiroUtils.getSubject().getSession();
-            //当前浏览器是否已登录  果当前为在线状态 再进行登录则不进行保存操作
+            //当前浏览器是否已登录  如果当前为在线状态 再进行登录则退出之前的登录
             LoginRecord exist = userMapper.findLoginRecordByCond(clientIp, userAgent.getOperatingSystem().getName(), userAgent.getBrowser().getName());
             if (null != exist) {
-                userMapper.updateLoginRecordSessionIdBySessionId(session.getId().toString(), exist.getSessionId());
-                return 0;
+                LoginRecord exit = new LoginRecord();
+                exit.setSessionId(exist.getSessionId());
+                exit.setOnline(Boolean.FALSE.toString());
+                exit.setLogoutTime(DateUtils.formatDateTime(new Date()));
+                updateLoginRecord(exit);
+                if (!session.getId().toString().equals(exist.getSessionId())) {
+                    redisCacheUtils.deleteMapDataByKey(shareSessionMapCache, exist.getSessionId());
+                }
             }
             User user = ShiroUtils.getCurrentUser();
 
@@ -193,9 +201,9 @@ public class UserServiceImpl implements UserService {
             loginRecord.setUserName(user.getUsername());
 
             loginRecord.setSessionId(session.getId().toString());
-            loginRecord.setVisitTime(DateUtils.formatDateTime(session.getStartTimestamp()));//访问时间
+            loginRecord.setVisitTime(DateUtils.getDateTime());//访问时间
             loginRecord.setLastTime(DateUtils.formatDateTime(session.getLastAccessTime()));//最后操作时间
-            loginRecord.setLoginTime(DateUtils.formatDateTime(session.getStartTimestamp()));//登录时间
+            loginRecord.setLoginTime(DateUtils.getDateTime());//登录时间
             userMapper.saveLoginRecord(loginRecord);
             handler.sendMessageToUsers(new Message(messageService.getSocketMessage()));
             return 1;

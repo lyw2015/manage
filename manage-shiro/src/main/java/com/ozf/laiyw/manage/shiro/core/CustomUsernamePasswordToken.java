@@ -22,13 +22,12 @@ public class CustomUsernamePasswordToken extends UsernamePasswordToken {
     }
 
     public CustomUsernamePasswordToken(String verificationAccount, boolean rememberMe) {
-        this.verificationAccount = verificationAccount;
+        this(verificationAccount);
         setRememberMe(rememberMe);
     }
 
     public CustomUsernamePasswordToken(String verificationAccount, boolean rememberMe, String loginDeviceType) {
-        this.verificationAccount = verificationAccount;
-        setRememberMe(rememberMe);
+        this(verificationAccount, rememberMe);
         this.loginDeviceType = loginDeviceType;
     }
 
@@ -39,11 +38,12 @@ public class CustomUsernamePasswordToken extends UsernamePasswordToken {
     }
 
     public CustomUsernamePasswordToken(String username, String password, boolean rememberMe) {
-        super(username, password, rememberMe);
+        this(username, password);
+        setRememberMe(rememberMe);
     }
 
     public CustomUsernamePasswordToken(String username, String password, boolean rememberMe, String loginDeviceType) {
-        super(username, password, rememberMe);
+        this(username, password, rememberMe);
         this.loginDeviceType = loginDeviceType;
     }
 

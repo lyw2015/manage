@@ -7,8 +7,6 @@ public class Constants {
 
     public static final Long ONE_MINUTE = 1000 * 60L;
 
-    public static final Long REMEMBERMECOOKIE_MAXAGE = ONE_MINUTE * 60 * 24 * 7;
-
     public static final String UTF_8 = "UTF-8";
     public static final String USER_AGENT = "User-Agent";
 

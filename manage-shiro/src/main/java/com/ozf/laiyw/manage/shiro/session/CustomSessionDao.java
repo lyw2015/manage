@@ -1,6 +1,5 @@
 package com.ozf.laiyw.manage.shiro.session;
 
-import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.DateUtils;
 import com.ozf.laiyw.manage.common.utils.SerializeUtil;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
@@ -32,7 +31,7 @@ public class CustomSessionDao extends AbstractSessionDAO {
     private String shareSessionMapCache;
     @Value("${rabbitmq.queue.key}")
     private String queueKey;
-    @Value("${shiro.session.effective.time}")
+    @Value("#{${shiro.session.effective.time}}")
     private Integer effectiveTime;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
@@ -109,7 +108,7 @@ public class CustomSessionDao extends AbstractSessionDAO {
             loginRecord.setOnline(Boolean.FALSE.toString());
             Date logoutDate = new Date();
             //session过期时间
-            Date invalidDate = new Date(session.getLastAccessTime().getTime() + effectiveTime * Constants.ONE_MINUTE);
+            Date invalidDate = new Date(session.getLastAccessTime().getTime() + effectiveTime);
             if (invalidDate.before(logoutDate)) {
                 logoutDate = invalidDate;
             }

@@ -14,6 +14,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,11 @@ public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Value("#{${shiro.session.effective.time}}")
+    private Long sessionTime;
+    @Value("#{${shiro.rememberme.cookie.maxage}}")
+    private Long cookieMaxAge;
+
 
     @RequestMapping("/getVerificationCode")
     @ResponseBody
@@ -73,11 +79,13 @@ public class LoginController extends BaseController {
 
     private WebResult executeLogin(UsernamePasswordToken token) {
         try {
-            if (token.isRememberMe()) {
-                SecurityUtils.getSubject().getSession().setTimeout(Constants.REMEMBERMECOOKIE_MAXAGE);
-            }
             UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader(Constants.USER_AGENT));
             ShiroUtils.getSubject().login(token);
+            if (token.isRememberMe()) {
+                SecurityUtils.getSubject().getSession().setTimeout(cookieMaxAge);
+            } else {
+                SecurityUtils.getSubject().getSession().setTimeout(sessionTime);
+            }
             userService.saveLoginRecord(userAgent, AddressUtils.getIpAddress(request));
             return WebResult.successResult("登录成功");
         } catch (IncorrectCredentialsException ice) {

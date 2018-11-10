@@ -91,7 +91,7 @@
                 online_time = #{onlineTime , jdbcType=VARCHAR},
             </if>
         </set>
-        where session_id = #{sessionId, jdbcType=VARCHAR}
+        where session_id = #{sessionId, jdbcType=VARCHAR} and lr_online = 'true'
     </update>
 
     <update id="updateLoginRecordSessionIdBySessionId">

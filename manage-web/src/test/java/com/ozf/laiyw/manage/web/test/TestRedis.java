@@ -32,23 +32,22 @@ public class TestRedis {
     }
 
 
-
     @Test
-    public void allKey(){
+    public void allKey() {
        /* Set<String> set = redisCacheUtils.keys(new StringBuffer("*").append("*").append("*").toString());
         System.out.println(set);*/
-       try {
-           String key = "shareSessionMapCache";
-           //Object value = redisCacheUtils.getCacheObject(key);
-           //List list = redisCacheUtils.getCacheList(key);
-           //Set set = redisCacheUtils.getCacheSet(key);
-           //Map map =  redisCacheUtils.getCacheMap(key);
-          Object object = redisCacheUtils.redisTemplate.opsForValue().get("shareSessionMapCache");
-           System.out.println(object);
-       }catch (Exception e){
-           System.out.println(e.getClass().getSimpleName());
-           System.out.println(e.getMessage());
-       }
+        try {
+            String key = "shareSessionMapCache";
+            //Object value = redisCacheUtils.getCacheObject(key);
+            //List list = redisCacheUtils.getCacheList(key);
+            //Set set = redisCacheUtils.getCacheSet(key);
+            //Map map =  redisCacheUtils.getCacheMap(key);
+            Object object = redisCacheUtils.redisTemplate.opsForValue().get("shareSessionMapCache");
+            System.out.println(object);
+        } catch (Exception e) {
+            System.out.println(e.getClass().getSimpleName());
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
@@ -57,14 +56,11 @@ public class TestRedis {
         System.out.println(set);
         Set list = redisCacheUtils.redisTemplate.boundHashOps("shareSessionMapCache").keys();
         System.out.println(list);
-       // redisCacheUtils.redisTemplate.delete(set);
+        // redisCacheUtils.redisTemplate.delete(set);
         Map<String, String> map = redisCacheUtils.getCacheMap("shareSessionMapCache");
         List<Session> sessionList = SerializeUtil.deserializeList(map.values());
         for (Session session : sessionList) {
             System.out.println(session.getId() + "--->" + session.getTimeout());
-            /*if(!"68fa46a6-a49b-49bf-801e-cbf4ef49f7a7".equals(session.getId())){
-                redisCacheUtils.deleteMapDataByKey("shareSessionMapCache",session.getId().toString());
-            }*/
         }
     }
 

@@ -30,6 +30,8 @@ public class UserFilter extends org.apache.shiro.web.filter.authc.UserFilter {
     private RedisCacheUtils redisCacheUtils;
     @Value("${session.shareSessionMapCache}")
     private String shareSessionMapCache;
+    @Value("#{${shiro.rememberme.cookie.maxage}}")
+    private Long cookieMaxAge;
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
@@ -49,7 +51,7 @@ public class UserFilter extends org.apache.shiro.web.filter.authc.UserFilter {
             Subject subject = getSubject(request, response);
             if (!subject.isAuthenticated() && subject.isRemembered()) {
                 Session session = subject.getSession();
-                session.setTimeout(Constants.REMEMBERMECOOKIE_MAXAGE);
+                session.setTimeout(cookieMaxAge);
                 HttpServletRequest httpServletRequest = (HttpServletRequest) request;
                 final UserAgent userAgent = UserAgent.parseUserAgentString(httpServletRequest.getHeader(Constants.USER_AGENT));
                 final LoginRecord exist = userMapper.findLoginRecordByCond(AddressUtils.getIpAddress(httpServletRequest), userAgent.getOperatingSystem().getName(), userAgent.getBrowser().getName());
