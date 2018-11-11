@@ -327,7 +327,6 @@
         //分页参数
         resultParams.pageSize = params.limit;
         resultParams.pageNum = (params.offset / params.limit) + 1;
-        resultParams.sortOrder = params.order;
         //表单参数
         var nv;
         $.each(serialize.split("&"), function (ind, val) {
@@ -406,7 +405,7 @@
                         id: "50012",
                         text: "菜单管理",
                         icon: "fa fa-tree",
-                        url: "",
+                        url: "pages/system/menu.html",
                         targetType: "iframe-tab"
                     }
                 ]

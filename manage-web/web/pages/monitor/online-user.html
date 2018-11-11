@@ -41,36 +41,47 @@
 </section>
 
 <section class="content">
-    <form onsubmit="return false" class="form-inline col-xs-12" style="line-height: 40px; margin-bottom: 5px;">
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon">用户名称</div>
-                <input name="userName" type="text" class="form-control">
-                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+    <div class="box box-primary collapsed-box">
+        <div class="box-header no-border">
+            <div class="box-tools pull-right">
+                <button style="margin-top: -10px;" type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
         </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon"></i>客户端IP</div>
-                <input name="clientIp" type="text" class="form-control">
-            </div>
+        <div class="box-body no-border">
+            <form onsubmit="return false" class="form-inline col-xs-12" style="line-height: 40px; margin-bottom: 5px;">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">用户名称</div>
+                        <input name="userName" type="text" class="form-control">
+                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon"></i>客户端IP</div>
+                        <input name="clientIp" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">设备类型</div>
+                        <input name="deviceType" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">登录时间</div>
+                        <input name="loginTime" type="text" class="form-control" style="width: 260px">
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                <button onclick="searchByCondition()" type="button" class="btn btn-primary">查询</button>
+                <button type="reset" class="btn btn-danger">重置</button>
+            </form>
         </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon">设备类型</div>
-                <input name="deviceType" type="text" class="form-control">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon">登录时间</div>
-                <input name="loginTime" type="text" class="form-control" style="width: 260px">
-                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-            </div>
-        </div>
-        <button onclick="searchByCondition()" type="button" class="btn btn-primary">查询</button>
-        <button type="reset" class="btn btn-danger">重置</button>
-    </form>
+    </div>
     <table id="monitor_login_record_data" class="table table-bordered table-hover col-xs-12"></table>
 </section>
 <!-- jQuery 2.2.3 -->
@@ -89,6 +100,9 @@
 <!-- bootstrap table -->
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.js"></script>
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<!--export-->
+<script src="../../plugins/export/tableExport.js"></script>
+<script src="../../plugins/export/bootstrap-table-export.js"></script>
 <script>
     var $tTable, queryUrl = '/monitor/onlineUser';
     $(function () {
@@ -115,16 +129,24 @@
             queryParams: function (params) {
                 return top.serializeParams(params, $("form").serialize())
             },
+            showFullscreen: true,//是否显示全屏按钮
+            showRefresh: true,//是否显示刷新按钮
+            showColumns: true,//是否显示内容列下拉框
+            minimumCountColumns: 2,//最小隐藏列的数量
+            showToggle: true,//是否显示切换视图（table/card）按钮
             cache: false,
             pagination: true,
-            sortable: true,//是否启用排序
-            sortOrder: "desc",//排序方式
             sidePagination: "server",
             pageNumber: 1,
             pageSize: 10,
             pageList: [10, 20, 30, 50, 100],
             paginationPreText: "上一页",
             paginationNextText: "下一页",
+            showExport: true,
+            exportDataType: 'basic',
+            exportOptions:{
+                fileName: '在线用户'
+            },
             columns: [
                 {
                     field: 'sessionId',
