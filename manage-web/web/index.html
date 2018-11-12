@@ -339,6 +339,24 @@
         return resultParams;
     }
 
+    function recursionMenu(data) {
+        var nodes = [];
+        $.each(data, function (index, value) {
+            var node = {};
+            node["id"] = value.id;
+            node["text"] = value.name;
+            node["icon"] = value.icon;
+            node["url"] = value.url;
+            if (value.children && value.children.length > 0) {
+                node["children"] = recursionMenu(value.children);
+            } else {
+                node["targetType"] = "iframe-tab";
+            }
+            nodes.push(node);
+        })
+        return nodes;
+    }
+
     $(function () {
         App.setbasePath("../");
         App.setGlobalImgPath("plugins/AdminLTE/dist/img/");
@@ -357,129 +375,17 @@
             }
         });
 
-        var menus = [
-            {
-                id: "1001",
-                text: "页面模板",
-                icon: "fa fa-pagelines",
-                url: "pages/template.html",
-                targetType: "iframe-tab"
-            }, {
-                id: "4001",
-                text: "组织机构",
-                icon: "fa fa-arrows",
-                children: [
-                    {
-                        id: "40011",
-                        text: "机构管理",
-                        icon: "fa fa-bars",
-                        url: "",
-                        targetType: "iframe-tab"
-                    }, {
-                        id: "40012",
-                        text: "角色管理",
-                        icon: "fa fa-object-group",
-                        url: "",
-                        targetType: "iframe-tab"
-                    }, {
-                        id: "40013",
-                        text: "用户管理",
-                        icon: "fa fa-users",
-                        url: "",
-                        targetType: "iframe-tab"
-                    }
-                ]
-            }, {
-                id: "5001",
-                text: "系统设置",
-                icon: "fa fa-cogs",
-                children: [
-                    {
-                        id: "50011",
-                        text: "系统配置",
-                        icon: "fa fa-asterisk",
-                        url: "pages/system/setting.html",
-                        targetType: "iframe-tab"
-                    },
-                    {
-                        id: "50012",
-                        text: "菜单管理",
-                        icon: "fa fa-tree",
-                        url: "pages/system/menu.html",
-                        targetType: "iframe-tab"
-                    }
-                ]
-            }, {
-                id: "2001",
-                text: "系统监控",
-                icon: "fa fa-dashboard",
-                children: [
-                    {
-                        id: "20011",
-                        text: "在线用户",
-                        icon: "fa fa-users",
-                        url: "pages/monitor/online-user.html",
-                        targetType: "iframe-tab"
-                    },
-                    {
-                        id: "20012",
-                        text: "访问日志",
-                        url: "pages/monitor/accessing-log.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-list"
-                    },
-                    {
-                        id: "20013",
-                        text: "数据监控",
-                        url: "monitor/druid",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-database"
-                    },
-                    {
-                        id: "20014",
-                        text: "服务器监控",
-                        url: "monitor/server",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-tv"
-                    },
-                    {
-                        id: "20015",
-                        text: "缓存监控",
-                        url: "pages/monitor/cache.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-cloud"
-                    },
-                    {
-                        id: "20016",
-                        text: "访客统计",
-                        icon: "fa fa-eye",
-                        url: "pages/monitor/guest.html",
-                        targetType: "iframe-tab"
-                    }
-                ]
-            }, {
-                id: "3001",
-                text: "系统异常",
-                icon: "fa fa-close",
-                children: [
-                    {
-                        id: "30011",
-                        text: "404 Error",
-                        icon: "fa fa-eye-slash",
-                        url: "pages/system/404.html",
-                        targetType: "iframe-tab"
-                    },
-                    {
-                        id: "30012",
-                        text: "500 Error",
-                        url: "pages/system/500.html",
-                        targetType: "iframe-tab",
-                        icon: "fa fa-frown-o"
-                    }
-                ]
+        $.ajax({
+            type: "get",
+            url: "/menu/getAllMenu",
+            success: function (data) {
+                if (data.success) {
+                    $('.sidebar-menu').sidebarMenu({data: recursionMenu(data.data)});
+                } else {
+                    parent.toastr.error(data.message);
+                }
             }
-        ];
-        $('.sidebar-menu').sidebarMenu({data: menus});
+        });
     });
 </script>
 

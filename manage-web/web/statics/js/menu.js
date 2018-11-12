@@ -183,7 +183,7 @@ InitMainTable = function () {
                 title: '菜单名称'
             }, {
                 field: 'url',
-                title: '菜单地址'
+                title: '菜单URL'
             }, {
                 field: 'parentName',
                 title: '父级菜单'

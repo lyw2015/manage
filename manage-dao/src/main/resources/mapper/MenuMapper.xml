@@ -19,6 +19,7 @@
         <id property="id" column="m_id"/>
         <result property="name" column="m_name"/>
         <result property="icon" column="m_icon"/>
+        <result property="url" column="m_url"/>
         <collection property="children" ofType="com.ozf.laiyw.manage.model.Menu" javaType="java.util.ArrayList"
                     select="getChildrenByParentId" column="m_id"/>
     </resultMap>
