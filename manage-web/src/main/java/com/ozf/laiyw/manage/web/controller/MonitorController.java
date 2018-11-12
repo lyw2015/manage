@@ -1,5 +1,6 @@
 package com.ozf.laiyw.manage.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.common.commons.WebResult;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @Description:
@@ -74,12 +78,13 @@ public class MonitorController extends BaseController {
             pageInfo.setList(new ArrayList());
             return pageInfo;
         }
-        if (values instanceof Collection) {
-            pageInfo.setList(new ArrayList((Collection) values));
-            pageInfo.setTotal(((Collection) values).size());
+        if (values instanceof Map) {
+            Set set = ((Map) values).keySet();
+            pageInfo.setList(new ArrayList(set));
+            pageInfo.setTotal(set.size());
             return pageInfo;
         }
-        pageInfo.setList(Arrays.asList(values));
+        pageInfo.setList(Arrays.asList(JSON.toJSONString(values, true)));
         return pageInfo;
     }
 

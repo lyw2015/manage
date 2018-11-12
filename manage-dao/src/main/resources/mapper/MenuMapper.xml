@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ozf.laiyw.manage.dao.mapper.MenuMapper">
+
+    <resultMap id="menuMap" type="com.ozf.laiyw.manage.model.Menu">
+        <id property="id" column="m_id"/>
+        <result property="parentId" column="m_parent_id"/>
+        <result property="parentName" column="m_parent_name"/>
+        <result property="name" column="m_name"/>
+        <result property="icon" column="m_icon"/>
+        <result property="sort" column="m_sort"/>
+        <result property="url" column="m_url"/>
+        <result property="description" column="m_description"/>
+        <result property="status" column="m_status"/>
+    </resultMap>
+
+    <resultMap id="allMenuMap" type="com.ozf.laiyw.manage.model.Menu">
+        <id property="id" column="m_id"/>
+        <result property="name" column="m_name"/>
+        <result property="icon" column="m_icon"/>
+        <collection property="children" ofType="com.ozf.laiyw.manage.model.Menu" javaType="java.util.ArrayList"
+                    select="getChildrenByParentId" column="m_id"/>
+    </resultMap>
+
+    <select id="getAllMenu" resultMap="allMenuMap">
+        select * from t_sys_menu where m_status = 1 and (m_parent_id is null or m_parent_id = '') order by m_sort desc
+    </select>
+
+    <insert id="saveMenuInfo" parameterType="com.ozf.laiyw.manage.model.Menu">
+        insert into t_sys_menu(
+            m_id,
+            m_parent_id,
+            m_name,
+            m_icon,
+            m_sort,
+            m_url,
+            m_description
+        )
+        values(
+            #{id, jdbcType=VARCHAR},
+            #{parentId , jdbcType=VARCHAR},
+            #{name , jdbcType=VARCHAR},
+            #{icon , jdbcType=VARCHAR},
+            #{sort},
+            #{url, jdbcType=VARCHAR},
+            #{description , jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateMenuInfo" parameterType="com.ozf.laiyw.manage.model.Menu">
+        update t_sys_menu set
+            m_parent_id = #{parentId , jdbcType=VARCHAR},
+            m_name = #{name , jdbcType=VARCHAR},
+            m_icon = #{icon , jdbcType=VARCHAR},
+            m_sort = #{sort},
+            m_url = #{url , jdbcType=VARCHAR},
+            m_description = #{description , jdbcType=VARCHAR}
+        where m_id = #{id, jdbcType=VARCHAR}
+    </update>
+
+    <select id="getRoot" resultMap="menuMap">
+        select * from t_sys_menu where m_status = 1 and (m_parent_id is null or m_parent_id = '') order by m_sort desc
+    </select>
+
+    <!--select * from t_sys_menu where m_parent_id = #{parentId} and m_status = 1 order by m_sort desc-->
+    <select id="getChildrenByParentId" resultMap="menuMap">
+        select
+          m.*,mp.m_name as m_parent_name
+        from t_sys_menu m
+        left join t_sys_menu mp on m.m_parent_id = mp.m_id
+        where m.m_parent_id = #{parentId} and m.m_status = 1 order by m.m_sort desc
+    </select>
+
+    <update id="removeMenu">
+        update t_sys_menu set m_status = 0 where m_id = #{id}
+    </update>
+
+    <select id="getMenuById" resultMap="menuMap">
+        select m.*, mp.m_name as m_parent_name from t_sys_menu m left join t_sys_menu mp on m.m_parent_id = mp.m_id where m.m_id = #{id}
+    </select>
+
+</mapper>

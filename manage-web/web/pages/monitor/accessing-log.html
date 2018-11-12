@@ -45,7 +45,7 @@
         <div class="box-header no-border">
             <div class="box-tools pull-right">
                 <button style="margin-top: -10px;" type="button" class="btn btn-box-tool" data-widget="collapse">
-                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-plus"></i>查询
                 </button>
             </div>
         </div>
@@ -130,7 +130,7 @@
         </div>
     </div>
     <div id="toolbar"></div>
-    <table id="monitor_log_data" class="table table-bordered table-hover col-xs-12"></table>
+    <table id="monitor_log_data" class="table table-bordered table-hover table-condensed"></table>
 </section>
 <!-- jQuery 2.2.3 -->
 <script src="../../plugins/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -175,7 +175,6 @@
             url: queryUrl,
             dataField: "list",
             queryParams: function (params) {
-                console.log(params)
                 return top.serializeParams(params, $("form").serialize())
             },
             toolbar: '#toolbar',

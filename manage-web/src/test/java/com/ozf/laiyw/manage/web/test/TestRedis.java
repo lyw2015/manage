@@ -22,6 +22,11 @@ public class TestRedis {
     private RedisCacheUtils redisCacheUtils;
 
     @Test
+    public void testDelete(){
+        redisCacheUtils.delete("12345678987654");
+    }
+
+    @Test
     public void get() {
         Map<String, String> map = redisCacheUtils.getCacheMap("shareSessionMapCache");
         System.out.println(map.size());

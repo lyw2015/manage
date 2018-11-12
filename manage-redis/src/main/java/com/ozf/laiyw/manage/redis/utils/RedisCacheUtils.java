@@ -24,7 +24,7 @@ public class RedisCacheUtils<T> {
                     return getCacheSet(key);
                 } catch (Exception se) {
                     try {
-                        return getCacheMap(key).keySet();
+                        return getCacheMap(key);
                     } catch (Exception me) {
                         return null;
                     }
@@ -87,6 +87,7 @@ public class RedisCacheUtils<T> {
      * @return
      */
     public <T> void setCacheList(String key, List<T> dataList) {
+        delete(key);
         if (null != dataList && !dataList.isEmpty()) {
             BoundListOperations<String, T> boundListOperations = redisTemplate.boundListOps(key);
             int size = dataList.size();

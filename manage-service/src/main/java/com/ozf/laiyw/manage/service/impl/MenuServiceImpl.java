@@ -1,0 +1,94 @@
+package com.ozf.laiyw.manage.service.impl;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ozf.laiyw.manage.common.utils.StringUtils;
+import com.ozf.laiyw.manage.dao.mapper.MenuMapper;
+import com.ozf.laiyw.manage.model.Menu;
+import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
+import com.ozf.laiyw.manage.service.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+
+/**
+ * @Description:
+ * @Auther: Laiyw
+ * @Date: 2018/11/10 19:06
+ */
+@Transactional
+@Service
+public class MenuServiceImpl implements MenuService {
+
+    @Autowired
+    private MenuMapper menuMapper;
+    @Autowired
+    private RedisCacheUtils redisCacheUtils;
+    private final String MENUKEY = "menuCacheKey";
+
+    @PostConstruct
+    public void initData() {
+        redisCacheUtils.setCacheList(MENUKEY, menuMapper.getAllMenu());
+    }
+
+    @Override
+    public int saveMenuInfo(Menu menu) {
+        menu.setId(StringUtils.randUUID());
+        int count = menuMapper.saveMenuInfo(menu);
+        initData();
+        return count;
+    }
+
+    @Override
+    public int updateMenuInfo(Menu menu) {
+        int count = menuMapper.updateMenuInfo(menu);
+        initData();
+        return count;
+    }
+
+    @Override
+    public PageInfo getRoot(PageInfo pageInfo) {
+        Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        pageInfo.setList(menuMapper.getRoot());
+        pageInfo.setTotal(page.getTotal());
+        return pageInfo;
+    }
+
+    @Override
+    public List<Menu> getAllMenu() {
+        List<Menu> list = redisCacheUtils.getCacheList(MENUKEY);
+        if (null == list || list.isEmpty()) {
+            initData();
+            list = redisCacheUtils.getCacheList(MENUKEY);
+        }
+        return list;
+    }
+
+    @Override
+    public PageInfo getChildrenByParentId(PageInfo pageInfo, String parentId) {
+        Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        pageInfo.setList(menuMapper.getChildrenByParentId(parentId));
+        pageInfo.setTotal(page.getTotal());
+        return pageInfo;
+    }
+
+    @Override
+    public int removeMenu(String id) {
+        List list = menuMapper.getChildrenByParentId(id);
+        if (null != list && list.size() > 0)
+            return -1;
+        //TO DO 该菜单是否有被引用
+        int count = menuMapper.removeMenu(id);
+        initData();
+        return count;
+    }
+
+    @Override
+    public Menu getMenuById(String id) {
+        return menuMapper.getMenuById(id);
+    }
+}
