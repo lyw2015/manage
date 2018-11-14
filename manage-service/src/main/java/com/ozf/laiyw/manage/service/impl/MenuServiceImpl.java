@@ -9,6 +9,7 @@ import com.ozf.laiyw.manage.model.Menu;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +29,12 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
-    private final String MENUKEY = "menuCacheKey";
+    @Value("${menu.cache.key}")
+    private String menuCacheKey;
 
     @PostConstruct
     public void initData() {
-        redisCacheUtils.setCacheList(MENUKEY, menuMapper.getAllMenu());
+        redisCacheUtils.setCacheList(menuCacheKey, menuMapper.getAllMenu());
     }
 
     @Override
@@ -60,10 +62,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> getAllMenu() {
-        List<Menu> list = redisCacheUtils.getCacheList(MENUKEY);
+        List<Menu> list = redisCacheUtils.getCacheList(menuCacheKey);
         if (null == list || list.isEmpty()) {
             initData();
-            list = redisCacheUtils.getCacheList(MENUKEY);
+            list = redisCacheUtils.getCacheList(menuCacheKey);
         }
         return list;
     }
