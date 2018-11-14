@@ -1,0 +1,15 @@
+DELETE FROM t_sys_menu;
+INSERT INTO t_sys_menu VALUES ('C2AA3AE6B81B486A8B8E0F56C7100F23', '', '页面模板', 'fa fa-pagelines', 400, 'pages/template.html', '新增页面时的页面模板', 1);
+INSERT INTO t_sys_menu VALUES ('5DC2DBA1D08F4BED9795B8A855ABD961', '', '系统设置', 'fa fa-cogs', 300, '', '', 1);
+INSERT INTO t_sys_menu VALUES ('40B77FA0E56244569B50A2DD2EBCE34C', '5DC2DBA1D08F4BED9795B8A855ABD961', '系统配置', 'fa fa-asterisk', 200, 'pages/system/setting.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('0B3B79641F4B4ACC8BE801EC41FC3006', '5DC2DBA1D08F4BED9795B8A855ABD961', '菜单管理', 'fa fa-tree', 100, 'pages/system/menu.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('D53DE23EDD544D80B0763BA21BDA2C19', '', '系统监控', 'fa fa-dashboard', 200, '', '系统监控', 1);
+INSERT INTO t_sys_menu VALUES ('242431D8DB5B492E964A0A4FCE91B38A', 'D53DE23EDD544D80B0763BA21BDA2C19', '在线用户', 'fa fa-users', 600, 'pages/monitor/online-user.html', '展示在线用户信息', 1);
+INSERT INTO t_sys_menu VALUES ('0ADAE38220754050A2FD8BC4E77FAB6A', 'D53DE23EDD544D80B0763BA21BDA2C19', '访客统计', 'fa fa-eye', 500, 'pages/monitor/guest.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('8BCA0A7B231F4F16A77CEC686F787D2B', 'D53DE23EDD544D80B0763BA21BDA2C19', '缓存监控', 'fa fa-cloud', 400, 'pages/monitor/cache.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('40CBF110E96945EC8C6696D6BFB09E72', 'D53DE23EDD544D80B0763BA21BDA2C19', '数据监控', 'fa fa-database', 300, 'monitor/druid', '数据监控', 1);
+INSERT INTO t_sys_menu VALUES ('F4B43298787E4D8A9D189BA59E985B8B', 'D53DE23EDD544D80B0763BA21BDA2C19', '服务器监控', 'fa fa-tv', 200, 'monitor/server', '', 1);
+INSERT INTO t_sys_menu VALUES ('4F9BC8DFB3554E5587CB0ECB12087C46', 'D53DE23EDD544D80B0763BA21BDA2C19', '访问日志', 'fa fa-list', 100, 'pages/monitor/accessing-log.html', '展示系统的操作日志', 1);
+INSERT INTO t_sys_menu VALUES ('9D8431FE7288481CA792CA72F5ED9F9A', '', '系统异常', 'fa fa-close', 100, '', '', 1);
+INSERT INTO t_sys_menu VALUES ('08F63797F0CA46299268C2816FB74AEB', '9D8431FE7288481CA792CA72F5ED9F9A', '404 Error', 'fa fa-eye-slash', 200, 'pages/system/404.html', '找不到页面时跳转的页面', 1);
+INSERT INTO t_sys_menu VALUES ('18582F8EBAF24618BA8250CC5819E9CE', '9D8431FE7288481CA792CA72F5ED9F9A', '500 Error', 'fa fa-frown-o', 100, 'pages/system/500.html', '系统发生异常时跳转的页面', 1);
