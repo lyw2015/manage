@@ -1,6 +1,5 @@
 package com.ozf.laiyw.manage.service;
 
-import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.model.Menu;
 
 import java.util.List;
@@ -16,11 +15,11 @@ public interface MenuService {
 
     int updateMenuInfo(Menu menu);
 
-    PageInfo getRoot(PageInfo pageInfo);
+    List<Menu> getRoot();
 
     List<Menu> getAllMenu();
 
-    PageInfo getChildrenByParentId(PageInfo pageInfo, String parentId);
+    List<Menu> getChildrenByParentId(String parentId);
 
     int removeMenu(String id);
 

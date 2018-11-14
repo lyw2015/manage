@@ -1,8 +1,5 @@
 package com.ozf.laiyw.manage.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.dao.mapper.MenuMapper;
 import com.ozf.laiyw.manage.model.Menu;
@@ -53,11 +50,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public PageInfo getRoot(PageInfo pageInfo) {
-        Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-        pageInfo.setList(menuMapper.getRoot());
-        pageInfo.setTotal(page.getTotal());
-        return pageInfo;
+    public List<Menu> getRoot() {
+        return menuMapper.getRoot();
     }
 
     @Override
@@ -71,11 +65,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public PageInfo getChildrenByParentId(PageInfo pageInfo, String parentId) {
-        Page page = PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-        pageInfo.setList(menuMapper.getChildrenByParentId(parentId));
-        pageInfo.setTotal(page.getTotal());
-        return pageInfo;
+    public List<Menu> getChildrenByParentId(String parentId) {
+        return menuMapper.getChildrenByParentId(parentId);
     }
 
     @Override

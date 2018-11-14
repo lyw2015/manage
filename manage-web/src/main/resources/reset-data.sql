@@ -1,7 +1,11 @@
 DELETE FROM t_sys_menu;
-INSERT INTO t_sys_menu VALUES ('C2AA3AE6B81B486A8B8E0F56C7100F23', '', '页面模板', 'fa fa-pagelines', 400, 'pages/template.html', '新增页面时的页面模板', 1);
+INSERT INTO t_sys_menu VALUES ('C2AA3AE6B81B486A8B8E0F56C7100F23', '', '页面模板', 'fa fa-pagelines', 500, 'pages/template.html', '新增页面时的页面模板', 1);
+INSERT INTO t_sys_menu VALUES ('444CB011FCB04E5B9C7D710117E2A1BA', '', '组织架构', 'fa fa-arrows', 400, '', '', 1);
+INSERT INTO t_sys_menu VALUES ('3804BFD84B0441EFA0B99C85622C7733', '444CB011FCB04E5B9C7D710117E2A1BA', '机构管理', 'fa fa-bars', 300, 'pages/system/mechanisms.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('660A7FD98FCB4B0FAE515853747FDEBF', '444CB011FCB04E5B9C7D710117E2A1BA', '角色管理', 'fa fa-object-group', 200, 'pages/system/roles.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('51646DCE7D7F42C4B58378C4E1CD02E9', '444CB011FCB04E5B9C7D710117E2A1BA', '用户管理', 'fa fa-users', 100, 'pages/system/users.html', '', 1);
 INSERT INTO t_sys_menu VALUES ('5DC2DBA1D08F4BED9795B8A855ABD961', '', '系统设置', 'fa fa-cogs', 300, '', '', 1);
-INSERT INTO t_sys_menu VALUES ('40B77FA0E56244569B50A2DD2EBCE34C', '5DC2DBA1D08F4BED9795B8A855ABD961', '系统配置', 'fa fa-asterisk', 200, 'pages/system/setting.html', '', 1);
+INSERT INTO t_sys_menu VALUES ('40B77FA0E56244569B50A2DD2EBCE34C', '5DC2DBA1D08F4BED9795B8A855ABD961', '基础配置', 'fa fa-asterisk', 200, 'pages/system/setting.html', '', 1);
 INSERT INTO t_sys_menu VALUES ('0B3B79641F4B4ACC8BE801EC41FC3006', '5DC2DBA1D08F4BED9795B8A855ABD961', '菜单管理', 'fa fa-tree', 100, 'pages/system/menu.html', '', 1);
 INSERT INTO t_sys_menu VALUES ('D53DE23EDD544D80B0763BA21BDA2C19', '', '系统监控', 'fa fa-dashboard', 200, '', '系统监控', 1);
 INSERT INTO t_sys_menu VALUES ('242431D8DB5B492E964A0A4FCE91B38A', 'D53DE23EDD544D80B0763BA21BDA2C19', '在线用户', 'fa fa-users', 600, 'pages/monitor/online-user.html', '展示在线用户信息', 1);

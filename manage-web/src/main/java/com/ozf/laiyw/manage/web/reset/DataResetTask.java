@@ -1,4 +1,4 @@
-package com.ozf.laiyw.manage.web.controller.reset;
+package com.ozf.laiyw.manage.web.reset;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;

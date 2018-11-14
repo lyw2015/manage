@@ -155,13 +155,6 @@ SubmitForm = function () {
 InitMainTable = function () {
     $('#menu_data').bootstrapTable({
         url: "/menu/getRoot",
-        dataField: "list",
-        queryParams: function (params) {
-            return {
-                pageSize: params.limit,
-                pageNum: (params.offset / params.limit) + 1
-            }
-        },
         toolbar: '#toolbar',
         detailView: true,
         showFullscreen: true,
@@ -169,18 +162,17 @@ InitMainTable = function () {
         showColumns: true,
         minimumCountColumns: 2,
         showToggle: true,
+        responseHandler: function (data) {
+            return data;
+        },
         cache: false,
-        pagination: true,
-        sidePagination: "server",
-        pageNumber: 1,
-        pageSize: 10,
-        pageList: [10, 20, 30, 50, 100],
-        paginationPreText: "上一页",
-        paginationNextText: "下一页",
         columns: [
             {
                 field: 'name',
-                title: '菜单名称'
+                title: '菜单名称',
+                formatter: function (field, row, index) {
+                    return "<i class='" + row.icon + "'></i>" + row.name
+                }
             }, {
                 field: 'url',
                 title: '菜单URL'
@@ -189,9 +181,9 @@ InitMainTable = function () {
                 title: '父级菜单'
             }, {
                 field: 'icon',
-                title: '菜单图标效果/代码',
+                title: '图标代码',
                 formatter: function (field, row, index) {
-                    return "<i style='margin-right: 10px;' class='" + row.icon + "'></i>" + row.icon
+                    return row.icon
                 }
             }, {
                 field: 'sort',
@@ -222,28 +214,24 @@ InitSubTable = function (index, row, $detail) {
     var cur_table = $detail.html('<table id="children_menu_data"></table>').find('table');
     $(cur_table).bootstrapTable({
         url: '/menu/getChildrenByParentId',
-        dataField: "list",
         queryParams: function (params) {
             return {
-                pageSize: params.limit,
-                pageNum: (params.offset / params.limit) + 1,
                 parentId: row.id
             }
         },
         detailView: true,
         classes: 'table table-bordered table-hover table-condensed',
+        responseHandler: function (data) {
+            return data;
+        },
         cache: false,
-        pagination: true,
-        sidePagination: "server",
-        pageNumber: 1,
-        pageSize: 10,
-        pageList: [10, 20, 30, 50, 100],
-        paginationPreText: "上一页",
-        paginationNextText: "下一页",
         columns: [
             {
                 field: 'name',
-                title: '菜单名称'
+                title: '菜单名称',
+                formatter: function (field, row, index) {
+                    return "<i class='" + row.icon + "'></i>" + row.name
+                }
             }, {
                 field: 'url',
                 title: '菜单URL'
@@ -252,9 +240,9 @@ InitSubTable = function (index, row, $detail) {
                 title: '父级菜单'
             }, {
                 field: 'icon',
-                title: '菜单图标效果/代码',
+                title: '图标代码',
                 formatter: function (field, row, index) {
-                    return "<i style='margin-right: 10px;' class='" + row.icon + "'></i>" + row.icon
+                    return row.icon
                 }
             }, {
                 field: 'sort',

@@ -1,6 +1,5 @@
 package com.ozf.laiyw.manage.web.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
 import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
@@ -10,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -27,8 +28,8 @@ public class MenuController extends BaseController {
     @SystemLog(description = "查看菜单列表")
     @RequestMapping("/getRoot")
     @ResponseBody
-    public PageInfo getRoot(PageInfo pageInfo) {
-        return menuService.getRoot(pageInfo);
+    public List<Menu> getRoot() {
+        return menuService.getRoot();
     }
 
     @RequestMapping("/getAllMenu")
@@ -39,8 +40,8 @@ public class MenuController extends BaseController {
 
     @RequestMapping("/getChildrenByParentId")
     @ResponseBody
-    public PageInfo getChildrenByParentId(PageInfo pageInfo, String parentId) {
-        return menuService.getChildrenByParentId(pageInfo, parentId);
+    public List<Menu> getChildrenByParentId(String parentId) {
+        return menuService.getChildrenByParentId(parentId);
     }
 
     @SystemLog(description = "添加菜单")
