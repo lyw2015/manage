@@ -26,7 +26,20 @@
         <property name="locations" value="file:C:/Users/Laiyw/Documents/Workspace/Manage/origin.properties"/>
     </bean>
 
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html; charset=UTF-8</value>
+                        <value>application/json; charset=UTF-8</value>
+                        <value>text/plain; charset=UTF-8</value>
+                        <value>application/xml; charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <mvc:default-servlet-handler/>
 

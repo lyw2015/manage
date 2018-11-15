@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Manage | 菜单管理</title>
+    <title>Manage | 字典管理</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Pace -->
@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/ionicons.min.css">
     <!-- bootstrap table -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.css">
-    <!-- treeview -->
-    <link rel="stylesheet" href="../../plugins/treeview/bootstrap-treeview.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -31,66 +29,44 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <section class="content-header">
     <h1>
-        菜单管理
+        字典管理
     </h1>
     <ol class="breadcrumb">
         <li><i class="fa fa-home"></i> Home</li>
         <li>系统设置</li>
-        <li>菜单管理</li>
+        <li>字典管理</li>
     </ol>
 </section>
 
 <section class="content">
     <div class="btn-group" id="toolbar">
-        <button onclick="AddMenu()" type="button" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>添加</button>
+        <button onclick="showDict('添加')" type="button" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>添加
+        </button>
     </div>
-    <table id="menu_data" class="table table-bordered table-hover table-condensed"></table>
+    <table id="dictionaries_data" class="table table-bordered table-hover table-condensed"></table>
 </section>
 
-<div id="menuModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+<div id="dictionariesModal" class="modal fade" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title title-name"></h4>
+                <h4 class="modal-title title-name-d"></h4>
             </div>
             <div class="modal-body col-xs-12">
-                <form id="form_menu" onsubmit="return false" style="line-height: 40px;">
-                    <input style="display: none" type="text" name="id">
-                    <input style="display: none" type="text" name="isChildren" value="false">
-                    <div class="form-group col-xs-12 col-md-6">
-                        <div class="input-group">
-                            <div class="input-group-addon">上级菜单</div>
-                            <input name="parentName" readonly type="text" class="form-control">
-                            <input style="display: none" name="parentId" type="text" class="form-control">
-                            <div class="input-group-addon btn" onclick="clean()"><i class="fa fa-remove"></i></div>
-                            <div data-toggle="modal" data-target="#menuTreeModal" class="input-group-addon btn"><i
-                                    class="fa fa-search"></i></div>
-                        </div>
-                    </div>
+                <form id="form_dictionaries" onsubmit="return false" style="line-height: 40px;">
+                    <input style="display: none" type="text" name="id" id="d_id">
                     <div class="form-group col-xs-12 col-md-6">
                         <div class="input-group">
                             <div class="input-group-addon">名称<i class="text-red">*</i></div>
                             <input name="name" type="text" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group col-xs-12 col-md-12">
-                        <div class="input-group">
-                            <div class="input-group-addon">地址</div>
-                            <input name="url" type="text" class="form-control">
-                        </div>
-                    </div>
                     <div class="form-group col-xs-12 col-md-6">
                         <div class="input-group">
-                            <div class="input-group-addon">图标</div>
-                            <input name="icon" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group col-xs-12 col-md-6">
-                        <div class="input-group">
-                            <div class="input-group-addon">排序<i class="text-red">*</i></div>
-                            <input name="sort" value="0" type="number" max="999999" class="form-control">
+                            <div class="input-group-addon">标识<i class="text-red">*</i></div>
+                            <input name="identification" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="form-group col-xs-12">
@@ -103,25 +79,49 @@
             </div>
             <div class="modal-footer">
                 <div class="col-xs-12">
-                    <button onclick="SubmitForm()" type="button" class="btn btn-info">提交</button>
+                    <button onclick="submitDictionaries()" type="button" class="btn btn-info">提交</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="menuTreeModal" class="modal fade">
-    <div class="modal-dialog" style="width: 260px;">
+<div id="dictionariesItemModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="pull-right">
-                    <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">确认</span></button>
-                </div>
-                <h4 class="modal-title">选择父级菜单</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title title-name-di"></h4>
             </div>
-            <div class="modal-body" style="width: 260px; max-height: 310px; overflow-y: scroll">
-                <div id="menuTree"></div>
+            <div class="modal-body col-xs-12">
+                <form id="form_dictionariesItem" onsubmit="return false" style="line-height: 40px;">
+                    <input style="display: none" type="text" name="id" id="di_id">
+                    <input style="display: none" type="text" name="dictId">
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="input-group">
+                            <div class="input-group-addon">所属字典</div>
+                            <input name="dictName" readonly type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">名称<i class="text-red">*</i></div>
+                            <input name="itemName" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12 col-md-6">
+                        <div class="input-group">
+                            <div class="input-group-addon">值<i class="text-red">*</i></div>
+                            <input name="itemValue" type="text" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="col-xs-12">
+                    <button onclick="submitDictionariesItem()" type="button" class="btn btn-info">提交</button>
+                </div>
             </div>
         </div>
     </div>
@@ -138,10 +138,8 @@
 <!-- bootstrap table -->
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.js"></script>
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<!-- treeview -->
-<script src="../../plugins/treeview/bootstrap-treeview.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../plugins/AdminLTE/dist/js/app.min.js"></script>
-<script src="../../statics/js/menu.js"></script>
+<script src="../../statics/js/dictionaries.js"></script>
 </body>
 </html>

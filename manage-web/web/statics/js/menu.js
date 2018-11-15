@@ -177,9 +177,6 @@ InitMainTable = function () {
                 field: 'url',
                 title: '菜单URL'
             }, {
-                field: 'parentName',
-                title: '父级菜单'
-            }, {
                 field: 'icon',
                 title: '图标代码',
                 formatter: function (field, row, index) {

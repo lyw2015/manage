@@ -30,6 +30,8 @@ public class DataResetTask {
     private RedisCacheUtils redisCacheUtils;
     @Value("${menu.cache.key}")
     private String menuCacheKey;
+    @Value("${dictionaries.cache.key}")
+    private String dictionariesKey;
 
     @Scheduled(cron = "0 0 0/1 * * ?")
     public void resetData() {
@@ -40,6 +42,7 @@ public class DataResetTask {
             EncodedResource encodedResource = new EncodedResource(classPathResource, Constants.UTF_8);
             ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), encodedResource);
             redisCacheUtils.delete(menuCacheKey);
+            redisCacheUtils.delete(dictionariesKey);
             logger.info("数据重置成功！");
         } catch (Exception e) {
             logger.error("数据重置异常", e);

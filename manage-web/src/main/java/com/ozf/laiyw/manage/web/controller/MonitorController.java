@@ -51,7 +51,7 @@ public class MonitorController extends BaseController {
     @RequestMapping("/getValueByKey")
     @ResponseBody
     public String getValueByKey(String mapKey, String dataKey) {
-        return (String) redisCacheUtils.getMapDataByKey(mapKey, dataKey);
+        return JSON.toJSONString(redisCacheUtils.getMapDataByKey(mapKey, dataKey), true);
     }
 
     @SystemLog(description = "删除Map中缓存Key")
