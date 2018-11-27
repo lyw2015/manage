@@ -154,7 +154,10 @@ Web Service框架：CXF
 ![系统基础设置](https://images.gitee.com/uploads/images/2018/1107/133749_c24d6144_1486552.png "系统基础设置.png")
 
 #菜单管理
-![菜单管理](https://images.gitee.com/uploads/images/2018/1112/135517_3b3e81da_1486552.png "菜单管理.png")
+![菜单管理](https://images.gitee.com/uploads/images/2018/1127/150335_3d2092c8_1486552.png "菜单管理.png")
+
+#机构管理
+![机构管理](https://images.gitee.com/uploads/images/2018/1127/150218_bbcf0be8_1486552.png "机构管理.png")
 
 #访问日志
 ![访问日志](https://images.gitee.com/uploads/images/2018/1112/135158_28aa27bb_1486552.png "访问日志.png")
