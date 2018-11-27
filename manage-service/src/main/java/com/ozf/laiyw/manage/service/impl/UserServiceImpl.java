@@ -109,7 +109,6 @@ public class UserServiceImpl implements UserService {
         User current = ShiroUtils.getCurrentUser();
         user.setId(current.getId());
         int count = userMapper.updateUserInfo(user);
-        logger.debug("update user info row--->" + count);
         if (count == 1) {
             current = findByUserAccount(current.getAccount());
             ShiroUtils.refreshUser(current);

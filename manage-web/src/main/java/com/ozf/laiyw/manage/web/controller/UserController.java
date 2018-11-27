@@ -5,6 +5,7 @@ import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ import java.util.Map;
 @RequestMapping("/personal")
 @Controller
 public class UserController extends BaseController {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     private UserService userService;
@@ -48,13 +51,24 @@ public class UserController extends BaseController {
     @RequestMapping("/updateUserInfo")
     @ResponseBody
     public WebResult updateUserInfo(User user) {
-        return WebResult.successResult(userService.updateUserInfo(user));
+        try {
+            userService.updateUserInfo(user);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("修改用户信息错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "修改用户密码")
     @RequestMapping("/updateUserPwd")
     @ResponseBody
     public WebResult updateUserPwd(String oldpassword, String newpassword) {
-        return WebResult.successResult(userService.updateUserPwd(oldpassword, newpassword));
+        try {
+            return WebResult.successResult(userService.updateUserPwd(oldpassword, newpassword));
+        } catch (Exception e) {
+            logger.error("修改用户密码错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 }

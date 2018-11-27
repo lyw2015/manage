@@ -201,9 +201,13 @@
             },
             url: "/monitor/removeMapKey",
             success: function (result) {
-                parent.toastr.success("缓存清除成功");
-                $("#cackeValueTextarea").val("");
-                $('#cacheSonKey').bootstrapTable("refresh");
+                if (result.success) {
+                    parent.toastr.success("缓存清除成功");
+                    $("#cackeValueTextarea").val("");
+                    $('#cacheSonKey').bootstrapTable("refresh");
+                } else {
+                    parent.toastr.error(result.message);
+                }
             }
         });
     }

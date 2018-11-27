@@ -6,6 +6,7 @@ import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.Dictionaries;
 import com.ozf.laiyw.manage.model.DictionariesItem;
 import com.ozf.laiyw.manage.service.DictionariesService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ import java.util.List;
 @RequestMapping("/dictionaries")
 @Controller
 public class DictionariesController extends BaseController {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     private DictionariesService dictionariesService;
@@ -58,7 +61,13 @@ public class DictionariesController extends BaseController {
         if (StringUtils.isEmpty(dictionaries.getName()) || StringUtils.isEmpty(dictionaries.getIdentification())) {
             return WebResult.errorResult("字典名与标识不能为空");
         }
-        return WebResult.successResult(dictionariesService.saveDictionaries(dictionaries));
+        try {
+            dictionariesService.saveDictionaries(dictionaries);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("保存数据字典错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "修改数据字典")
@@ -71,7 +80,13 @@ public class DictionariesController extends BaseController {
         if (StringUtils.isEmpty(dictionaries.getId())) {
             return WebResult.errorResult("无效的字典ID");
         }
-        return WebResult.successResult(dictionariesService.updateDictionaries(dictionaries));
+        try {
+            dictionariesService.updateDictionaries(dictionaries);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("修改数据字典错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "保存数据字典项")
@@ -84,7 +99,13 @@ public class DictionariesController extends BaseController {
         if (StringUtils.isEmpty(dictionariesItem.getDictId())) {
             return WebResult.errorResult("无效的字典ID");
         }
-        return WebResult.successResult(dictionariesService.saveDictionariesItem(dictionariesItem));
+        try {
+            dictionariesService.saveDictionariesItem(dictionariesItem);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("保存数据字典项错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "修改数据字典项")
@@ -100,7 +121,13 @@ public class DictionariesController extends BaseController {
         if (StringUtils.isEmpty(dictionariesItem.getId())) {
             return WebResult.errorResult("无效的字典项ID");
         }
-        return WebResult.successResult(dictionariesService.updateDictionariesItem(dictionariesItem));
+        try {
+            dictionariesService.updateDictionariesItem(dictionariesItem);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("修改数据字典项错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @RequestMapping("/getDictionariesById")
@@ -119,16 +146,28 @@ public class DictionariesController extends BaseController {
     @RequestMapping("/updateDictionariesStatus")
     @ResponseBody
     public WebResult updateDictionariesStatus(String id) {
-        int count = dictionariesService.updateDictionariesStatus(id);
-        if (count == -1)
-            return WebResult.errorResult("删除失败，该字典存在字典项");
-        return WebResult.successResult(count);
+        try {
+            int count = dictionariesService.updateDictionariesStatus(id);
+            if (count == -1) {
+                return WebResult.errorResult("删除失败，该字典存在字典项");
+            }
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("删除字典错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "删除字典项")
     @RequestMapping("/updateDictionariesItemStatus")
     @ResponseBody
     public WebResult updateDictionariesItemStatus(String id) {
-        return WebResult.successResult(dictionariesService.updateDictionariesItemStatus(id));
+        try {
+            dictionariesService.updateDictionariesItemStatus(id);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("删除字典项错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 }

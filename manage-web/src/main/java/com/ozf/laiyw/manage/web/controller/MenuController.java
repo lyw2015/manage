@@ -5,6 +5,7 @@ import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.Menu;
 import com.ozf.laiyw.manage.service.MenuService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,8 @@ import java.util.List;
 @RequestMapping("/menu")
 @Controller
 public class MenuController extends BaseController {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     private MenuService menuService;
@@ -50,7 +53,13 @@ public class MenuController extends BaseController {
     public WebResult saveMenuInfo(Menu menu) {
         if (StringUtils.isEmpty(menu.getName()))
             return WebResult.errorResult("菜单名称不能为空");
-        return WebResult.successResult(menuService.saveMenuInfo(menu));
+        try {
+            menuService.saveMenuInfo(menu);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("添加菜单错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "修改菜单")
@@ -59,7 +68,13 @@ public class MenuController extends BaseController {
     public WebResult updateMenuInfo(Menu menu) {
         if (StringUtils.isEmpty(menu.getName()))
             return WebResult.errorResult("菜单名称不能为空");
-        return WebResult.successResult(menuService.updateMenuInfo(menu));
+        try {
+            menuService.updateMenuInfo(menu);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("修改菜单错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "删除菜单")
@@ -68,11 +83,16 @@ public class MenuController extends BaseController {
     public WebResult removeMenu(String id) {
         if (StringUtils.isEmpty(id))
             return WebResult.errorResult("请指定需要删除的菜单");
-        int count = menuService.removeMenu(id);
-        if (count == -1) {
-            return WebResult.errorResult("删除失败，该菜单包含子节点");
+        try {
+            int count = menuService.removeMenu(id);
+            if (count == -1) {
+                return WebResult.errorResult("删除失败，该菜单包含子节点");
+            }
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("删除菜单错误", e);
+            return WebResult.errorNetworkAnomalyResult();
         }
-        return WebResult.successResult();
     }
 
     @SystemLog(description = "查看菜单详细信息")

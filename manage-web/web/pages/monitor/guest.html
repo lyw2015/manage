@@ -90,7 +90,7 @@
             </form>
         </div>
     </div>
-    <table id="monitor_guest_data" class="table table-bordered table-hover table-condensed"></table>
+    <table id="monitor_guest_data" class="table-bordered table-condensed"></table>
 </section>
 <!-- jQuery 2.2.3 -->
 <script src="../../plugins/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -137,12 +137,10 @@
             queryParams: function (params) {
                 return top.serializeParams(params, $("form").serialize())
             },
-            showFullscreen: true,//是否显示全屏按钮
             showRefresh: true,//是否显示刷新按钮
+            showToggle: true,//是否显示切换视图（table/card）按钮
             showColumns: true,//是否显示内容列下拉框
             minimumCountColumns: 2,//最小隐藏列的数量
-            showToggle: true,//是否显示切换视图（table/card）按钮
-            cache: false,
             pagination: true,
             sidePagination: "server",
             pageNumber: 1,

@@ -258,12 +258,12 @@
     </div>
 
     <!-- 底部版权信息 -->
-    <footer class="main-footer">
+    <!--<footer class="main-footer">
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.0.0
         </div>
         <strong>Copyright &copy; 2018 <a href="https://gitee.com/laiyw">Laiyw</a></strong> 版权所有
-    </footer>
+    </footer>-->
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
@@ -318,6 +318,15 @@
 
     function setUserInfo(data) {
         $(".user_name").html(data.username);
+    }
+
+    function getUrlParam(search, name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2], true);
+        }
+        return null;
     }
 
     //序列化表单参数（用于bootstrapTable 分页） params：bootstrapTable参数，serialize表单的序列化值

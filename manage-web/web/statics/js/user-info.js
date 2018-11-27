@@ -131,6 +131,8 @@ function updateUserPwd() {
                         } else if (result.data == 1) {
                             parent.toastr.success("密码修改成功，请重新登录！");
                             top.location.href = "/manage/logout";
+                        } else {
+                            parent.toastr.error(result.message);
                         }
                     }
                 }

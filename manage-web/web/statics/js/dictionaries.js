@@ -171,15 +171,10 @@ function initMainTable() {
         url: "/dictionaries/getAllDictionaries",
         toolbar: '#toolbar',
         detailView: true,
-        showFullscreen: true,
         showRefresh: true,
+        showToggle: true,
         showColumns: true,
         minimumCountColumns: 2,
-        showToggle: true,
-        responseHandler: function (data) {
-            return data;
-        },
-        cache: false,
         columns: [
             {
                 field: 'name',
@@ -199,9 +194,9 @@ function initMainTable() {
                 align: 'center',
                 width: '100',
                 formatter: function (field, row, index) {
-                    return '<a href="javascript:showDictItem(\'' + row.id + '\', \'' + row.name + '\' ,\'添加\')" data-toggle="tooltip" title="添加字典项" type="button" class="btn btn-xs btn-primary"><i class="fa fa-plus-square"></i></a>' +
-                        '<a href="javascript:updateDict(\'' + row.id + '\')" type="button" class="btn btn-xs btn-info" style="margin-left: 5px;"><i class="fa fa-edit"></i></a>' +
-                        '<a href="javascript:removeDict(\'' + row.id + '\')" type="button" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-close"></i></a>';
+                    return '<a href="javascript:showDictItem(\'' + row.id + '\', \'' + row.name + '\' ,\'添加\')" data-toggle="tooltip" title="添加字典项" class="btn btn-xs btn-primary"><i class="fa fa-plus"></i></a>' +
+                        '<a href="javascript:updateDict(\'' + row.id + '\')" class="btn btn-xs btn-info" style="margin-left: 5px;"><i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:removeDict(\'' + row.id + '\')" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-trash-o"></i></a>';
                 }
             }
         ],
@@ -222,10 +217,6 @@ function initSubTable(index, row, $detail) {
             }
         },
         classes: 'table table-bordered table-hover table-condensed',
-        responseHandler: function (data) {
-            return data;
-        },
-        cache: false,
         columns: [
             {
                 field: 'itemName',
@@ -242,8 +233,8 @@ function initSubTable(index, row, $detail) {
                 align: 'center',
                 width: '80',
                 formatter: function (field, row, index) {
-                    return '<a href="javascript:updateDictItem(\'' + row.id + '\', \'' + parentid + '\' , \'修改\')" type="button" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>' +
-                        '<a href="javascript:removeDictItem(\'' + row.id + '\')" type="button" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-close"></i></a>';
+                    return '<a href="javascript:updateDictItem(\'' + row.id + '\', \'' + parentid + '\' , \'修改\')" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:removeDictItem(\'' + row.id + '\')" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-trash-o"></i></a>';
                 }
             }
         ]

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ozf.laiyw.manage.dao.mapper.OrganizationMapper">
+
+    <resultMap id="organizationMap" type="com.ozf.laiyw.manage.model.Organization">
+        <id property="id" column="o_id"/>
+        <result property="parentId" column="o_parent_id"/>
+        <result property="parentFullName" column="o_parent_full_name"/>
+        <result property="type" column="o_type"/>
+        <result property="name" column="o_name"/>
+        <result property="fullName" column="o_full_name"/>
+        <result property="updateTime" column="o_update_time"/>
+        <result property="personInCharge" column="o_person_in_charge"/>
+        <result property="officePhone" column="o_office_phone"/>
+        <result property="address" column="o_address"/>
+        <result property="postalCode" column="o_postal_code"/>
+        <result property="mailbox" column="o_mailbox"/>
+        <result property="description" column="o_description"/>
+        <result property="status" column="o_status"/>
+    </resultMap>
+
+    <resultMap id="treeOrganizationMap" type="com.ozf.laiyw.manage.model.Organization">
+        <id property="id" column="o_id"/>
+        <result property="name" column="o_name"/>
+        <collection property="organizationList" ofType="com.ozf.laiyw.manage.model.Organization"
+                    javaType="java.util.ArrayList"
+                    select="getChildrenByParentId" column="o_id"/>
+    </resultMap>
+
+    <resultMap id="baseOrganizationMap" type="com.ozf.laiyw.manage.model.Organization">
+        <id property="id" column="o_id"/>
+        <result property="name" column="o_name"/>
+        <collection property="organizationList" ofType="com.ozf.laiyw.manage.model.Organization"
+                    javaType="java.util.ArrayList"
+                    select="getChildrenByParentId" column="o_id"/>
+    </resultMap>
+
+    <select id="getOrganizationById" resultMap="organizationMap">
+        select o1.*, parent.o_full_name as o_parent_full_name
+        from t_sys_organization o1
+        left join t_sys_organization parent on o1.o_parent_id = parent.o_id
+        where o1.o_id = #{id}
+    </select>
+
+    <select id="treeOrganization" resultMap="treeOrganizationMap">
+        select * from t_sys_organization where o_status = 1 and o_parent_id = 0 order by o_name
+    </select>
+
+    <select id="getChildrenByParentId" resultMap="baseOrganizationMap">
+        select * from t_sys_organization where o_parent_id = #{parentId} and o_status = 1 order by o_name
+    </select>
+
+    <update id="updateOrganizationStatus">
+        update t_sys_organization set o_status = 0 where o_id = #{id}
+    </update>
+
+    <update id="updateOrganization" parameterType="com.ozf.laiyw.manage.model.Organization">
+        update t_sys_organization set
+        <choose>
+            <when test="parentId == null">o_parent_id = 0,</when>
+            <otherwise>o_parent_id = #{parentId},</otherwise>
+        </choose>
+        o_type = #{type, jdbcType=VARCHAR},
+        o_name = #{name, jdbcType=VARCHAR},
+        o_full_name = #{fullName, jdbcType=VARCHAR},
+        o_update_time = #{updateTime, jdbcType=VARCHAR},
+        o_person_in_charge = #{personInCharge, jdbcType=VARCHAR},
+        o_office_phone = #{officePhone, jdbcType=VARCHAR},
+        o_address = #{address, jdbcType=VARCHAR},
+        o_postal_code = #{postalCode, jdbcType=VARCHAR},
+        o_mailbox = #{mailbox, jdbcType=VARCHAR},
+        o_description = #{description, jdbcType=VARCHAR}
+        where o_id = #{id}
+    </update>
+
+    <insert id="addOrganization" parameterType="com.ozf.laiyw.manage.model.Organization">
+        insert into t_sys_organization(
+        <if test="parentId != null">o_parent_id,</if>
+        o_type,
+        o_name,
+        o_full_name,
+        o_update_time,
+        o_person_in_charge,
+        o_office_phone,
+        o_address,
+        o_postal_code,
+        o_mailbox,
+        o_description
+        )values(
+        <if test="parentId != null">#{parentId},</if>
+        #{type, jdbcType=VARCHAR},
+        #{name, jdbcType=VARCHAR},
+        #{fullName, jdbcType=VARCHAR},
+        #{updateTime, jdbcType=VARCHAR},
+        #{personInCharge, jdbcType=VARCHAR},
+        #{officePhone, jdbcType=VARCHAR},
+        #{address, jdbcType=VARCHAR},
+        #{postalCode, jdbcType=VARCHAR},
+        #{mailbox, jdbcType=VARCHAR},
+        #{description, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="getAllOrganization" resultMap="organizationMap">
+        select
+        orgn.*, part.o_full_name as o_parent_full_name
+        from t_sys_organization orgn
+        left join t_sys_organization part on orgn.o_parent_id = part.o_id
+        <where>
+            orgn.o_status = 1
+            <if test="type != null and type != ''">
+                and orgn.o_type = #{type}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="pattern" value="'%' + name + '%'"/>
+                and (orgn.o_name like #{pattern} or orgn.o_full_name like #{pattern})
+            </if>
+            <if test="personInCharge != null and personInCharge != ''">
+                <bind name="pattern" value="'%' + personInCharge + '%'"/>
+                and orgn.o_person_in_charge like #{pattern}
+            </if>
+            <if test="address != null and address != ''">
+                <bind name="pattern" value="'%' + address + '%'"/>
+                and orgn.o_address like #{pattern}
+            </if>
+            <if test="officePhone != null and officePhone != ''">
+                <bind name="pattern" value="'%' + officePhone + '%'"/>
+                and orgn.o_office_phone like #{pattern}
+            </if>
+        </where>
+        order by orgn.o_name
+    </select>
+
+
+</mapper>

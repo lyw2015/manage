@@ -157,15 +157,10 @@ InitMainTable = function () {
         url: "/menu/getRoot",
         toolbar: '#toolbar',
         detailView: true,
-        showFullscreen: true,
         showRefresh: true,
+        showToggle: true,
         showColumns: true,
         minimumCountColumns: 2,
-        showToggle: true,
-        responseHandler: function (data) {
-            return data;
-        },
-        cache: false,
         columns: [
             {
                 field: 'name',
@@ -195,8 +190,8 @@ InitMainTable = function () {
                 align: 'center',
                 width: '80',
                 formatter: function (field, row, index) {
-                    return '<a href="javascript:UpdateMenu(\'' + row.id + '\', false)" type="button" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>' +
-                        '<a href="javascript:RemoveMenu(\'' + row.id + '\', false)" type="button" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-close"></i></a>';
+                    return '<a href="javascript:UpdateMenu(\'' + row.id + '\', false)" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:RemoveMenu(\'' + row.id + '\', false)" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-trash-o"></i></a>';
                 }
             }
         ],
@@ -218,10 +213,6 @@ InitSubTable = function (index, row, $detail) {
         },
         detailView: true,
         classes: 'table table-bordered table-hover table-condensed',
-        responseHandler: function (data) {
-            return data;
-        },
-        cache: false,
         columns: [
             {
                 field: 'name',
@@ -254,8 +245,8 @@ InitSubTable = function (index, row, $detail) {
                 align: 'center',
                 width: '80',
                 formatter: function (field, row, index) {
-                    return '<a href="javascript:UpdateMenu(\'' + row.id + '\', true)" type="button" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>' +
-                        '<a href="javascript:RemoveMenu(\'' + row.id + '\', true)" type="button" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-close"></i></a>';
+                    return '<a href="javascript:UpdateMenu(\'' + row.id + '\', true)" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:RemoveMenu(\'' + row.id + '\', true)" class="btn btn-xs btn-danger" style="margin-left: 5px;"><i class="fa fa-trash-o"></i></a>';
                 }
             }
         ],

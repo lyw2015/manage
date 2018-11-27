@@ -9,6 +9,7 @@ import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.LogService;
 import com.ozf.laiyw.manage.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,8 @@ import java.util.Set;
 @RequestMapping("/monitor")
 @Controller
 public class MonitorController extends BaseController {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
     private LogService logService;
@@ -58,16 +61,26 @@ public class MonitorController extends BaseController {
     @RequestMapping("/removeMapKey")
     @ResponseBody
     public WebResult removeMapKey(String mapKey, String dataKey) {
-        redisCacheUtils.deleteMapDataByKey(mapKey, dataKey);
-        return WebResult.successResult();
+        try {
+            redisCacheUtils.deleteMapDataByKey(mapKey, dataKey);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("删除Map中缓存Key错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @SystemLog(description = "删除缓存")
     @RequestMapping("/removeKey")
     @ResponseBody
     public WebResult removeKey(String key) {
-        redisCacheUtils.delete(key);
-        return WebResult.successResult();
+        try {
+            redisCacheUtils.delete(key);
+            return WebResult.successResult();
+        } catch (Exception e) {
+            logger.error("删除缓存错误", e);
+            return WebResult.errorNetworkAnomalyResult();
+        }
     }
 
     @RequestMapping("/getCacheSonKeys")
