@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/ionicons.min.css">
+    <!-- bootstrap table -->
+    <link rel="stylesheet" href="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -37,7 +39,39 @@
 </section>
 
 <section class="content">
-
+    <div class="box box-primary collapsed-box">
+        <div class="box-header no-border">
+            <div class="box-tools pull-right">
+                <button style="margin-top: -10px;" type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-plus"></i>查询
+                </button>
+            </div>
+        </div>
+        <div class="box-body no-border">
+            <form onsubmit="return false" class="form-inline col-xs-12" style="line-height: 40px; margin-bottom: 5px;">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">角色类型</div>
+                        <select id="role_type" name="type" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">角色名称</div>
+                        <input name="name" type="text" class="form-control">
+                    </div>
+                </div>
+                <button onclick="searchByCondition()" type="button" class="btn btn-primary">查询</button>
+                <button type="reset" class="btn btn-danger">重置</button>
+            </form>
+        </div>
+    </div>
+    <div class="btn-group" id="toolbar">
+        <button onclick="top.addTabs({id:'roles-add-panel',title: '添加角色',close: true,url: 'pages/organization/roles-info.html',urlType: 'relative'});"
+                type="button" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>添加
+        </button>
+    </div>
+    <table id="roles_data" class="table-bordered table-condensed"></table>
 </section>
 <!-- jQuery 2.2.3 -->
 <script src="../../plugins/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -47,7 +81,14 @@
 <script src="../../plugins/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
 <!-- FastClick -->
 <script src="../../plugins/AdminLTE/plugins/fastclick/fastclick.js"></script>
+<!-- bootstrap table -->
+<script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.js"></script>
+<script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<!--export-->
+<script src="../../plugins/export/tableExport.js"></script>
+<script src="../../plugins/export/bootstrap-table-export.js"></script>
 <!-- AdminLTE App -->
 <script src="../../plugins/AdminLTE/dist/js/app.min.js"></script>
+<script src="../../statics/js/roles.js"></script>
 </body>
 </html>

@@ -58,16 +58,8 @@ function loadTableData() {
                 title: '更新时间'
             }, {
                 field: 'description',
-                width: '200px',
-                title: '机构描述',
-                formatter: function (value, row, index) {
-                    if (value.length > 13) {
-                        return value.substring(0, 12) + "...";
-                    }
-                    return value;
-                }
-            },
-            {
+                title: '机构描述'
+            }, {
                 field: 'options',
                 title: '操作',
                 align: 'center',
@@ -79,7 +71,7 @@ function loadTableData() {
                         '<a class="mdelete btn btn-xs btn-danger" style="margin-left:5px;"><i class="fa fa-trash-o" ></i></a>'
                     ].join('');
                 }
-            },
+            }
         ],
         treeShowField: 'name',
         parentIdField: 'parentId',

@@ -87,6 +87,8 @@ public class MenuController extends BaseController {
             int count = menuService.removeMenu(id);
             if (count == -1) {
                 return WebResult.errorResult("删除失败，该菜单包含子节点");
+            } else if (count == -2) {
+                return WebResult.errorResult("删除失败，该菜单已被引用");
             }
             return WebResult.successResult();
         } catch (Exception e) {

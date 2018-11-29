@@ -2,7 +2,6 @@ package com.ozf.laiyw.manage.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ozf.laiyw.manage.model.vo.UserRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +13,7 @@ import java.util.List;
  * 用户
  */
 @XmlRootElement//cxf
-@ApiModel(value = "User", description = "用户")//swagger2
+@ApiModel(value = "User", description = "用户")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable {
 
@@ -43,7 +42,7 @@ public class User implements Serializable {
 
     private Boolean rememberMe = false;
     private String verificationCode;
-    private List<UserRole> userRoleList;
+    private List<Role> roleList;
 
     public String getId() {
         return id;
@@ -117,14 +116,6 @@ public class User implements Serializable {
         this.rememberMe = rememberMe;
     }
 
-    public List<UserRole> getUserRoleList() {
-        return userRoleList;
-    }
-
-    public void setUserRoleList(List<UserRole> userRoleList) {
-        this.userRoleList = userRoleList;
-    }
-
     public String getCreateDate() {
         return createDate;
     }
@@ -147,5 +138,13 @@ public class User implements Serializable {
 
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 }

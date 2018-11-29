@@ -25,4 +25,6 @@ public interface MenuMapper {
     int removeMenu(@Param("id") String id);
 
     Menu getMenuById(String id);
+
+    int isQuote(String id);
 }

@@ -74,7 +74,10 @@ public class MenuServiceImpl implements MenuService {
         List list = menuMapper.getChildrenByParentId(id);
         if (null != list && list.size() > 0)
             return -1;
-        //TODO 该菜单是否有被引用
+        int num = menuMapper.isQuote(id);
+        if (num > 0) {
+            return -2;
+        }
         int count = menuMapper.removeMenu(id);
         initData();
         return count;

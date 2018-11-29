@@ -1,6 +1,5 @@
 package com.ozf.laiyw.manage.model;
 
-import com.ozf.laiyw.manage.model.vo.RolePermission;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,16 +10,23 @@ import java.util.List;
  * 角色
  */
 @XmlRootElement
-@ApiModel(value = "Role", description = "角色")//swagger2
+@ApiModel(value = "Role", description = "角色")
 public class Role {
 
     @ApiModelProperty(value = "ID", dataType = "String")
     private String id;
     @ApiModelProperty(value = "名称", dataType = "String")
     private String name;
+    @ApiModelProperty(value = "类型", dataType = "String")
+    private String type;
+    @ApiModelProperty(value = "更新时间", dataType = "String")
+    private String updateTime;
     @ApiModelProperty(value = "描述", dataType = "String")
     private String description;
-    private List<RolePermission> rolePermissionList;
+    private Integer status;//默认为1
+
+    private String menuIds;
+    private List<Menu> menuList;
 
     public String getId() {
         return id;
@@ -38,6 +44,22 @@ public class Role {
         this.name = name;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -46,11 +68,27 @@ public class Role {
         this.description = description;
     }
 
-    public List<RolePermission> getRolePermissionList() {
-        return rolePermissionList;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setRolePermissionList(List<RolePermission> rolePermissionList) {
-        this.rolePermissionList = rolePermissionList;
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(String menuIds) {
+        this.menuIds = menuIds;
+    }
+
+    public List<Menu> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
     }
 }

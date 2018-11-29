@@ -81,4 +81,8 @@
         select m.*, mp.m_name as m_parent_name from t_sys_menu m left join t_sys_menu mp on m.m_parent_id = mp.m_id where m.m_id = #{id}
     </select>
 
+    <select id="isQuote" resultType="java.lang.Integer">
+        select count(0) from t_sys_role_menu where m_id = #{id}
+    </select>
+
 </mapper>
