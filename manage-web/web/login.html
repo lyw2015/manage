@@ -167,7 +167,7 @@
             data: {
                 email: $("input[name='email']").val()
             },
-            url: "/manage/getVerificationCode",
+            url: "/common/getVerificationCode",
             success: function (result) {
                 toastr.info(result.message)
             }

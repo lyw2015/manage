@@ -105,10 +105,8 @@
             <value>
                 /statics/** = anon
                 /plugins/** = anon
-                /favicon.ico = anon
-                /manage/login = anon
-                /manage/verificationCodeLogin = anon
-                /manage/getVerificationCode = anon
+                /common/** = anon
+                /manage/** = anon
                 /personal/** = authcFilter
                 /** = userFilter
             </value>

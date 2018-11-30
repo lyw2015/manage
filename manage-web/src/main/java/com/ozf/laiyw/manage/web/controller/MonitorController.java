@@ -8,7 +8,7 @@ import com.ozf.laiyw.manage.model.Log;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.LogService;
-import com.ozf.laiyw.manage.service.UserService;
+import com.ozf.laiyw.manage.service.LoginRecordService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +37,7 @@ public class MonitorController extends BaseController {
     @Autowired
     private LogService logService;
     @Autowired
-    private UserService userService;
+    private LoginRecordService loginRecordService;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
 
@@ -104,21 +104,21 @@ public class MonitorController extends BaseController {
     @RequestMapping("/countUserGuest")
     @ResponseBody
     public Map<String, Integer> countUserGuest() {
-        return userService.countUserGuest();
+        return loginRecordService.countUserGuest();
     }
 
     @SystemLog(description = "查看访客记录")
     @RequestMapping("/guestRecord")
     @ResponseBody
     public PageInfo guestRecord(PageInfo pageInfo, LoginRecord loginRecord) {
-        return userService.guestRecord(pageInfo, loginRecord);
+        return loginRecordService.guestRecord(pageInfo, loginRecord);
     }
 
     @SystemLog(description = "查看在线用户")
     @RequestMapping("/onlineUser")
     @ResponseBody
     public PageInfo onlineUser(PageInfo pageInfo, LoginRecord loginRecord) {
-        return userService.onlineUser(pageInfo, loginRecord);
+        return loginRecordService.onlineUser(pageInfo, loginRecord);
     }
 
     @SystemLog(description = "数据监控")

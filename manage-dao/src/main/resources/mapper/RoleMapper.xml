@@ -13,6 +13,10 @@
         <result property="menuIds" column="menu_ids"/>
     </resultMap>
 
+    <select id="allRole" resultMap="roleMap">
+        select * from t_sys_role where r_status = 1 order by r_name
+    </select>
+
     <select id="findRoleById" resultMap="roleMap">
         select r.*, group_concat(m.m_id) as menu_ids from t_sys_role r left join t_sys_role_menu m on r.r_id = m.r_id  where r.r_id = #{id}
     </select>
@@ -73,6 +77,10 @@
             </if>
         </where>
         order by r_name
+    </select>
+
+    <select id="isQuote" resultType="java.lang.Integer">
+        select count(0) from t_sys_user_role where r_id = #{id}
     </select>
 
 </mapper>

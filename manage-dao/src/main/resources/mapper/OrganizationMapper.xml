@@ -132,5 +132,7 @@
         order by orgn.o_name
     </select>
 
-
+    <select id="isQuote" resultType="java.lang.Integer">
+        select count(0) from t_sys_user where user_organization_id = #{id}
+    </select>
 </mapper>

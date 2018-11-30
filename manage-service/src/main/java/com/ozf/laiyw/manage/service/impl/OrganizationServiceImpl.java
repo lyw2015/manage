@@ -45,7 +45,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (null != organizationList && !organizationList.isEmpty()) {
             return -1;
         }
-        // TODO 该机构是否有被引用
+        int count = organizationMapper.isQuote(id);
+        if (count > 0) {
+            return -2;
+        }
         return organizationMapper.updateOrganizationStatus(id);
     }
 

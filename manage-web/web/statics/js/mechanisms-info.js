@@ -1,7 +1,7 @@
 var id;
 $(function () {
     loadDeptType();
-    initMenuTree();
+    initDeptTree();
 });
 
 function update() {
@@ -48,7 +48,7 @@ function recursionMenu(data) {
     return nodes;
 }
 
-function initMenuTree() {
+function initDeptTree() {
     $.ajax({
         type: "get",
         url: "/organization/treeOrganization",

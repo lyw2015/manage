@@ -24,4 +24,6 @@ public interface OrganizationMapper {
     List<Organization> getChildrenByParentId(int parentId);
 
     Organization getOrganizationById(int id);
+
+    int isQuote(Integer id);
 }

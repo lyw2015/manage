@@ -1,29 +1,36 @@
 package com.ozf.laiyw.manage.service;
 
 import com.github.pagehelper.PageInfo;
-import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
-import eu.bitwalker.useragentutils.UserAgent;
 
 import java.util.List;
-import java.util.Map;
 
+/**
+ * @Description:
+ * @Auther: Laiyw
+ * @Date: 2018/11/29 19:26
+ */
 public interface UserService {
+
+    PageInfo queryUser(PageInfo pageInfo, User user);
+
+    int saveUser(User user);
+
+    int updateUser(User user);
+
+    User getUserById(String id);
+
+    int updateUserStatus(String id, int status);
+
+    void resetUserPwd(String id);
+
+    User getUserByAccount(String account);
 
     User getUserByEmail(String email);
 
-    boolean checkVerificationCode(String email, String verificationCode);
-
     String getVerificationCode(String email);
 
-    //获取用户登录信息（是否登录）
-    List<LoginRecord> getOnlineUserByAccount(String userAccount);
-
-    List<LoginRecord> getUserLoginRecordsByDay(String day);
-
-    List<Map<String, String>> getUserLoginRecordDate();
-
-    LoginRecord getUserLastLoginRecord();
+    boolean checkVerificationCode(String email, String verificationCode);
 
     //修改用户密码
     int updateUserPwd(String oldpassword, String newpassword);
@@ -31,35 +38,14 @@ public interface UserService {
     //修改用户信息
     int updateUserInfo(User user);
 
-    //统计每天的访客记录
-    Map<String, Integer> countUserGuest();
-
     //统计今天新增用户数量
     int countTodayNewUser();
 
-    User findByUserAccount(String userAccount);
+    User findUserByAccountOrMailbox(String userAccount);
 
     //获取角色
     List<String> findRolesByUserAccount(String userAccount);
 
     //获取权限
     List<String> findPermissionsByUserAccount(String userAccount);
-
-    //保存访问记录
-    int saveLoginRecord(UserAgent userAgent, String clientIp);
-
-    //修改访问记录
-    int updateLoginRecord(LoginRecord loginRecord);
-
-    //在线用户
-    PageInfo onlineUser(PageInfo pageInfo, LoginRecord loginRecord);
-
-    //统计当前在线用户数
-    int countOnline();
-
-    //统计今日访客
-    int countTodayTuest();
-
-    //访客统计
-    PageInfo guestRecord(PageInfo pageInfo, LoginRecord loginRecord);
 }

@@ -18,31 +18,47 @@ import java.util.List;
 public class User implements Serializable {
 
     @ApiModelProperty(value = "ID", dataType = "String")
-    @JsonIgnore
     private String id;
-    @ApiModelProperty(value = "用户名", dataType = "String")
-    private String username;
+    @ApiModelProperty(value = "用户类型", dataType = "String")
+    private String type;
     @ApiModelProperty(value = "登录账号", dataType = "String")
     private String account;
     @ApiModelProperty(value = "密码", dataType = "String")
     @JsonIgnore
     private String password;
-    @ApiModelProperty(value = "邮箱", dataType = "String")
-    private String mailbox;
-    @ApiModelProperty(value = "电话号码", dataType = "String")
-    private String phone;
+    @ApiModelProperty(value = "用户名", dataType = "String")
+    private String username;
     @ApiModelProperty(value = "性别", dataType = "String")
     private String sex;
+    @ApiModelProperty(value = "邮箱", dataType = "String")
+    private String mailbox;
+    @ApiModelProperty(value = "手机号码", dataType = "String")
+    private String phone;
+    @ApiModelProperty(value = "办公号码", dataType = "String")
+    private String officePhone;
     @ApiModelProperty(value = "是否锁定", dataType = "int")
-    private int locked;
-    @ApiModelProperty(value = "创建时间", dataType = "String")
-    private String createDate;
+    private Integer status;//默认为1    0：删除  1：正常 2：锁定 3：停用
     @ApiModelProperty(value = "头像", dataType = "String")
     private String headImg;
+    @ApiModelProperty(value = "描述", dataType = "String")
+    private String description;
+    @ApiModelProperty(value = "所属机构", dataType = "String")
+    private String organizationId;
+    @ApiModelProperty(value = "创建时间", dataType = "String")
+    private String createTime;
+    @ApiModelProperty(value = "更新时间", dataType = "String")
+    private String updateTime;
 
     private Boolean rememberMe = false;
     private String verificationCode;
+
+    private Organization organization;
     private List<Role> roleList;
+
+    private String roleId;
+    private String roleIds;
+    private String roleNames;
+    private String organizationName;
 
     public String getId() {
         return id;
@@ -52,12 +68,12 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getType() {
+        return type;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getAccount() {
@@ -76,6 +92,22 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     public String getMailbox() {
         return mailbox;
     }
@@ -92,36 +124,20 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public String getSex() {
-        return sex;
+    public String getOfficePhone() {
+        return officePhone;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setOfficePhone(String officePhone) {
+        this.officePhone = officePhone;
     }
 
-    public int getLocked() {
-        return locked;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setLocked(int locked) {
-        this.locked = locked;
-    }
-
-    public Boolean getRememberMe() {
-        return rememberMe;
-    }
-
-    public void setRememberMe(Boolean rememberMe) {
-        this.rememberMe = rememberMe;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getHeadImg() {
@@ -132,12 +148,20 @@ public class User implements Serializable {
         this.headImg = headImg;
     }
 
-    public String getVerificationCode() {
-        return verificationCode;
+    public String getDescription() {
+        return description;
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public List<Role> getRoleList() {
@@ -146,5 +170,77 @@ public class User implements Serializable {
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Boolean getRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(Boolean rememberMe) {
+        this.rememberMe = rememberMe;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public String getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleNames() {
+        return roleNames;
+    }
+
+    public void setRoleNames(String roleNames) {
+        this.roleNames = roleNames;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 }

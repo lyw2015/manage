@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface RoleMapper {
 
+    List<Role> allRole();
+
     Role findRoleById(String id);
 
     int updateRoleStatus(String id);
@@ -25,4 +27,6 @@ public interface RoleMapper {
     int updateRole(Role role);
 
     List<Role> getRoles(Role role);
+
+    int isQuote(String id);
 }

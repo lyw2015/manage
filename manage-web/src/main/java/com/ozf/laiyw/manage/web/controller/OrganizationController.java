@@ -110,6 +110,9 @@ public class OrganizationController extends BaseController {
             if (count == -1) {
                 return WebResult.errorResult("删除失败，该机构存在子机构");
             }
+            if (count == -2) {
+                return WebResult.errorResult("删除失败，该机构已被引用");
+            }
             return WebResult.successResult();
         } catch (Exception e) {
             logger.error("删除机构错误", e);

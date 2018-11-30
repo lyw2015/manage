@@ -2,7 +2,7 @@ package com.ozf.laiyw.manage.shiro.filter;
 
 import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.AddressUtils;
-import com.ozf.laiyw.manage.dao.mapper.UserMapper;
+import com.ozf.laiyw.manage.dao.mapper.LoginRecordMapper;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserFilter extends org.apache.shiro.web.filter.authc.UserFilter {
 
     @Autowired
-    private UserMapper userMapper;
+    private LoginRecordMapper loginRecordMapper;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
     @Value("${session.shareSessionMapCache}")
@@ -54,10 +54,10 @@ public class UserFilter extends org.apache.shiro.web.filter.authc.UserFilter {
                 session.setTimeout(cookieMaxAge);
                 HttpServletRequest httpServletRequest = (HttpServletRequest) request;
                 final UserAgent userAgent = UserAgent.parseUserAgentString(httpServletRequest.getHeader(Constants.USER_AGENT));
-                final LoginRecord exist = userMapper.findLoginRecordByCond(AddressUtils.getIpAddress(httpServletRequest), userAgent.getOperatingSystem().getName(), userAgent.getBrowser().getName());
+                final LoginRecord exist = loginRecordMapper.findLoginRecordByCond(AddressUtils.getIpAddress(httpServletRequest), userAgent.getOperatingSystem().getName(), userAgent.getBrowser().getName());
                 if (null != exist && !session.getId().toString().equals(exist.getSessionId())) {
                     redisCacheUtils.deleteMapDataByKey(shareSessionMapCache, exist.getSessionId());
-                    userMapper.updateLoginRecordSessionIdBySessionId(session.getId().toString(), exist.getSessionId());
+                    loginRecordMapper.updateLoginRecordSessionIdBySessionId(session.getId().toString(), exist.getSessionId());
                 }
             }
             return subject.isAuthenticated() || subject.isRemembered();

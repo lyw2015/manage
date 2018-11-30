@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Description:
@@ -25,6 +26,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
+
+    @Override
+    public List<Role> allRole() {
+        return roleMapper.allRole();
+    }
 
     @Override
     public PageInfo queryRoles(PageInfo pageInfo, Role role) {
@@ -62,7 +68,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public int updateRoleStatus(String id) {
-        //TODO
+        int count = roleMapper.isQuote(id);
+        if (count > 0) {
+            return -2;
+        }
         roleMapper.removeRoleMenuByRoleId(id);
         return roleMapper.updateRoleStatus(id);
     }

@@ -164,7 +164,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="statics/images/default-user/avatar5.png" class="user-image"
                                  alt="User Image">
-                            <span class="hidden-xs user_name"></span>
+                            <span class="hidden-xs user_account"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -172,8 +172,8 @@
                                 <img src="statics/images/default-user/avatar5.png" class="img-circle"
                                      alt="User Image">
                                 <p>
-                                    Laiyw - Manage 开发者
-                                    <small>2018/08/31 - 至今</small>
+                                    <span class="organization_name"></span><br>
+                                    <span class="role_names"></span>
                                 </p>
                             </li>
                             </li>
@@ -317,7 +317,10 @@
     }
 
     function setUserInfo(data) {
+        $(".user_account").html(data.account);
         $(".user_name").html(data.username);
+        $(".organization_name").html(data.organizationName);
+        $(".role_names").html(data.roleNames);
     }
 
     function getUrlParam(search, name) {

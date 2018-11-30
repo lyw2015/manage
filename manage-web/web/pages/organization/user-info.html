@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Manage | 用户管理</title>
+    <title>Manage | 用户信息</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Pace -->
@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.css">
     <!-- treeview -->
     <link rel="stylesheet" href="../../plugins/treeview/bootstrap-treeview.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="../../plugins/AdminLTE/plugins/iCheck/all.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/AdminLTE.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -30,104 +32,116 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <section class="content-header">
-    <h1>
-        用户管理
-    </h1>
+    <h1 class="tab-title-name"></h1>
     <ol class="breadcrumb">
         <li><i class="fa fa-home"></i> Home</li>
         <li>组织架构</li>
         <li>用户管理</li>
+        <li class="tab-title-name"></li>
     </ol>
 </section>
 
 <section class="content">
-    <div class="box box-primary collapsed-box">
-        <div class="box-header no-border">
+    <div class="box box-default">
+        <div class="box-header">
+            <h3 class="box-title">基本信息</h3>
             <div class="box-tools pull-right">
-                <button style="margin-top: -10px;" type="button" class="btn btn-box-tool" data-widget="collapse">
-                    <i class="fa fa-plus"></i>查询
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
                 </button>
             </div>
         </div>
-        <div class="box-body no-border">
-            <form onsubmit="return false" class="form-inline col-xs-12" style="line-height: 40px; margin-bottom: 5px;">
-                <div class="form-group">
+        <div class="box-body">
+            <form id="form-organ" onsubmit="return false" class="col-xs-12">
+                <input style="display: none" name="id" type="text">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
-                        <div class="input-group-addon">所属机构</div>
+                        <div class="input-group-addon">所属机构<i class="text-red">*</i></div>
                         <input style="display: none" name="organizationId" type="text" class="form-control">
                         <input name="organizationName" type="text" readonly class="form-control">
                         <div data-toggle="modal" data-target="#organTreeModal" class="input-group-addon btn"><i
                                 class="fa fa-search"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
-                        <div class="input-group-addon">担任角色</div>
-                        <select id="roles" name="roleId" class="form-control"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon">用户类型</div>
+                        <div class="input-group-addon">用户类型<i class="text-red">*</i></div>
                         <select id="user_type" name="type" class="form-control"></select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
-                        <div class="input-group-addon">用户名</div>
+                        <div class="input-group-addon">登录账号<i class="text-red">*</i></div>
+                        <input name="account" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-addon">用户名<i class="text-red">*</i></div>
                         <input name="username" type="text" class="form-control">
                         <div class="input-group-addon"><i class="fa fa-user"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
-                        <div class="input-group-addon">登录账号</div>
-                        <input name="account" type="text" class="form-control">
+                        <div class="input-group-addon">性别</div>
+                        <div class="form-control">
+                            <label>
+                                <input type="radio" name="sex" value="男" checked>男
+                            </label>
+                            <label style="margin-left: 10px">
+                                <input type="radio" name="sex" value="女">女
+                            </label>
+                        </div>
+                        <div class="input-group-addon"><i class="fa fa-intersex"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
-                        <div class="input-group-addon">邮箱</div>
+                        <div class="input-group-addon">电子邮箱</div>
                         <input name="mailbox" type="text" class="form-control">
                         <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
                         <div class="input-group-addon">手机号码</div>
-                        <input name="phone" type="text" class="form-control">
+                        <input name="phone" type="tel" class="form-control">
                         <div class="input-group-addon"><i class="fa fa-mobile-phone"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12 col-md-6">
                     <div class="input-group">
                         <div class="input-group-addon">办公电话</div>
                         <input name="officePhone" type="text" class="form-control">
                         <div class="input-group-addon"><i class="fa fa-phone"></i></div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12">
                     <div class="input-group">
-                        <div class="input-group-addon">状态</div>
-                        <select name="status" class="form-control">
-                            <option value=""></option>
-                            <option value="1">正常</option>
-                            <option value="2">锁定</option>
-                            <option value="3">停用</option>
-                        </select>
+                        <div class="input-group-addon">描述</div>
+                        <textarea name="description" class="form-control" style="height: 150px"></textarea>
                     </div>
                 </div>
-                <button onclick="searchByCondition()" type="button" class="btn btn-primary">查询</button>
-                <button type="reset" class="btn btn-danger">重置</button>
             </form>
         </div>
     </div>
-    <div class="btn-group" id="toolbar">
-        <button onclick="top.addTabs({id:'user-add-panel',title: '添加用户',close: true,url: 'pages/organization/user-info.html',urlType: 'relative'});"
-                type="button" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>添加
-        </button>
+    <div class="box box-default">
+        <div class="box-header text-center">
+            <h3 class="box-title pull-left">分配角色</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <table id="roles_data" class="table-bordered table-condensed"></table>
+        </div>
     </div>
-    <table id="users_data" class="table-bordered table-condensed"></table>
+    <div class="col-xs-12 text-center margin-bottom">
+        <button onclick="submitUser()" class="btn btn-info">提交</button>
+    </div>
 </section>
 
 <div id="organTreeModal" class="modal fade">
@@ -138,7 +152,7 @@
                     <button type="button" class="btn btn-xs btn-primary" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">确认</span></button>
                 </div>
-                <h4 class="modal-title">选择机构</h4>
+                <h4 class="modal-title">选择所属机构</h4>
             </div>
             <div class="modal-body" style="width: 290px; max-height: 310px; overflow-y: scroll">
                 <div id="organTree"></div>
@@ -158,13 +172,15 @@
 <!-- bootstrap table -->
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.js"></script>
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<!--export-->
-<script src="../../plugins/export/tableExport.js"></script>
-<script src="../../plugins/export/bootstrap-table-export.js"></script>
 <!-- treeview -->
 <script src="../../plugins/treeview/bootstrap-treeview.min.js"></script>
+<!-- iCheck -->
+<script src="../../plugins/AdminLTE/plugins/iCheck/icheck.js"></script>
 <!-- AdminLTE App -->
 <script src="../../plugins/AdminLTE/dist/js/app.min.js"></script>
-<script src="../../statics/js/manage-user.js"></script>
+<script src="../../statics/js/user-manage-info.js"></script>
+<script>
+    $(".tab-title-name").html(top.findTabTitle(top.getActivePageId()).context.text);
+</script>
 </body>
 </html>

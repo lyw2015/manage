@@ -6,6 +6,7 @@ import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.common.utils.AddressUtils;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.service.LoginRecordService;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
@@ -29,26 +30,12 @@ public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginRecordService loginRecordService;
     @Value("#{${shiro.session.effective.time}}")
     private Long sessionTime;
     @Value("#{${shiro.rememberme.cookie.maxage}}")
     private Long cookieMaxAge;
-
-
-    @RequestMapping("/getVerificationCode")
-    @ResponseBody
-    public WebResult getVerificationCode(String email) {
-        return WebResult.successResult(userService.getVerificationCode(email));
-    }
-
-    @RequestMapping("/checkEmail")
-    @ResponseBody
-    public WebResult checkEmail(String email) {
-        if (null == userService.getUserByEmail(email)) {
-            return WebResult.successResult(false);
-        }
-        return WebResult.successResult(true);
-    }
 
     @SystemLog(description = "验证码登录")
     @RequestMapping("/verificationCodeLogin")
@@ -64,7 +51,7 @@ public class LoginController extends BaseController {
         return WebResult.errorResult(Constants.INCORRECTCREDENTIALSEXCEPTION);
     }
 
-    @SystemLog(description = "用户登录")
+    @SystemLog(description = "账号密码登录")
     @RequestMapping("/login")
     @ResponseBody
     public WebResult login(User user) {
@@ -77,6 +64,7 @@ public class LoginController extends BaseController {
         ));
     }
 
+    //执行登录
     private WebResult executeLogin(UsernamePasswordToken token) {
         try {
             UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader(Constants.USER_AGENT));
@@ -86,7 +74,7 @@ public class LoginController extends BaseController {
             } else {
                 SecurityUtils.getSubject().getSession().setTimeout(sessionTime);
             }
-            userService.saveLoginRecord(userAgent, AddressUtils.getIpAddress(request));
+            loginRecordService.saveLoginRecord(userAgent, AddressUtils.getIpAddress(request));
             return WebResult.successResult("登录成功");
         } catch (IncorrectCredentialsException ice) {
             return WebResult.errorResult(Constants.INCORRECTCREDENTIALSEXCEPTION);
@@ -99,6 +87,6 @@ public class LoginController extends BaseController {
     @RequestMapping("/logout")
     public void logout() {
         ShiroUtils.getSubject().logout();
-        redirect("login.html");
+        redirect("/login.html");
     }
 }

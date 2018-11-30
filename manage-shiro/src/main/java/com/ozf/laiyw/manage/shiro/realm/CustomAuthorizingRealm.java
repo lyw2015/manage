@@ -47,12 +47,15 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         CustomUsernamePasswordToken token = (CustomUsernamePasswordToken) authenticationToken;
         String account = (String) token.getPrincipal();
-        User user = userService.findByUserAccount(account);
+        User user = userService.findUserByAccountOrMailbox(account);
         if (null == user) {
             throw new UnknownAccountException("验证未通过,未知账户");
         }
-        if (Boolean.TRUE.equals(user.getLocked() == 1)) {
+        if (user.getStatus() == 2) {
             throw new LockedAccountException("验证未通过,账户已锁定");
+        }
+        if (user.getStatus() == 3) {
+            throw new LockedAccountException("验证未通过,账户已停用");
         }
         return new SimpleAuthenticationInfo(
                 user,

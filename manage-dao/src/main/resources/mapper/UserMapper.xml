@@ -5,233 +5,190 @@
 
     <resultMap id="userMap" type="com.ozf.laiyw.manage.model.User">
         <id property="id" column="user_id"/>
-        <result property="username" column="user_name"/>
+        <result property="type" column="user_type"/>
         <result property="account" column="user_account"/>
         <result property="password" column="user_password"/>
+        <result property="username" column="user_name"/>
+        <result property="sex" column="user_sex"/>
         <result property="mailbox" column="user_mailbox"/>
         <result property="phone" column="user_phone"/>
-        <result property="sex" column="user_sex"/>
-        <result property="locked" column="user_locked"/>
-        <result property="createDate" column="create_date"/>
+        <result property="officePhone" column="user_office_phone"/>
+        <result property="status" column="user_status"/>
         <result property="headImg" column="user_head_img"/>
+        <result property="description" column="user_description"/>
+        <result property="organizationId" column="user_organization_id"/>
+        <result property="createTime" column="user_create_time"/>
+        <result property="updateTime" column="user_update_time"/>
+        <result property="roleIds" column="user_role_ids"/>
+        <result property="roleNames" column="user_role_names"/>
+        <result property="organizationName" column="user_organization_name"/>
     </resultMap>
 
-    <resultMap id="loginRecordMap" type="com.ozf.laiyw.manage.model.LoginRecord">
-        <id property="id" column="lr_id"/>
-        <result property="sessionId" column="session_id"/>
-        <result property="userAccount" column="user_account"/>
-        <result property="userName" column="user_name"/>
-        <result property="visitTime" column="visit_time"/>
-        <result property="lastTime" column="last_time"/>
-        <result property="loginTime" column="login_time"/>
-        <result property="logoutTime" column="logout_time"/>
-        <result property="onlineTime" column="online_time"/>
-        <result property="online" column="lr_online"/>
-        <result property="clientIp" column="client_ip"/>
-        <result property="deviceType" column="device_type"/>
-        <result property="groupName" column="group_name"/>
-        <result property="operatingSystemName" column="operating_system_name"/>
-        <result property="browser" column="browser"/>
-    </resultMap>
-
-    <select id="findByUserAccount" resultMap="userMap">
-        select * from t_sys_user where user_account = #{userAccount} or user_mailbox = #{userAccount}
+    <select id="queryUser" resultMap="userMap">
+        select distinct
+        u.*,
+        o.o_name as user_organization_name,
+        (
+        select group_concat(zr.r_name) from t_sys_user_role zur
+        left join t_sys_role zr on zur.r_id = zr.r_id where zur.u_id = u.user_id
+        ) as user_role_names
+        from t_sys_user u
+        left join t_sys_organization o on u.user_organization_id = o.o_id
+        left join t_sys_user_role ur on ur.u_id = u.user_id
+        left join t_sys_role r on ur.r_id = r.r_id
+        <where>
+            u.user_status != 0
+            <if test="organizationId != null and organizationId != ''">
+                and o.o_id = #{organizationId}
+            </if>
+            <if test="roleId != null and roleId != ''">
+                and r.r_id = #{roleId}
+            </if>
+            <if test="type != null and type != ''">
+                and u.user_type = #{type}
+            </if>
+            <if test="username != null and username != ''">
+                <bind name="pattern" value="'%' + username + '%'"/>
+                and u.user_name like #{pattern}
+            </if>
+            <if test="account != null and account != ''">
+                <bind name="pattern" value="'%' + account + '%'"/>
+                and u.user_account like #{pattern}
+            </if>
+            <if test="mailbox != null and mailbox != ''">
+                <bind name="pattern" value="'%' + mailbox + '%'"/>
+                and u.user_mailbox like #{pattern}
+            </if>
+            <if test="phone != null and phone != ''">
+                <bind name="pattern" value="'%' + phone + '%'"/>
+                and u.user_phone like #{pattern}
+            </if>
+            <if test="officePhone != null and officePhone != ''">
+                <bind name="pattern" value="'%' + officePhone + '%'"/>
+                and u.user_office_phone like #{pattern}
+            </if>
+            <if test="status != null">
+                and u.user_status = #{status}
+            </if>
+        </where>
+        order by u.user_name desc
     </select>
 
-    <insert id="saveLoginRecord" parameterType="com.ozf.laiyw.manage.model.LoginRecord">
-        insert into t_sys_monitor_login_record(
-          lr_id,
-          session_id,
-          user_account,
-          user_name,
-          visit_time,
-          last_time,
-          login_time,
-          logout_time,
-          online_time,
-          lr_online,
-          client_ip,
-          device_type,
-          group_name,
-          operating_system_name,
-          browser
-        )
-        values(
-          #{id, jdbcType=VARCHAR},
-          #{sessionId , jdbcType=VARCHAR},
-          #{userAccount , jdbcType=VARCHAR},
-          #{userName , jdbcType=VARCHAR},
-          #{visitTime , jdbcType=VARCHAR},
-          #{lastTime, jdbcType=VARCHAR},
-          #{loginTime , jdbcType=VARCHAR},
-          #{logoutTime , jdbcType=VARCHAR},
-          #{onlineTime, jdbcType=VARCHAR},
-          #{online, jdbcType=VARCHAR},
-          #{clientIp, jdbcType=VARCHAR},
-          #{deviceType, jdbcType=VARCHAR},
-          #{groupName, jdbcType=VARCHAR},
-          #{operatingSystemName, jdbcType=VARCHAR},
-          #{browser, jdbcType=VARCHAR}
+    <delete id="removeUserRoleByUserId">
+        delete from t_sys_user_role where u_id = #{userId}
+    </delete>
+
+    <insert id="saveUserRole">
+        insert into t_sys_user_role (u_id, r_id)
+        values
+        <foreach collection="roleIds" item="rid" index="index" separator=",">
+            (#{userId}, #{rid})
+        </foreach>
+    </insert>
+
+    <update id="updateUserStatus">
+        update t_sys_user set user_status = #{status} where user_id = #{id}
+    </update>
+
+    <select id="getUserById" resultMap="userMap">
+        select
+          u.*,
+          o.o_name as user_organization_name,
+          group_concat(ur.r_id) as user_role_ids
+        from t_sys_user u
+        left join t_sys_organization o on u.user_organization_id = o.o_id
+        left join t_sys_user_role ur on u.user_id = ur.u_id
+        where u.user_id = #{id}
+    </select>
+
+    <insert id="saveUser" parameterType="com.ozf.laiyw.manage.model.User">
+        insert into t_sys_user(
+        user_id,
+        user_type,
+        user_account,
+        user_password,
+        user_name,
+        user_sex,
+        user_mailbox,
+        user_phone,
+        user_office_phone,
+        user_description,
+        user_organization_id,
+        user_create_time,
+        user_update_time
+        )values(
+        #{id , jdbcType=VARCHAR},
+        #{type , jdbcType=VARCHAR},
+        #{account , jdbcType=VARCHAR},
+        #{password , jdbcType=VARCHAR},
+        #{username , jdbcType=VARCHAR},
+        #{sex , jdbcType=VARCHAR},
+        #{mailbox , jdbcType=VARCHAR},
+        #{phone , jdbcType=VARCHAR},
+        #{officePhone , jdbcType=VARCHAR},
+        #{description , jdbcType=VARCHAR},
+        #{organizationId , jdbcType=VARCHAR},
+        #{createTime , jdbcType=VARCHAR},
+        #{updateTime , jdbcType=VARCHAR}
         )
     </insert>
 
-    <update id="updateLoginRecord" parameterType="com.ozf.laiyw.manage.model.LoginRecord">
-        update t_sys_monitor_login_record
-        <set>
-            <if test="online != null and online != ''">
-                lr_online = #{online , jdbcType=VARCHAR},
-            </if>
-            <if test="lastTime != null and lastTime != ''">
-                last_time = #{lastTime , jdbcType=VARCHAR},
-            </if>
-            <if test="logoutTime != null and logoutTime != ''">
-                logout_time = #{logoutTime , jdbcType=VARCHAR},
-            </if>
-            <if test="onlineTime != null and onlineTime != ''">
-                online_time = #{onlineTime , jdbcType=VARCHAR},
-            </if>
-        </set>
-        where session_id = #{sessionId, jdbcType=VARCHAR} and lr_online = 'true'
+    <update id="updateUser" parameterType="com.ozf.laiyw.manage.model.User">
+        update t_sys_user set
+        user_type = #{type , jdbcType=VARCHAR},
+        user_name = #{username , jdbcType=VARCHAR},
+        user_sex = #{sex , jdbcType=VARCHAR},
+        user_mailbox = #{mailbox , jdbcType=VARCHAR},
+        user_phone = #{phone , jdbcType=VARCHAR},
+        user_office_phone = #{officePhone , jdbcType=VARCHAR},
+        user_description = #{description , jdbcType=VARCHAR},
+        user_organization_id = #{organizationId , jdbcType=VARCHAR},
+        user_update_time = #{updateTime , jdbcType=VARCHAR}
+        where user_id = #{id , jdbcType=VARCHAR}
     </update>
 
-    <update id="updateLoginRecordSessionIdBySessionId">
-        update t_sys_monitor_login_record set session_id = #{newSessionId} where session_id = #{oldSessionId}
-    </update>
-
-    <select id="findLoginRecordBySessionId" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record where session_id = #{sessionId} and lr_online = 'true'
-    </select>
-
-    <select id="findLoginRecordByCond" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record where lr_online = 'true' and client_ip = #{clientIp} and operating_system_name = #{operatingSystemName} and browser = #{browser}
-    </select>
-
-    <select id="onlineUser" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record where lr_online = 'true'
-        <if test="userName != null and userName != ''">
-            <bind name="pattern" value="'%' + userName + '%'"/>
-            and (user_name like #{pattern} or user_account like #{pattern})
-        </if>
-        <if test="clientIp != null and clientIp != ''">
-            <bind name="pattern" value="'%' + clientIp + '%'"/>
-            and client_ip like #{pattern}
-        </if>
-        <if test="deviceType != null and deviceType != ''">
-            <bind name="pattern" value="'%' + deviceType + '%'"/>
-            and device_type like #{pattern}
-        </if>
-        <if test="loginTime != null and loginTime != ''">
-            and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ >= ]]> date_format(#{sd}, '%Y-%m-%d %H:%i')
-            and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ <= ]]> date_format(#{ed}, '%Y-%m-%d %H:%i')
-        </if>
-        order by visit_time desc
-    </select>
-
-    <select id="countOnline" resultType="java.lang.Integer">
-        select count(0) from t_sys_monitor_login_record where lr_online = 'true'
+    <select id="findUserByAccountOrMailbox" resultMap="userMap">
+        select
+        u.*,
+        o.o_name as user_organization_name,
+        (
+        select group_concat(zr.r_name) from t_sys_user_role zur
+        left join t_sys_role zr on zur.r_id = zr.r_id where zur.u_id = u.user_id
+        ) as user_role_names
+        from t_sys_user u
+        left join t_sys_organization o on u.user_organization_id = o.o_id
+        where (u.user_account = #{userAccount} or u.user_mailbox = #{userAccount}) and u.user_status != 0
     </select>
 
     <select id="countTodayNewUser" resultType="java.lang.Integer">
-        select count(0) from t_sys_user where create_date like concat(date_format(now(), '%Y-%m-%d'), '%');
+        select count(0) from t_sys_user where user_create_time like concat(date_format(now(), '%Y-%m-%d'), '%');
     </select>
 
-    <select id="countTodayTuest" resultType="java.lang.Integer">
-        select count(0) from (
-          select count(0) from t_sys_monitor_login_record where last_time like concat(date_format(now(), '%Y-%m-%d'), '%')
-              group by user_account,client_ip,operating_system_name,browser
-        ) counttemp
+    <select id="getUserByAccount" resultMap="userMap">
+        select * from t_sys_user where user_account = #{account} and user_status != 0
     </select>
 
-    <select id="guestRecord" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record
-        <where>
-            <if test="userName != null and userName != ''">
-                <bind name="pattern" value="'%' + userName + '%'"/>
-                and (user_name like #{pattern} or user_account like #{pattern})
-            </if>
-            <if test="clientIp != null and clientIp != ''">
-                <bind name="pattern" value="'%' + clientIp + '%'"/>
-                and client_ip like #{pattern}
-            </if>
-            <if test="operatingSystemName != null and operatingSystemName != ''">
-                <bind name="pattern" value="'%' + operatingSystemName + '%'"/>
-                and operating_system_name like #{pattern}
-            </if>
-            <if test="browser != null and browser != ''">
-                <bind name="pattern" value="'%' + browser + '%'"/>
-                and browser like #{pattern}
-            </if>
-            <if test="loginTime != null and loginTime != ''">
-                and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ >= ]]> date_format(#{sd}, '%Y-%m-%d %H:%i')
-                and date_format(login_time, '%Y-%m-%d %H:%i') <![CDATA[ <= ]]> date_format(#{ed}, '%Y-%m-%d %H:%i')
-            </if>
-        </where>
-        order by visit_time desc
+    <select id="getUserByEmail" resultMap="userMap">
+        select * from t_sys_user where user_mailbox = #{email} and user_status != 0
     </select>
 
-    <select id="countUserGuest" resultType="java.util.HashMap">
-        select date_format(last_time, '%m-%d') lrtime, count(0) lrcount from (
-          select last_time from t_sys_monitor_login_record
-            where date_format(last_time, '%Y-%m-%d') <![CDATA[ >= ]]> date_format(#{startDate}, '%Y-%m-%d')
-                and date_format(last_time, '%Y-%m-%d') <![CDATA[ <= ]]> date_format(#{endDate}, '%Y-%m-%d')
-            group by user_account,client_ip,operating_system_name,browser,date_format(last_time, '%Y-%m-%d')) tempdata
-        group by date_format(last_time, '%Y-%m-%d') order by last_time asc
+    <select id="countUnCurrentUserEmail" resultType="java.lang.Integer">
+        select count(0) from t_sys_user
+        where user_status != 0 and user_mailbox = #{email} and user_id != #{id}
     </select>
-
-    <update id="updateUserInfo">
-        update t_sys_user set
-          user_name = #{username , jdbcType=VARCHAR},
-          user_sex = #{sex , jdbcType=VARCHAR},
-          user_mailbox = #{mailbox , jdbcType=VARCHAR},
-          user_phone = #{phone , jdbcType=VARCHAR}
-        where user_id = #{id}
-    </update>
 
     <update id="updateUserPwd">
         update t_sys_user set user_password = #{password} where user_id = #{id}
     </update>
 
-    <select id="getLastLoginRecord" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record where logout_time is not null and user_account = #{userAccount} order by login_time desc limit 1
-    </select>
-
-    <select id="getUserLoginRecordDate" resultType="java.util.Map">
-        select
-            count(0) lr_count,
-            concat(date_format(login_time, '%Y'), '-order') lr_login_time
-        from t_sys_monitor_login_record lr
-        where user_account = #{userAccount} and lr_online = 'false' group by lr_login_time
-        union
-        select
-            count(0) lr_count,
-            concat(date_format(login_time, '%Y-%m'), '-order') lr_login_time
-        from t_sys_monitor_login_record
-        where user_account = #{userAccount} and lr_online = 'false' group by lr_login_time
-        union
-        select
-            count(0) lr_count,
-            date_format(login_time, '%Y-%m-%d') lr_login_time
-        from t_sys_monitor_login_record
-        where user_account = #{userAccount} and lr_online = 'false' group by lr_login_time  order by lr_login_time desc
-    </select>
-
-    <select id="getUserLoginRecordsByDay" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record
-          where user_account = #{userAccount}
-          and date_format(login_time, '%Y-%m-%d') = #{day}
-          and lr_online = 'false'
-          order by login_time desc
-    </select>
-
-    <select id="getOnlineUserByAccount" resultMap="loginRecordMap">
-        select * from t_sys_monitor_login_record
-          where user_account = #{userAccount}
-          and lr_online = 'true'
-          order by login_time desc
-    </select>
-
-    <select id="getUserByEmail" resultMap="userMap">
-        select * from t_sys_user where user_mailbox = #{email}
-    </select>
+    <update id="updateUserInfo">
+        update t_sys_user set
+        user_name = #{username , jdbcType=VARCHAR},
+        user_sex = #{sex , jdbcType=VARCHAR},
+        user_mailbox = #{mailbox , jdbcType=VARCHAR},
+        user_phone = #{phone , jdbcType=VARCHAR},
+        user_office_phone = #{officePhone , jdbcType=VARCHAR},
+        where user_id = #{id}
+    </update>
 
 </mapper>

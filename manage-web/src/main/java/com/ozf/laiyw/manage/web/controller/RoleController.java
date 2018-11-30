@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * @Description:
  * @Auther: Laiyw
@@ -30,6 +32,12 @@ public class RoleController extends BaseController {
     @ResponseBody
     public PageInfo queryRoles(PageInfo pageInfo, Role role) {
         return roleService.queryRoles(pageInfo, role);
+    }
+
+    @RequestMapping("/allRole")
+    @ResponseBody
+    public List<Role> allRole() {
+        return roleService.allRole();
     }
 
     @SystemLog(description = "添加角色")

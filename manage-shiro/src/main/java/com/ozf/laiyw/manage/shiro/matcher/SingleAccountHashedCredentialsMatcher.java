@@ -4,7 +4,7 @@ import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.commons.SystemConfig;
 import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
-import com.ozf.laiyw.manage.service.UserService;
+import com.ozf.laiyw.manage.service.LoginRecordService;
 import com.ozf.laiyw.manage.shiro.exception.ExcessiveOnlineSingleAccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -20,7 +20,7 @@ import java.util.List;
 public class SingleAccountHashedCredentialsMatcher extends ErrorNumberHashedCredentialsMatcher {
 
     @Autowired
-    private UserService userService;
+    private LoginRecordService loginRecordService;
 
     public SingleAccountHashedCredentialsMatcher(String hashAlgorithmName) {
         super(hashAlgorithmName);
@@ -34,7 +34,7 @@ public class SingleAccountHashedCredentialsMatcher extends ErrorNumberHashedCred
         }
         boolean matches = super.doCredentialsMatch(token, info);
         if (matches) {
-            List<LoginRecord> recordList = userService.getOnlineUserByAccount(user.getUsername());
+            List<LoginRecord> recordList = loginRecordService.getOnlineUserByAccount(user.getUsername());
             if (recordList.size() >= SystemConfig.getSaonumber()) {
                 throw new ExcessiveOnlineSingleAccountException("验证未通过,当前账号在线数已达上限");
             }

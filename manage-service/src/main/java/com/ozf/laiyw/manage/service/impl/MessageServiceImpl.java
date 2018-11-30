@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.model.vo.SocketMessage;
+import com.ozf.laiyw.manage.service.LoginRecordService;
 import com.ozf.laiyw.manage.service.MessageService;
 import com.ozf.laiyw.manage.service.UserService;
 import org.apache.log4j.Logger;
@@ -30,14 +31,16 @@ public class MessageServiceImpl implements MessageService {
     private final Logger logger = Logger.getLogger(this.getClass());
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginRecordService loginRecordService;
 
     //获取公共的消息
     @Override
     public SocketMessage getSocketMessage() {
         SocketMessage socketMessage = new SocketMessage();
-        socketMessage.setOnlineuser(userService.countOnline());
+        socketMessage.setOnlineuser(loginRecordService.countOnline());
         socketMessage.setNewuser(userService.countTodayNewUser());
-        socketMessage.setTodayguest(userService.countTodayTuest());
+        socketMessage.setTodayguest(loginRecordService.countTodayTuest());
         return socketMessage;
     }
 
