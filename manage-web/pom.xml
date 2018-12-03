@@ -62,11 +62,6 @@
         </dependency>
         <dependency>
             <groupId>com.ozf.laiyw.manage</groupId>
-            <artifactId>manage-activiti</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ozf.laiyw.manage</groupId>
             <artifactId>manage-shiro</artifactId>
             <version>${project.version}</version>
         </dependency>
