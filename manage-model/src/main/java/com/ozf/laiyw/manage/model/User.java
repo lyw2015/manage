@@ -52,13 +52,15 @@ public class User implements Serializable {
     private Boolean rememberMe = false;
     private String verificationCode;
 
-    private Organization organization;
-    private List<Role> roleList;
+    private List<Menu> menuList;
 
     private String roleId;
     private String roleIds;
     private String roleNames;
     private String organizationName;
+
+    private String ctsd;
+    private String cted;
 
     public String getId() {
         return id;
@@ -156,20 +158,12 @@ public class User implements Serializable {
         this.description = description;
     }
 
-    public Organization getOrganization() {
-        return organization;
+    public List<Menu> getMenuList() {
+        return menuList;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
-    public List<Role> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(List<Role> roleList) {
-        this.roleList = roleList;
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
     }
 
     public String getCreateTime() {
@@ -178,6 +172,10 @@ public class User implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+        if (null != createTime && createTime.contains(" - ")) {
+            this.ctsd = createTime.split(" - ")[0];
+            this.cted = createTime.split(" - ")[1];
+        }
     }
 
     public String getUpdateTime() {
@@ -242,5 +240,21 @@ public class User implements Serializable {
 
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    public String getCtsd() {
+        return ctsd;
+    }
+
+    public void setCtsd(String ctsd) {
+        this.ctsd = ctsd;
+    }
+
+    public String getCted() {
+        return cted;
+    }
+
+    public void setCted(String cted) {
+        this.cted = cted;
     }
 }

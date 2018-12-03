@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/dist/css/ionicons.min.css">
+    <!-- daterangepicker -->
+    <link rel="stylesheet" href="../../plugins/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap table -->
     <link rel="stylesheet" href="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.css">
     <!-- treeview -->
@@ -117,6 +119,13 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">创建时间</div>
+                        <input name="createTime" type="text" class="form-control" style="width: 260px">
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
                 <button onclick="searchByCondition()" type="button" class="btn btn-primary">查询</button>
                 <button type="reset" class="btn btn-danger">重置</button>
             </form>
@@ -155,6 +164,9 @@
 <script src="../../plugins/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
 <!-- FastClick -->
 <script src="../../plugins/AdminLTE/plugins/fastclick/fastclick.js"></script>
+<!-- daterangepicker -->
+<script src="../../plugins/AdminLTE/plugins/daterangepicker/moment.js"></script>
+<script src="../../plugins/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
 <!-- bootstrap table -->
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table.js"></script>
 <script src="../../plugins/AdminLTE/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>

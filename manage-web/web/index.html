@@ -321,6 +321,7 @@
         $(".user_name").html(data.username);
         $(".organization_name").html(data.organizationName);
         $(".role_names").html(data.roleNames);
+        $('.sidebar-menu').empty().sidebarMenu({data: recursionMenu(data.menuList)});
     }
 
     function getUrlParam(search, name) {
@@ -384,18 +385,6 @@
         $("input[name=q]").keyup(function (event) {
             if (event.keyCode == 13) {
                 search_menu();
-            }
-        });
-
-        $.ajax({
-            type: "get",
-            url: "/menu/getAllMenu",
-            success: function (data) {
-                if (data.success) {
-                    $('.sidebar-menu').sidebarMenu({data: recursionMenu(data.data)});
-                } else {
-                    parent.toastr.error(data.message);
-                }
             }
         });
     });

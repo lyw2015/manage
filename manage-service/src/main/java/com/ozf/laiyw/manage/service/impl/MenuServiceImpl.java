@@ -35,6 +35,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public List<Menu> getMenuByUserId(String userId) {
+        return menuMapper.getMenuByUserId(userId);
+    }
+
+    @Override
     public int saveMenuInfo(Menu menu) {
         menu.setId(StringUtils.randUUID());
         int count = menuMapper.saveMenuInfo(menu);

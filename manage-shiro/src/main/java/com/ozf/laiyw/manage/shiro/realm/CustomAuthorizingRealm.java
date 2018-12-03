@@ -1,7 +1,9 @@
 package com.ozf.laiyw.manage.shiro.realm;
 
+import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.service.MenuService;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
@@ -20,6 +22,8 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MenuService menuService;
 
     /**
      * 授权
@@ -29,10 +33,8 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String account = ((User) principals.getPrimaryPrincipal()).getAccount();
+        User user = (User) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.addRoles(userService.findRolesByUserAccount(account));
-        simpleAuthorizationInfo.addStringPermissions(userService.findPermissionsByUserAccount(account));
         return simpleAuthorizationInfo;
     }
 
@@ -56,6 +58,11 @@ public class CustomAuthorizingRealm extends AuthorizingRealm {
         }
         if (user.getStatus() == 3) {
             throw new LockedAccountException("验证未通过,账户已停用");
+        }
+        if (Constants.SUPER_USER_ACCOUNT.equals(user.getAccount())) {
+            user.setMenuList(menuService.getAllMenu());
+        } else {
+            user.setMenuList(menuService.getMenuByUserId(user.getId()));
         }
         return new SimpleAuthenticationInfo(
                 user,

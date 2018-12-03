@@ -125,7 +125,7 @@ public class Log {
 
     public void setOperationTime(String operationTime) {
         this.operationTime = operationTime;
-        if (operationTime.contains(" - ")) {
+        if (null != operationTime && operationTime.contains(" - ")) {
             this.sd = operationTime.split(" - ")[0];
             this.ed = operationTime.split(" - ")[1];
         }

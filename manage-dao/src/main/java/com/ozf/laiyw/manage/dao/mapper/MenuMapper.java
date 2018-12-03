@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface MenuMapper {
 
+    List<Menu> getMenuByUserId(String userId);
+
     int saveMenuInfo(Menu menu);
 
     int updateMenuInfo(Menu menu);

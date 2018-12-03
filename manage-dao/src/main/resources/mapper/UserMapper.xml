@@ -70,6 +70,10 @@
             <if test="status != null">
                 and u.user_status = #{status}
             </if>
+            <if test="createTime != null and createTime != ''">
+                and date_format(u.user_create_time, '%Y-%m-%d %H:%i') <![CDATA[ >= ]]> date_format(#{ctsd}, '%Y-%m-%d %H:%i')
+                and date_format(u.user_create_time, '%Y-%m-%d %H:%i') <![CDATA[ <= ]]> date_format(#{cted}, '%Y-%m-%d %H:%i')
+            </if>
         </where>
         order by u.user_name desc
     </select>

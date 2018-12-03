@@ -24,6 +24,19 @@
                     select="getChildrenByParentId" column="m_id"/>
     </resultMap>
 
+    <select id="getMenuByUserId" resultMap="allMenuMap">
+        select distinct
+        m.*
+        from t_sys_menu m
+        left join t_sys_role_menu rm on m.m_id = rm.m_id
+        left join t_sys_role r on r.r_id = rm.r_id
+        left join t_sys_user_role ur on ur.r_id = r.r_id
+        where m.m_status = 1
+        and ur.u_id = #{userId}
+        and (m_parent_id is null or m_parent_id = '')
+        order by m.m_sort desc
+    </select>
+
     <select id="getAllMenu" resultMap="allMenuMap">
         select * from t_sys_menu where m_status = 1 and (m_parent_id is null or m_parent_id = '') order by m_sort desc
     </select>

@@ -3,8 +3,6 @@ package com.ozf.laiyw.manage.service;
 import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.model.User;
 
-import java.util.List;
-
 /**
  * @Description:
  * @Auther: Laiyw
@@ -42,10 +40,4 @@ public interface UserService {
     int countTodayNewUser();
 
     User findUserByAccountOrMailbox(String userAccount);
-
-    //获取角色
-    List<String> findRolesByUserAccount(String userAccount);
-
-    //获取权限
-    List<String> findPermissionsByUserAccount(String userAccount);
 }

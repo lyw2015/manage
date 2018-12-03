@@ -1,5 +1,15 @@
 var $table = $('#users_data');
 $(function () {
+    $("input[name='createTime']").daterangepicker({
+        timePicker: true,
+        startDate: false,
+        showDropdowns: true,
+        timePicker24Hour: true,
+        locale: {
+            format: 'YYYY-MM-DD HH:mm'
+        }
+    });
+    $("input[name='createTime']").val("");
     loadCondiction();
     loadData();
 });
@@ -58,6 +68,9 @@ function loadData() {
                 field: 'officePhone',
                 title: '办公号码'
             }, {
+                field: 'createTime',
+                title: '创建时间'
+            }, {
                 field: 'updateTime',
                 title: '更新时间'
             }, {
@@ -80,12 +93,14 @@ function loadData() {
                 formatter: function (value, row, index) {
                     var options = new Array();
                     options.push('<a class="uupdate btn btn-xs btn-info"><i class="fa fa-pencil-square-o" ></i></a>');
-                    if (row.status == 3) {
-                        options.push('<a class="uenable btn btn-xs btn-success" title="启用用户" style="margin-left:5px;"><i class="fa fa-check-square" ></i></a>');
-                    } else {
-                        options.push('<a class="udisable btn btn-xs btn-danger" title="停用用户" style="margin-left:5px;"><i class="fa fa-ban" ></i></a>');
+                    if (row.account != 'admin') {
+                        if (row.status == 3) {
+                            options.push('<a class="uenable btn btn-xs btn-success" title="启用用户" style="margin-left:5px;"><i class="fa fa-check-square" ></i></a>');
+                        } else {
+                            options.push('<a class="udisable btn btn-xs btn-danger" title="停用用户" style="margin-left:5px;"><i class="fa fa-ban" ></i></a>');
+                        }
+                        options.push('<a class="udelete btn btn-xs btn-danger" style="margin-left:5px;"><i class="fa fa-trash-o" ></i></a>');
                     }
-                    options.push('<a class="udelete btn btn-xs btn-danger" style="margin-left:5px;"><i class="fa fa-trash-o" ></i></a>');
                     options.push('<a class="ureset btn btn-xs btn-primary" title="重置密码" style="margin-left:5px;"><i class="fa fa-repeat" ></i></a>');
                     return options.join('');
                 }

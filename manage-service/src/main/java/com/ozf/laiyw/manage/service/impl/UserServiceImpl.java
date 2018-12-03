@@ -100,6 +100,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateUserStatus(String id, int status) {
+        User user = getUserById(id);
+        if ("admin".equals(user.getAccount())) {
+            return -1;
+        }
         if (status == 0) {
             userMapper.removeUserRoleByUserId(id);
         }
@@ -183,15 +187,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByAccountOrMailbox(String userAccount) {
         return userMapper.findUserByAccountOrMailbox(userAccount);
-    }
-
-    @Override
-    public List<String> findRolesByUserAccount(String userAccount) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<String> findPermissionsByUserAccount(String userAccount) {
-        return new ArrayList<>();
     }
 }

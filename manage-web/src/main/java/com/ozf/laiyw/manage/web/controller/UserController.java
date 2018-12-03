@@ -115,7 +115,10 @@ public class UserController extends BaseController {
             return WebResult.errorResult("无效用户");
         }
         try {
-            userService.updateUserStatus(id, 3);
+            int count = userService.updateUserStatus(id, 3);
+            if (count == -1) {
+                return WebResult.errorResult("停用错误，超级管理员账户不可执行此操作");
+            }
             return WebResult.successResult();
         } catch (Exception e) {
             logger.error("停用用户错误", e);
@@ -131,7 +134,10 @@ public class UserController extends BaseController {
             return WebResult.errorResult("无效用户");
         }
         try {
-            userService.updateUserStatus(id, 1);
+            int count = userService.updateUserStatus(id, 1);
+            if (count == -1) {
+                return WebResult.errorResult("启用错误，超级管理员账户不可执行此操作");
+            }
             return WebResult.successResult();
         } catch (Exception e) {
             logger.error("启用用户错误", e);
@@ -147,7 +153,10 @@ public class UserController extends BaseController {
             return WebResult.errorResult("无效用户");
         }
         try {
-            userService.updateUserStatus(id, 0);
+            int count = userService.updateUserStatus(id, 0);
+            if (count == -1) {
+                return WebResult.errorResult("删除错误，超级管理员账户不可执行此操作");
+            }
             return WebResult.successResult();
         } catch (Exception e) {
             logger.error("删除用户错误", e);

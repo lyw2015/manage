@@ -154,6 +154,8 @@ function setLoginRecord(data) {
 
 function setUserInfo(data) {
     $("#account").val(data.account);
+    $("#organizationName").val(data.organizationName);
+    $("#roleNames").val(data.roleNames);
     $("#username").val(data.username);
     $(".user-name").text(data.username);
     $("input[name='sex'][value='" + data.sex + "']").iCheck('check');
