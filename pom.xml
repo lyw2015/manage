@@ -17,8 +17,6 @@
         <module>manage-web</module>
         <module>manage-app</module>
         <module>manage-redis</module>
-        <module>manage-activiti</module>
-        <module>manage-cas-server</module>
         <module>manage-shiro</module>
         <module>manage-rabbitmq</module>
         <module>manage-solr</module>
@@ -48,9 +46,6 @@
         <redis.client>2.9.0</redis.client>
         <spring-redis.version>1.8.6.RELEASE</spring-redis.version>
         <freemarker.version>2.3.23</freemarker.version>
-        <activiti.version>5.22.0</activiti.version>
-        <fasterxml.uuid.version>3.1.4</fasterxml.uuid.version>
-        <cas-server.version>4.2.7</cas-server.version>
         <java-jwt.version>3.1.0</java-jwt.version>
         <swagger2.version>2.8.0</swagger2.version>
         <swagger2-annotations.version>1.5.14</swagger2-annotations.version>
@@ -251,33 +246,6 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
-            </dependency>
-            <!--activiti-->
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-json-converter</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.uuid</groupId>
-                <artifactId>java-uuid-generator</artifactId>
-                <version>${fasterxml.uuid.version}</version>
-            </dependency>
-            <!-- cas-server -->
-            <dependency>
-                <groupId>org.jasig.cas</groupId>
-                <artifactId>cas-server-support-generic</artifactId>
-                <version>${cas-server.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jasig.cas</groupId>
-                <artifactId>cas-server-support-jdbc</artifactId>
-                <version>${cas-server.version}</version>
             </dependency>
             <!-- jwt -->
             <dependency>
