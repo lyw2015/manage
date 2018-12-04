@@ -21,7 +21,7 @@
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations" value="file:C:/Users/Laiyw/Documents/Workspace/Manage/origin.properties"/>
+        <property name="locations" value="file:C:/Users/Laiyw/Documents/Workspace/Manage/config/origin.properties"/>
         <!--<property name="locations" value="classpath:origin.properties"/>-->
     </bean>
 
