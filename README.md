@@ -1,5 +1,7 @@
 # Manage
 
+##项目重构中，单点登录拆分至：https://gitee.com/laiyw/manage-sso
+
 #### 项目介绍
 Manage管理系统，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、ServerMonitor、JWT、Freemarker、监控组件Monitor等常用框架及组件，实现了机构管理、用户管理、权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
 
