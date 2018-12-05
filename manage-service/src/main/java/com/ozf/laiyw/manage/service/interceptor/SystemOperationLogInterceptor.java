@@ -67,7 +67,11 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             if (handlerMethod.hasMethodAnnotation(SystemLog.class) && null != user) {
-                saveLog(handlerMethod, httpServletRequest, e, executeTime, user);
+                try {
+                    saveLog(handlerMethod, httpServletRequest, e, executeTime, user);
+                } catch (Exception ex) {
+                    logger.error("保持日志出错", ex);
+                }
             }
         }
         logger.info("计时结束：" + DateUtils.formatDate(endTime, DateUtils.HHMMSSSSS) + " 用时：" + DateUtils.formatDateAgo(executeTime) + " 总内存：" + ByteUtils.formatByteSize(runtime.totalMemory()) + " 已用内存：" + ByteUtils.formatByteSize(runtime.totalMemory() - runtime.freeMemory()));
@@ -83,7 +87,7 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
         return user;
     }
 
-    private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, User user) {
+    private void saveLog(HandlerMethod handlerMethod, HttpServletRequest httpServletRequest, Exception e, long executeTime, User user) throws Exception {
         String ip = AddressUtils.getIpAddress(httpServletRequest);
         String agent = httpServletRequest.getHeader(Constants.USER_AGENT);
         UserAgent userAgent = UserAgent.parseUserAgentString(agent);

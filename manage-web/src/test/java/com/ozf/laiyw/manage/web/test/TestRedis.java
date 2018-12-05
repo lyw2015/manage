@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Map;
-import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:test-spring-servlet.xml", "classpath:spring-redis.xml"})
@@ -22,6 +21,7 @@ public class TestRedis {
     @Value("${session.shareSessionMapCache}")
     private String shareSessionMapCache;
 
+
     @Test
     public void gethareSessSionMapCache() {
         Map<String, String> map = redisCacheUtils.getCacheMap(shareSessionMapCache);
@@ -31,14 +31,5 @@ public class TestRedis {
             System.out.println("Session--->" + map.get(str));
             System.out.println();
         }
-    }
-
-    @Test
-    public void hashKey() {
-        Set<String> set = redisCacheUtils.keys("*");
-        System.out.println(set);
-        Set list = redisCacheUtils.redisTemplate.boundHashOps(shareSessionMapCache).keys();
-        System.out.println(list);
-        redisCacheUtils.redisTemplate.delete("menuCacheKey");
     }
 }

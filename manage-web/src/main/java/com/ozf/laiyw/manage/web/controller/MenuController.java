@@ -5,6 +5,7 @@ import com.ozf.laiyw.manage.common.commons.WebResult;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.model.Menu;
 import com.ozf.laiyw.manage.service.MenuService;
+import com.ozf.laiyw.manage.web.controller.base.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -11,40 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisCacheUtils<T> {
 
     @Autowired
-    public RedisTemplate redisTemplate;
-
-    public Object getByKey(String key) {
-        try {
-            return getCacheObject(key);
-        } catch (Exception oe) {
-            try {
-                return getCacheList(key);
-            } catch (Exception le) {
-                try {
-                    return getCacheSet(key);
-                } catch (Exception se) {
-                    try {
-                        return getCacheMap(key);
-                    } catch (Exception me) {
-                        return null;
-                    }
-                }
-            }
-        }
-    }
-
-    public Set keys(Object pattern) {
-        return redisTemplate.keys(pattern);
-    }
-
-    /**
-     * 删除指定key
-     *
-     * @param key
-     */
-    public void delete(String key) {
-        redisTemplate.delete(key);
-    }
+    private RedisTemplate redisTemplate;
 
     /**
      * 缓存基本的对象，Integer、String、实体类等
@@ -201,5 +168,70 @@ public class RedisCacheUtils<T> {
      */
     public long deleteMapDataByKey(String mapKey, String dataKey) {
         return redisTemplate.boundHashOps(mapKey).delete(dataKey);
+    }
+
+    /**
+     * 根据key获取值
+     *
+     * @param key
+     * @return
+     */
+    public Object getByKey(String key) {
+        try {
+            return getCacheObject(key);
+        } catch (Exception oe) {
+            try {
+                return getCacheList(key);
+            } catch (Exception le) {
+                try {
+                    return getCacheSet(key);
+                } catch (Exception se) {
+                    try {
+                        return getCacheMap(key);
+                    } catch (Exception me) {
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取正则获取缓存key
+     *
+     * @param pattern
+     * @return
+     */
+    public Set keys(Object pattern) {
+        return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 删除指定key
+     *
+     * @param key
+     */
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
+
+    /**
+     * 入栈
+     *
+     * @param key
+     * @param message
+     */
+    public void leftPush(String key, Object message) {
+        redisTemplate.boundListOps(key).leftPush(message);
+    }
+
+    /**
+     * 出栈
+     *
+     * @param key
+     * @return
+     */
+    public Object rightPop(String key, long longtime, TimeUnit timeUnit) {
+        return redisTemplate.boundListOps(key).rightPop(longtime, timeUnit);
     }
 }

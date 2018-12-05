@@ -1,6 +1,7 @@
 package com.ozf.laiyw.manage.web.controller;
 
 import com.ozf.laiyw.manage.common.annotation.SystemLog;
+import com.ozf.laiyw.manage.web.controller.base.BaseController;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.solr.core.SolrTemplate;

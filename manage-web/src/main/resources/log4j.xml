@@ -32,10 +32,6 @@
         </layout>
     </appender>
 
-    <logger name="org.springframework.amqp.rabbit.listener.BlockingQueueConsumer">
-        <level value="warn"/>
-    </logger>
-
     <logger name="org.springframework.web.socket.handler.LoggingWebSocketHandlerDecorator">
         <level value="warn"/>
     </logger>

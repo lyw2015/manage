@@ -3,14 +3,11 @@ package com.ozf.laiyw.manage.service.impl;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.dao.mapper.MenuMapper;
 import com.ozf.laiyw.manage.model.Menu;
-import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -24,15 +21,6 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private MenuMapper menuMapper;
-    @Autowired
-    private RedisCacheUtils redisCacheUtils;
-    @Value("${menu.cache.key}")
-    private String menuCacheKey;
-
-    @PostConstruct
-    public void initData() {
-        redisCacheUtils.setCacheList(menuCacheKey, menuMapper.getAllMenu());
-    }
 
     @Override
     public List<Menu> getMenuByUserId(String userId) {
@@ -42,16 +30,12 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public int saveMenuInfo(Menu menu) {
         menu.setId(StringUtils.randUUID());
-        int count = menuMapper.saveMenuInfo(menu);
-        initData();
-        return count;
+        return menuMapper.saveMenuInfo(menu);
     }
 
     @Override
     public int updateMenuInfo(Menu menu) {
-        int count = menuMapper.updateMenuInfo(menu);
-        initData();
-        return count;
+        return menuMapper.updateMenuInfo(menu);
     }
 
     @Override
@@ -61,12 +45,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> getAllMenu() {
-        List<Menu> list = redisCacheUtils.getCacheList(menuCacheKey);
-        if (null == list || list.isEmpty()) {
-            initData();
-            list = redisCacheUtils.getCacheList(menuCacheKey);
-        }
-        return list;
+        return menuMapper.getAllMenu();
     }
 
     @Override
@@ -83,9 +62,7 @@ public class MenuServiceImpl implements MenuService {
         if (num > 0) {
             return -2;
         }
-        int count = menuMapper.removeMenu(id);
-        initData();
-        return count;
+        return menuMapper.removeMenu(id);
     }
 
     @Override

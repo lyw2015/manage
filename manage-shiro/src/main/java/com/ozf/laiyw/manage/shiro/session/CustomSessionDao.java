@@ -7,11 +7,11 @@ import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,16 +27,15 @@ import java.util.Map;
 @Component
 public class CustomSessionDao extends AbstractSessionDAO {
 
+    private final Logger logger = Logger.getLogger(this.getClass());
     @Value("${session.shareSessionMapCache}")
     private String shareSessionMapCache;
-    @Value("${rabbitmq.queue.key}")
-    private String queueKey;
     @Value("#{${shiro.session.effective.time}}")
     private Integer effectiveTime;
+    @Value("${redis.login.record.queue.key}")
+    private String loginReocrdQueueKey;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
 
     //如DefaultSessionManager在创建完session后会调用该方法；如保存到关系数据库/文件系统/NoSQL数据库；
     // 即可以实现会话的持久化；返回会话ID；主要此处返回的ID.equals(session.getId())；
@@ -103,20 +102,24 @@ public class CustomSessionDao extends AbstractSessionDAO {
     }
 
     private void updateLoginRecord(Session session, boolean isDelete) {
-        LoginRecord loginRecord = new LoginRecord();
-        if (isDelete) {//退出
-            loginRecord.setOnline(Boolean.FALSE.toString());
-            Date logoutDate = new Date();
-            //session过期时间
-            Date invalidDate = new Date(session.getLastAccessTime().getTime() + effectiveTime);
-            if (invalidDate.before(logoutDate)) {
-                logoutDate = invalidDate;
+        try {
+            LoginRecord loginRecord = new LoginRecord();
+            if (isDelete) {//退出
+                loginRecord.setOnline(Boolean.FALSE.toString());
+                Date logoutDate = new Date();
+                //session过期时间
+                Date invalidDate = new Date(session.getLastAccessTime().getTime() + effectiveTime);
+                if (invalidDate.before(logoutDate)) {
+                    logoutDate = invalidDate;
+                }
+                loginRecord.setLogoutTime(DateUtils.formatDateTime(logoutDate));
             }
-            loginRecord.setLogoutTime(DateUtils.formatDateTime(logoutDate));
+            loginRecord.setSessionId(session.getId().toString());
+            loginRecord.setLastTime(DateUtils.formatDateTime(session.getLastAccessTime()));//最后操作时间
+            redisCacheUtils.leftPush(loginReocrdQueueKey, loginRecord);
+        } catch (Exception e) {
+            logger.error("登录日志数据入栈失败，队列名称：" + loginReocrdQueueKey, e);
         }
-        loginRecord.setSessionId(session.getId().toString());
-        loginRecord.setLastTime(DateUtils.formatDateTime(session.getLastAccessTime()));//最后操作时间
-        rabbitTemplate.convertAndSend(queueKey, loginRecord);
     }
 
 }

@@ -28,10 +28,10 @@
             classpath:spring-dataSource.xml,
             classpath:spring-redis.xml,
             classpath:spring-shiro.xml,
-            classpath:spring-rabbitmq-config.xml,
             classpath:spring-data-solr.xml,
             classpath:spring-freemarker.xml,
-            classpath:spring-websocket.xml
+            classpath:spring-websocket.xml,
+            classpath:spring-thread.xml
         </param-value>
     </context-param>
 

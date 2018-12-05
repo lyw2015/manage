@@ -27,11 +27,6 @@
             <artifactId>manage-redis</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.ozf.laiyw.manage</groupId>
-            <artifactId>manage-rabbitmq</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!--servlet-api-->
         <dependency>
             <groupId>javax.servlet</groupId>

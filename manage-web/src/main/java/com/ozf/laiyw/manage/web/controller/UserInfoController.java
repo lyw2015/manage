@@ -6,6 +6,7 @@ import com.ozf.laiyw.manage.model.User;
 import com.ozf.laiyw.manage.service.LoginRecordService;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
+import com.ozf.laiyw.manage.web.controller.base.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
