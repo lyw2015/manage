@@ -2,9 +2,10 @@
 
 ## 项目重构中
 ### 单点登录拆分至：https://gitee.com/laiyw/manage-sso
+### 工作流模块完善中，待上传
 
 #### 项目介绍
-Manage管理系统，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、RabbitMQ、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、ServerMonitor、JWT、Freemarker、监控组件Monitor等常用框架及组件，实现了机构管理、用户管理、权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
+Manage管理系统，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC、Mybatis、Shiro、Solr、CAS、Activiti、Swagger2、CXF、Redis、Log4j、Server Monitor、JWT、Freemarker、监控组件Monitor等常用框架及组件，实现了机构管理、用户管理、权限管理，Activiti工作流程引擎、全文检索、CAS单点登陆、消息推送以及提供了对外的WebService接口等功能
 
 #### 项目功能
 1，采用主流的Activiti流程引擎，实现审批业务的自由流转以及自定义表单等功能
@@ -36,12 +37,10 @@ Manage管理系统，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC�
 #### —manage
 ##### ——manage-activiti    工作流
 ##### ——manage-app    APP接口
-##### ——manage-cas-server    单点登录服务
 ##### ——manage-common    公共模块
 ##### ——manage-dao    持久层
 ##### ——manage-model    业务实体
 ##### ——manage-openapi    对外接口
-##### ——manage-rabbitmq    消息中间件
 ##### ——manage-redis    缓存
 ##### ——manage-service    业务逻辑层
 ##### ——manage-shiro    权限管理
@@ -57,10 +56,6 @@ Manage管理系统，基于核心框架Spring 4.3.18.RELEASE，集成SpringMVC�
 
 #manage-openapi
 ![manage-openapi](https://images.gitee.com/uploads/images/2018/1026/153946_d15e3b78_1486552.png "Module 'manage-openapi'.png")
-
-##### Spring Web Flow
-#manage-cas-server
-![manage-cas-server](https://images.gitee.com/uploads/images/2018/1026/152521_8730dc4e_1486552.png "Module manage-cas-server.png")
 
 #### 项目环境
 Intelli JIDEA
@@ -129,21 +124,17 @@ Web Service框架：CXF
     
     Solr：https://gitee.com/laiyw/codes/6nt7expfcgdhqu0m98ow179
     
-    RabbitMQ：https://gitee.com/laiyw/codes/swj8qkvmadenr1gc3ul0i41
-    
     Redis：https://gitee.com/laiyw/codes/286cnvbrwtqop49su7kg598
     
 2. 创建数据库manage，数据库编码为UTF-8，导入manage.sql脚本
 
-3. 修改manage-common/src/main/resources/origin.properties文件，更改相应的数据源、Redis、RabbitMQ、Solr配置信息；如果使用SSO，则需要修改manage-cas-server/web/WEB-INF/cas.properties配置文件中的数据源
+3. 修改manage-common/src/main/resources/origin.properties文件，更改相应的数据源、Redis、Solr配置信息；
 
 4. 修改manage-dao/src/main/resources/spring-dataSource.xml中Properties文件载入地址
 
 5. 项目访问路径
 
     后台管理：[http://localhost:port/login.html](http://)
-    
-    单点登陆：[http://localhost:port/login](http://)
 
 #### 效果图
 #管理后台登录
