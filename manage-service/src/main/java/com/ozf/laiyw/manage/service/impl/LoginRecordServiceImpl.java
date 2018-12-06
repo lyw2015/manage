@@ -60,12 +60,22 @@ public class LoginRecordServiceImpl implements LoginRecordService {
         return loginRecordMapper.getLastLoginRecord(ShiroUtils.getCurrentUser().getAccount());
     }
 
+    @Override
+    public Map<String, Map<String, Integer>> getCount() {
+        Map<String, Map<String, Integer>> resultMap = new HashMap<>();
+        resultMap.put("total", countUserGuest("user_account,client_ip"));
+        resultMap.put("account", countUserGuest("user_account"));
+        resultMap.put("ip", countUserGuest("client_ip"));
+        return resultMap;
+    }
+
 
     @Override
-    public Map<String, Integer> countUserGuest() {
+    public Map<String, Integer> countUserGuest(String groupByName) {
         Date before = DateUtils.getBeforeDayDate(6);
         Date current = new Date();
-        List<Map<String, Integer>> list = loginRecordMapper.countUserGuest(DateUtils.formatDateTime(before), DateUtils.formatDateTime(current));
+        //总的访问量
+        List<Map<String, Integer>> list = loginRecordMapper.countUserGuest(DateUtils.formatDateTime(before), DateUtils.formatDateTime(current), groupByName);
         Map<String, Integer> resultMap = new HashMap<>();
         for (Map map : list) {
             resultMap.put(map.get("lrtime").toString(), Integer.valueOf(map.get("lrcount").toString()));

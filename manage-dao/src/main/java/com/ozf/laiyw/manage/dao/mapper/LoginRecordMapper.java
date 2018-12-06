@@ -35,5 +35,5 @@ public interface LoginRecordMapper {
     List<LoginRecord> guestRecord(LoginRecord loginRecord);
 
     //统计两个时间点间的访问量
-    List<Map<String, Integer>> countUserGuest(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<Map<String, Integer>> countUserGuest(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("groupByName") String groupByName);
 }

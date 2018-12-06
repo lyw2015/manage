@@ -9,7 +9,6 @@ import com.ozf.laiyw.manage.model.LoginRecord;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.LogService;
 import com.ozf.laiyw.manage.service.LoginRecordService;
-import com.ozf.laiyw.manage.web.controller.base.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -104,8 +103,8 @@ public class MonitorController extends BaseController {
 
     @RequestMapping("/countUserGuest")
     @ResponseBody
-    public Map<String, Integer> countUserGuest() {
-        return loginRecordService.countUserGuest();
+    public Map<String, Map<String, Integer>> countUserGuest() {
+        return loginRecordService.getCount();
     }
 
     @SystemLog(description = "查看访客记录")

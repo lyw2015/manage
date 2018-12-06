@@ -115,10 +115,15 @@
         select count(0) from t_sys_monitor_login_record where lr_online = 'true'
     </select>
 
+    <!--
+        TODO
+        根据用户账号，登录IP进行统计
+        user_account,client_ip,operating_system_name,browser
+    -->
     <select id="countTodayTuest" resultType="java.lang.Integer">
         select count(0) from (
           select count(0) from t_sys_monitor_login_record where last_time like concat(date_format(now(), '%Y-%m-%d'), '%')
-              group by user_account,client_ip,operating_system_name,browser
+              group by user_account,client_ip
         ) counttemp
     </select>
 
@@ -149,12 +154,17 @@
         order by visit_time desc
     </select>
 
+    <!--
+        TODO
+        根据用户账号，登录IP进行统计
+        user_account,client_ip,operating_system_name,browser
+    -->
     <select id="countUserGuest" resultType="java.util.HashMap">
         select date_format(last_time, '%m-%d') lrtime, count(0) lrcount from (
           select last_time from t_sys_monitor_login_record
             where date_format(last_time, '%Y-%m-%d') <![CDATA[ >= ]]> date_format(#{startDate}, '%Y-%m-%d')
                 and date_format(last_time, '%Y-%m-%d') <![CDATA[ <= ]]> date_format(#{endDate}, '%Y-%m-%d')
-            group by user_account,client_ip,operating_system_name,browser,date_format(last_time, '%Y-%m-%d')) tempdata
+            group by ${groupByName}, date_format(last_time, '%Y-%m-%d')) tempdata
         group by date_format(last_time, '%Y-%m-%d') order by last_time asc
     </select>
 

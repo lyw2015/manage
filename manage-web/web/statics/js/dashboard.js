@@ -79,14 +79,25 @@ function canvasLine(labels, data) {
         labels: labels,
         datasets: [
             {
-                label: "访问量",
-                fillColor: "rgba(60,141,188,0.9)",
+                label: "总量",
+                // 线的颜色
                 strokeColor: "rgba(60,141,188,0.8)",
-                pointColor: "#3b8bba",
-                pointStrokeColor: "rgba(60,141,188,1)",
+                // 点的填充颜色
+                pointColor: "rgba(60,141,188,0.8)",
                 pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(60,141,188,1)",
-                data: data
+                data: data[0]
+            }, {
+                label: "账号",
+                strokeColor: "red",
+                pointColor: "red",
+                pointHighlightFill: "#fff",
+                data: data[1]
+            }, {
+                label: "IP",
+                strokeColor: "green",
+                pointColor: "green",
+                pointHighlightFill: "#fff",
+                data: data[2]
             }
         ]
     }, lineChartOptions);
@@ -100,10 +111,26 @@ function countUserGuest() {
             if (result) {
                 var labels = [];
                 var data = [];
-                for (var key in result) {
+                var tempdata = [];
+
+                for (var key in result["total"]) {
                     labels.push(key);
-                    data.push(result[key])
+                    tempdata.push(result["total"][key])
                 }
+                data.push(tempdata);
+
+                tempdata = [];
+                for (var key in result["account"]) {
+                    tempdata.push(result["account"][key])
+                }
+                data.push(tempdata);
+
+                tempdata = [];
+                for (var key in result["ip"]) {
+                    tempdata.push(result["ip"][key])
+                }
+                data.push(tempdata);
+                console.log(data)
                 canvasLine(labels, data);
             }
         }

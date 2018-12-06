@@ -18,8 +18,10 @@ public interface LoginRecordService {
 
     LoginRecord getUserLastLoginRecord();
 
+    Map<String, Map<String, Integer>> getCount();
+
     //统计每天的访客记录
-    Map<String, Integer> countUserGuest();
+    Map<String, Integer> countUserGuest(String groupByName);
 
     //保存访问记录
     int saveLoginRecord(UserAgent userAgent, String clientIp);
