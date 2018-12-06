@@ -8,6 +8,20 @@
     <artifactId>manage</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <url>https://gitee.com/laiyw/manage</url>
+
+    <developers>
+        <developer>
+            <id>laiyw</id>
+            <name>laiyuanwang</name>
+            <email>laiyuanwang2015@foxmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://gitee.com/laiyw/manage.git</url>
+    </scm>
+
     <modules>
         <module>manage-common</module>
         <module>manage-model</module>
