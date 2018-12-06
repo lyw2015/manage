@@ -7,6 +7,7 @@
         <id property="id" column="r_id"/>
         <result property="name" column="r_name"/>
         <result property="type" column="r_type"/>
+        <result property="typeName" column="r_type_name"/>
         <result property="updateTime" column="r_update_time"/>
         <result property="description" column="r_description"/>
         <result property="status" column="r_status"/>
@@ -65,18 +66,22 @@
     </update>
 
     <select id="getRoles" resultMap="roleMap">
-        select * from t_sys_role
+        select
+        r.* ,
+        item.di_name as r_type_name
+        from t_sys_role r
+        left join t_sys_dictionaries_item item on item.di_id = r.r_type
         <where>
-            r_status = 1
+            r.r_status = 1
             <if test="name != null and name != ''">
                 <bind name="pattern" value="'%' + name + '%'"/>
-                and r_name like #{pattern}
+                and r.r_name like #{pattern}
             </if>
             <if test="type != null and type != ''">
-                and r_type = #{type}
+                and r.r_type = #{type}
             </if>
         </where>
-        order by r_name
+        order by r.r_name
     </select>
 
     <select id="isQuote" resultType="java.lang.Integer">

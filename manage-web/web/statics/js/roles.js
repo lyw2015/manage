@@ -6,7 +6,7 @@ $(function () {
     }, function (data) {
         var html = '<option value=""></option>';
         $.each(data, function (ind, val) {
-            html += '<option value="' + val.itemName + '">' + val.itemValue + '</option>';
+            html += '<option value="' + val.id + '">' + val.itemValue + '</option>';
         })
         $("#role_type").empty().html(html);
     });
@@ -47,7 +47,7 @@ function loadData() {
                 field: 'name',
                 title: '角色名称'
             }, {
-                field: 'type',
+                field: 'typeName',
                 title: '角色类型'
             }, {
                 field: 'updateTime',

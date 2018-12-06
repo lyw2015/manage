@@ -14,7 +14,10 @@ public class DictionariesItem implements Serializable {
     private String dictName;
     private String itemName;
     private String itemValue;
-    private Integer status;
+    private Integer status;//默认为1
+    private Integer sort;
+    private String description;
+    private String updateTime;
 
     public String getId() {
         return id;
@@ -62,5 +65,29 @@ public class DictionariesItem implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

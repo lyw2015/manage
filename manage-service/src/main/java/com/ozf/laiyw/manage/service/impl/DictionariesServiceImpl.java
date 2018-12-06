@@ -98,6 +98,7 @@ public class DictionariesServiceImpl implements DictionariesService {
     @Override
     public int saveDictionariesItem(DictionariesItem dictionariesItem) {
         dictionariesItem.setId(StringUtils.randUUID());
+        dictionariesItem.setUpdateTime(DateUtils.getDateTime());
         int count = dictionariesMapper.saveDictionariesItem(dictionariesItem);
         init();
         return count;
@@ -105,6 +106,7 @@ public class DictionariesServiceImpl implements DictionariesService {
 
     @Override
     public int updateDictionariesItem(DictionariesItem dictionariesItem) {
+        dictionariesItem.setUpdateTime(DateUtils.getDateTime());
         int count = dictionariesMapper.updateDictionariesItem(dictionariesItem);
         init();
         return count;

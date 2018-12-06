@@ -6,7 +6,7 @@ $(function () {
     }, function (data) {
         var html = '<option value=""></option>';
         $.each(data, function (ind, val) {
-            html += '<option value="' + val.itemName + '">' + val.itemValue + '</option>';
+            html += '<option value="' + val.id + '">' + val.itemName + '</option>';
         })
         $("#dept_type").empty().html(html);
     });
@@ -45,7 +45,7 @@ function loadTableData() {
                 field: 'parentFullName',
                 title: '父级机构'
             }, {
-                field: 'type',
+                field: 'typeName',
                 title: '机构类型'
             }, {
                 field: 'personInCharge',
@@ -77,7 +77,6 @@ function loadTableData() {
         parentIdField: 'parentId',
         onResetView: function (data) {
             $table.treegrid({
-                //initialState: 'collapsed',// 所有节点都折叠
                 initialState: 'expanded',// 所有节点都展开，默认展开
                 expanderExpandedClass: 'glyphicon glyphicon-minus',
                 expanderCollapsedClass: 'glyphicon glyphicon-plus',
@@ -85,9 +84,12 @@ function loadTableData() {
                     $table.bootstrapTable('resetWidth');
                 }
             });
-            //$table.treegrid('getRootNodes').treegrid('expand');
         }
     });
+}
+
+function methodHandler(method) {
+    $table.treegrid(method);
 }
 
 window.operateEvents = {

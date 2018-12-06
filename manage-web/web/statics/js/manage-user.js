@@ -56,7 +56,7 @@ function loadData() {
                 field: 'roleNames',
                 title: '担任角色'
             }, {
-                field: 'type',
+                field: 'typeName',
                 title: '用户类型'
             }, {
                 field: 'mailbox',
@@ -201,7 +201,7 @@ function loadCondiction() {
     }, function (data) {
         var html = '<option value=""></option>';
         $.each(data, function (ind, val) {
-            html += '<option value="' + val.itemName + '">' + val.itemValue + '</option>';
+            html += '<option value="' + val.id + '">' + val.itemValue + '</option>';
         })
         $("#user_type").empty().html(html);
     });

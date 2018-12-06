@@ -14,6 +14,7 @@ public class Organization implements Serializable {
     private Integer parentId;//默认为0
     private String parentFullName;
     private String type;
+    private String typeName;
     private String name;
     private String fullName;
     private String updateTime;
@@ -57,6 +58,14 @@ public class Organization implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public String getName() {

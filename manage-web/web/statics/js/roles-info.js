@@ -77,7 +77,7 @@ loadRoleType = function () {
     }, function (data) {
         var html = '';
         $.each(data, function (ind, val) {
-            html += '<option value="' + val.itemName + '">' + val.itemValue + '</option>';
+            html += '<option value="' + val.id + '">' + val.itemValue + '</option>';
         })
         $("#role_type").empty().html(html);
 

@@ -26,10 +26,13 @@
         <result property="itemName" column="di_name"/>
         <result property="itemValue" column="di_value"/>
         <result property="status" column="di_status"/>
+        <result property="sort" column="di_sort"/>
+        <result property="description" column="di_description"/>
+        <result property="updateTime" column="di_update_time"/>
     </resultMap>
 
     <select id="getAllDictItem" resultMap="allDictItem">
-        select * from t_sys_dictionaries where d_status = 1 order by d_update_time desc
+        select * from t_sys_dictionaries where d_status = 1 order by d_name
     </select>
 
     <update id="updateDictionariesStatus">
@@ -51,19 +54,19 @@
     </select>
 
     <select id="getAllDictionaries" resultMap="dictionariesMap">
-        select * from t_sys_dictionaries where d_status = 1 order by d_update_time desc
+        select * from t_sys_dictionaries where d_status = 1 order by d_name
     </select>
 
     <select id="getDictionariesItemByDid" resultMap="dictionariesItemMap">
         select item.*, dict.d_name as d_dict_name from t_sys_dictionaries_item item
          left join t_sys_dictionaries dict on item.d_id = dict.d_id
-         where item.di_status = 1 and dict.d_id = #{dictId}
+         where item.di_status = 1 and dict.d_id = #{dictId} order by item.di_sort desc
     </select>
 
     <select id="getDictionariesItemByIdentification" resultMap="dictionariesItemMap">
         select item.*, dict.d_name as d_dict_name from t_sys_dictionaries_item item
          left join t_sys_dictionaries dict on item.d_id = dict.d_id
-         where item.di_status = 1 and item.d_identification = #{identification}
+         where item.di_status = 1 and dict.d_identification = #{identification} order by item.di_sort desc
     </select>
 
     <insert id="saveDictionaries" parameterType="com.ozf.laiyw.manage.model.Dictionaries">
@@ -96,20 +99,29 @@
             di_id,
             d_id,
             di_name,
-            di_value
+            di_value,
+            di_description,
+            di_update_time,
+            di_sort
         )
         values(
             #{id, jdbcType=VARCHAR},
             #{dictId , jdbcType=VARCHAR},
             #{itemName , jdbcType=VARCHAR},
-            #{itemValue , jdbcType=VARCHAR}
+            #{itemValue , jdbcType=VARCHAR},
+            #{description , jdbcType=VARCHAR},
+            #{updateTime , jdbcType=VARCHAR},
+            #{sort}
         )
     </insert>
 
     <update id="updateDictionariesItem" parameterType="com.ozf.laiyw.manage.model.DictionariesItem">
         update t_sys_dictionaries_item set
             di_name = #{itemName , jdbcType=VARCHAR},
-            di_value = #{itemValue , jdbcType=VARCHAR}
+            di_value = #{itemValue , jdbcType=VARCHAR},
+            di_description = #{description , jdbcType=VARCHAR},
+            di_update_time = #{updateTime , jdbcType=VARCHAR},
+            di_sort = #{sort}
         where di_id = #{id, jdbcType=VARCHAR}
     </update>
 

@@ -8,6 +8,7 @@
         <result property="parentId" column="o_parent_id"/>
         <result property="parentFullName" column="o_parent_full_name"/>
         <result property="type" column="o_type"/>
+        <result property="typeName" column="o_type_name"/>
         <result property="name" column="o_name"/>
         <result property="fullName" column="o_full_name"/>
         <result property="updateTime" column="o_update_time"/>
@@ -104,9 +105,12 @@
 
     <select id="getAllOrganization" resultMap="organizationMap">
         select
-        orgn.*, part.o_full_name as o_parent_full_name
+        orgn.*,
+        part.o_full_name as o_parent_full_name,
+        item.di_name as o_type_name
         from t_sys_organization orgn
         left join t_sys_organization part on orgn.o_parent_id = part.o_id
+        left join t_sys_dictionaries_item item on item.di_id = orgn.o_type
         <where>
             orgn.o_status = 1
             <if test="type != null and type != ''">

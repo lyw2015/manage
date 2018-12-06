@@ -112,6 +112,8 @@ function updateDictItem(id, dictId, str) {
                 $("#di_id").val(data.data.id);
                 $("input[name='itemName']").val(data.data.itemName);
                 $("input[name='itemValue']").val(data.data.itemValue);
+                $("input[name='sort']").val(data.data.sort);
+                $("textarea[name='description']").val(data.data.description);
             } else {
                 parent.toastr.error(data.message);
             }
@@ -120,8 +122,8 @@ function updateDictItem(id, dictId, str) {
 }
 
 function submitDictionariesItem() {
-    if (!$("input[name='itemName']").val() || !$("input[name='itemValue']").val()) {
-        parent.toastr.error("名称和值不能为空");
+    if (!$("input[name='itemName']").val() || !$("input[name='itemValue']").val() || !$("input[name='sort']").val()) {
+        parent.toastr.error("名称、值、序号不能为空");
         return false;
     }
     var url = "/dictionaries/saveDictionariesItem";
@@ -225,8 +227,17 @@ function initSubTable(index, row, $detail) {
                 field: 'itemValue',
                 title: '字典项值'
             }, {
+                field: 'sort',
+                title: '排序'
+            }, {
                 field: 'dictName',
                 title: '所属字典'
+            }, {
+                field: 'updateTime',
+                title: '更新时间'
+            }, {
+                field: 'description',
+                title: '字典描述'
             }, {
                 field: 'options',
                 title: '操作',

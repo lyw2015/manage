@@ -85,7 +85,7 @@ function loadDeptType() {
     }, function (data) {
         var html = '';
         $.each(data, function (ind, val) {
-            html += '<option value="' + val.itemName + '">' + val.itemValue + '</option>';
+            html += '<option value="' + val.id + '">' + val.itemName + '</option>';
         })
         $("#dept_type").empty().html(html);
 

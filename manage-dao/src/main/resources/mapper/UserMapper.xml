@@ -6,6 +6,7 @@
     <resultMap id="userMap" type="com.ozf.laiyw.manage.model.User">
         <id property="id" column="user_id"/>
         <result property="type" column="user_type"/>
+        <result property="typeName" column="user_type_name"/>
         <result property="account" column="user_account"/>
         <result property="password" column="user_password"/>
         <result property="username" column="user_name"/>
@@ -28,11 +29,13 @@
         select distinct
         u.*,
         o.o_name as user_organization_name,
+        item.di_name as user_type_name,
         (
         select group_concat(zr.r_name) from t_sys_user_role zur
         left join t_sys_role zr on zur.r_id = zr.r_id where zur.u_id = u.user_id
         ) as user_role_names
         from t_sys_user u
+        left join t_sys_dictionaries_item item on item.di_id = u.user_type
         left join t_sys_organization o on u.user_organization_id = o.o_id
         left join t_sys_user_role ur on ur.u_id = u.user_id
         left join t_sys_role r on ur.r_id = r.r_id

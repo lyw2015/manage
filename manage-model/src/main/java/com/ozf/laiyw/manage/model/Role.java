@@ -17,8 +17,10 @@ public class Role {
     private String id;
     @ApiModelProperty(value = "名称", dataType = "String")
     private String name;
-    @ApiModelProperty(value = "类型", dataType = "String")
+    @ApiModelProperty(value = "类型ID", dataType = "String")
     private String type;
+    @ApiModelProperty(value = "类型名称", dataType = "String")
+    private String typeName;
     @ApiModelProperty(value = "更新时间", dataType = "String")
     private String updateTime;
     @ApiModelProperty(value = "描述", dataType = "String")
@@ -50,6 +52,14 @@ public class Role {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public String getUpdateTime() {
