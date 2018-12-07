@@ -6,7 +6,7 @@ $(function () {
     renderingUser();
 });
 
-function collapseLoginRecord(button, groupClass, boolean) {
+function collapseLoginRecord(button, groupClass, bl) {
     var i = $(button).children("i");
     if (i.hasClass("fa-minus")) {
         i.removeClass("fa-minus").addClass("fa-plus");
@@ -18,7 +18,7 @@ function collapseLoginRecord(button, groupClass, boolean) {
                 collapseLoginRecord($(val).find("button"), $(val).children("span").text(), false);
             }
         })
-    } else if (i.hasClass("fa-plus") && boolean) {
+    } else if (i.hasClass("fa-plus") && bl) {
         i.removeClass("fa-plus").addClass("fa-minus");
         if ($("." + groupClass).length > 0) {
             $("." + groupClass).show();

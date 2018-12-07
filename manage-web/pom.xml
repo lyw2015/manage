@@ -14,12 +14,39 @@
     <build>
         <plugins>
             <plugin>
+                <!-- YUI Compressor Maven压缩插件 -->
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>compress</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <jswarn>false</jswarn>
+                    <nosuffix>true</nosuffix>
+                    <linebreakpos>-1</linebreakpos>
+                    <sourceDirectory>web/statics</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/${project.build.finalName}/statics</outputDirectory>
+                    <includes>
+                        <include>**/*.js</include>
+                        <include>**/*.css</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <warSourceDirectory>web</warSourceDirectory>
                     <webXml>web\WEB-INF\web.xml</webXml>
+                    <warSourceDirectory>web</warSourceDirectory>
+                    <warSourceExcludes>statics/**/*.js,statics/**/*.css</warSourceExcludes>
                 </configuration>
             </plugin>
             <!--拷贝服务器监控资源文件-->
