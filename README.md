@@ -140,6 +140,9 @@ Web Service框架：CXF
 #管理后台登录
 ![管理后台登录](https://images.gitee.com/uploads/images/2018/1101/141049_60c7bc9b_1486552.png "管理后台登录.png")
 
+#忘记密码
+![忘记密码](https://images.gitee.com/uploads/images/2018/1207/163544_8bf1e90e_1486552.png "忘记密码.png")
+
 #首页
 ![首页](https://images.gitee.com/uploads/images/2018/1206/190037_dedfb0d3_1486552.png "首页.png")
 
