@@ -105,6 +105,7 @@
             <value>
                 /statics/** = anon
                 /plugins/** = anon
+                /forgetPwd.html = anon
                 /common/** = anon
                 /manage/** = anon
                 /personal/** = authcFilter

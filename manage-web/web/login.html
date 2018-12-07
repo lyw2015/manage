@@ -66,7 +66,7 @@
         </form>
         <div class="row" style="margin-top: 10px;">
             <div class="col-xs-6">
-                <a href="javaScript:void(0)">忘记密码</a><br>
+                <a href="forgetPwd.html">忘记密码</a><br>
             </div>
         </div>
         <div class="social-auth-links text-center">
@@ -170,7 +170,11 @@
             },
             url: "/common/getVerificationCode",
             success: function (result) {
-                toastr.info(result.message)
+                if (result.success) {
+                    toastr.success(result.message)
+                } else {
+                    toastr.error(result.message);
+                }
             }
         });
     }

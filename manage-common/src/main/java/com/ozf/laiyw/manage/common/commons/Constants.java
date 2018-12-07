@@ -2,6 +2,9 @@ package com.ozf.laiyw.manage.common.commons;
 
 public class Constants {
 
+    public static final String LOGIN_VERIFICATION_CODE_PREFIX = "login_verification_code_";
+    public static final String FORGETPWD_VERIFICATION_CODE_PREFIX = "forgetpwd_verification_code_";
+
     public static final String LOGIN_RULE = "LOGIN_RULE";
     public static final String EMAIL_SERVER = "EMAIL_SERVER";
 
@@ -11,7 +14,6 @@ public class Constants {
     public static final String USER_AGENT = "User-Agent";
 
     public static final String SESSION_USER = "user";
-    public static final String VERIFICATION_CODE_PREFIX = "verification_code_";
 
     //超级管理员账号
     public static final String SUPER_USER_ACCOUNT = "admin";

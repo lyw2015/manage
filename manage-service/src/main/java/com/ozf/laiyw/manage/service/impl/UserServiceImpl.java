@@ -5,11 +5,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ozf.laiyw.manage.common.commons.Constants;
 import com.ozf.laiyw.manage.common.utils.DateUtils;
-import com.ozf.laiyw.manage.common.utils.EmailUtils;
 import com.ozf.laiyw.manage.common.utils.StringUtils;
 import com.ozf.laiyw.manage.dao.mapper.UserMapper;
 import com.ozf.laiyw.manage.model.Message;
 import com.ozf.laiyw.manage.model.User;
+import com.ozf.laiyw.manage.model.vo.VerificationCode;
 import com.ozf.laiyw.manage.redis.utils.RedisCacheUtils;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.socket.SpringWebSocketHandler;
@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Description:
@@ -39,10 +36,10 @@ public class UserServiceImpl implements UserService {
     private SpringWebSocketHandler handler;
     @Autowired
     private RedisCacheUtils redisCacheUtils;
-    @Value("${verificationCode.effective.time}")
-    private Integer vcetime;
     @Value("${user.init.password}")
     private String initPassword;
+    @Value("${redis.verification.code.queue.key}")
+    private String verificationCodeKey;
 
     @Override
     public PageInfo queryUser(PageInfo pageInfo, User user) {
@@ -127,28 +124,68 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getVerificationCode(String email) {
+    public int getVerificationCode(String email) {
         User user = getUserByEmail(email);
         if (null == user) {
-            return "该邮箱尚未绑定账号";
+            return -1;
         }
-        String verificationCode = StringUtils.randomCode(6);
-        boolean bl = EmailUtils.send(email, verificationCode, vcetime);
-        if (!bl) {
-            return Constants.ERROR_MESSAGE_NETWORK_ANOMALY;
-        }
-        redisCacheUtils.setCacheObject(Constants.VERIFICATION_CODE_PREFIX + email, verificationCode, vcetime, TimeUnit.MINUTES);
-        return "邮件发送成功";
+        redisCacheUtils.leftPush(verificationCodeKey, VerificationCode.buildMail(Constants.LOGIN_VERIFICATION_CODE_PREFIX, email, user.getAccount()));
+        return 1;
     }
 
     @Override
-    public boolean checkVerificationCode(String email, String verificationCode) {
-        String cacheCode = String.valueOf(redisCacheUtils.getCacheObject(Constants.VERIFICATION_CODE_PREFIX + email));
-        if (verificationCode.equals(cacheCode)) {
-            redisCacheUtils.delete(Constants.VERIFICATION_CODE_PREFIX + email);
-            return true;
+    public int getVerificationCodeByType(String account, String type) {
+        User user = getUserByAccount(account);
+        if (null == user) {
+            return 0;
         }
-        return false;
+        if (type.equals(VerificationCode.SEND_TYPE_EMAIL)) {
+            if (StringUtils.isEmpty(user.getMailbox())) {
+                return -1;
+            }
+        } else if (type.equals(VerificationCode.SEND_TYPE_PHONE)) {
+            if (StringUtils.isEmpty(user.getPhone())) {
+                return -2;
+            }
+        } else {
+            return -9;
+        }
+        redisCacheUtils.leftPush(verificationCodeKey, new VerificationCode(type, Constants.FORGETPWD_VERIFICATION_CODE_PREFIX, user.getMailbox(), null, user.getAccount()));
+        return 1;
+    }
+
+    @Override
+    public int forgetPwd(String account, String verificationCode, String password) {
+        User user = getUserByAccount(account);
+        if (null == user) {
+            return 0;
+        }
+        int count = checkVerificationCode(Constants.FORGETPWD_VERIFICATION_CODE_PREFIX, user.getAccount(), verificationCode);
+        if (count != 1) {
+            return count;
+        }
+        userMapper.updateUserPwd(user.getId(), ShiroUtils.getHashPassword(password, user.getAccount()));
+        return 1;
+    }
+
+    /**
+     * 校验验证码
+     *
+     * @param account
+     * @param verificationCode
+     * @return -1：验证码失效  -2：验证码错误
+     */
+    @Override
+    public int checkVerificationCode(String prefix, String account, String verificationCode) {
+        Object object = redisCacheUtils.getCacheObject(prefix + account);
+        if (null == object) {
+            return -1;
+        }
+        if (!verificationCode.equals(String.valueOf(object))) {
+            return -2;
+        }
+        redisCacheUtils.delete(prefix + account);
+        return 1;
     }
 
     @Override

@@ -24,6 +24,8 @@ public interface MenuMapper {
 
     List<Menu> getChildrenByParentId(String parentId);
 
+    List<Menu> getUserChildrenByParentId(@Param("parentId") String parentId, @Param("userId") String userId);
+
     int removeMenu(@Param("id") String id);
 
     Menu getMenuById(String id);

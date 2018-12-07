@@ -18,7 +18,7 @@ public abstract class AbstractTask implements Runnable {
     @Value("${redis.right.pop.timeout}")
     private long timeout;
     @Autowired
-    private RedisCacheUtils redisCacheUtils;
+    protected RedisCacheUtils redisCacheUtils;
     protected String queueKey;
 
     public void setQueueKey(String queueKey) {

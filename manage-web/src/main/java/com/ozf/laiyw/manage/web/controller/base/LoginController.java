@@ -10,7 +10,6 @@ import com.ozf.laiyw.manage.service.LoginRecordService;
 import com.ozf.laiyw.manage.service.UserService;
 import com.ozf.laiyw.manage.service.utils.ShiroUtils;
 import com.ozf.laiyw.manage.shiro.core.CustomUsernamePasswordToken;
-import com.ozf.laiyw.manage.web.controller.base.BaseController;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -42,22 +41,29 @@ public class LoginController extends BaseController {
     @RequestMapping("/verificationCodeLogin")
     @ResponseBody
     public WebResult verificationCodeLogin(User user) {
-        if (StringUtils.isNotEmpty(user.getMailbox()) && StringUtils.isNotEmpty(user.getVerificationCode())) {
-            boolean bl = userService.checkVerificationCode(user.getMailbox(), user.getVerificationCode());
-            if (bl) {
-                return executeLogin(new CustomUsernamePasswordToken(user.getMailbox(), user.getRememberMe()));
-            }
-            return WebResult.errorResult(Constants.INCORRECTCREDENTIALSEXCEPTION);
+        String verificationCode = user.getVerificationCode();
+        if (StringUtils.isEmpty(user.getMailbox()) || StringUtils.isEmpty(verificationCode)) {
+            return WebResult.errorResult("邮箱、验证码不能为空");
         }
-        return WebResult.errorResult(Constants.INCORRECTCREDENTIALSEXCEPTION);
+        user = userService.getUserByEmail(user.getMailbox());
+        if (null == user) {
+            return WebResult.errorResult("无效邮箱");
+        }
+        int count = userService.checkVerificationCode(Constants.LOGIN_VERIFICATION_CODE_PREFIX, user.getAccount(), verificationCode);
+        if (count == -1) {
+            return WebResult.errorResult("验证码已失效");
+        } else if (count == -2) {
+            return WebResult.errorResult("验证码错误");
+        }
+        return executeLogin(new CustomUsernamePasswordToken(user.getMailbox(), user.getRememberMe()));
     }
 
     @SystemLog(description = "账号密码登录")
     @RequestMapping("/login")
     @ResponseBody
     public WebResult login(User user) {
-        if (StringUtils.isEmpty(user.getPassword()))
-            return WebResult.errorResult(Constants.INCORRECTCREDENTIALSEXCEPTION);
+        if (StringUtils.isEmpty(user.getAccount()) || StringUtils.isEmpty(user.getPassword()))
+            return WebResult.errorResult("账号密码不能为空");
         return executeLogin(new CustomUsernamePasswordToken(
                 user.getAccount(),
                 user.getPassword(),

@@ -24,9 +24,19 @@
                     select="getChildrenByParentId" column="m_id"/>
     </resultMap>
 
-    <select id="getMenuByUserId" resultMap="allMenuMap">
+    <resultMap id="userMenuMap" type="com.ozf.laiyw.manage.model.Menu">
+        <id property="id" column="m_id"/>
+        <result property="name" column="m_name"/>
+        <result property="icon" column="m_icon"/>
+        <result property="url" column="m_url"/>
+        <collection property="children" ofType="com.ozf.laiyw.manage.model.Menu" javaType="java.util.ArrayList"
+                    select="getUserChildrenByParentId" column="{parentId=m_id, userId=user_id}"/>
+    </resultMap>
+
+    <select id="getMenuByUserId" resultMap="userMenuMap">
         select distinct
-        m.*
+        m.*,
+        ur.u_id as user_id
         from t_sys_menu m
         left join t_sys_role_menu rm on m.m_id = rm.m_id
         left join t_sys_role r on r.r_id = rm.r_id
@@ -84,6 +94,20 @@
         from t_sys_menu m
         left join t_sys_menu mp on m.m_parent_id = mp.m_id
         where m.m_parent_id = #{parentId} and m.m_status = 1 order by m.m_sort desc
+    </select>
+
+    <select id="getUserChildrenByParentId" resultMap="menuMap">
+        select
+          m.*,mp.m_name as m_parent_name
+        from t_sys_menu m
+        left join t_sys_menu mp on m.m_parent_id = mp.m_id
+        left join t_sys_role_menu rm on m.m_id = rm.m_id
+        left join t_sys_role r on r.r_id = rm.r_id
+        left join t_sys_user_role ur on ur.r_id = r.r_id
+        where m.m_parent_id = #{parentId}
+            and ur.u_id = #{userId}
+            and m.m_status = 1
+        order by m.m_sort desc
     </select>
 
     <update id="removeMenu">

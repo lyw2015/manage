@@ -26,9 +26,13 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    String getVerificationCode(String email);
+    int getVerificationCode(String email);
 
-    boolean checkVerificationCode(String email, String verificationCode);
+    int getVerificationCodeByType(String account, String type);
+
+    int forgetPwd(String account, String verificationCode, String password);
+
+    int checkVerificationCode(String prefix, String account, String verificationCode);
 
     //修改用户密码
     int updateUserPwd(String oldpassword, String newpassword);

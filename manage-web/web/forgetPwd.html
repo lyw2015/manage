@@ -1,0 +1,185 @@
+<!--Copyright https://gitee.com/laiyw/manage-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="statics/images/favicon.ico" type="image/x-icon"/>
+    <title>Manage | 忘记密码</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="plugins/AdminLTE/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/AdminLTE/dist/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="plugins/AdminLTE/dist/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="plugins/AdminLTE/dist/css/AdminLTE.min.css">
+    <!-- toastr -->
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition login-page" style="background-image: url('https://goss1.veer.com/creative/vcg/veer/612/veer-153787711.jpg');
+        background-position: center,center; background-size: cover; background-repeat: no-repeat;
+        background-attachment: fixed; overflow: hidden">
+<div class="login-box">
+    <div class="login-logo">
+        <span><b>Manage</b></span>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <form onsubmit="return false">
+            <small class="text-red">*如未设置邮箱及手机号码，可联系管理员重置密码</small>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">找回方式</div>
+                    <select id="type" class="form-control">
+                        <option value="email">电子邮箱</option>
+                        <option value="phone">手机号码</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">登录账号</div>
+                    <input name="account" type="text" class="form-control">
+                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input name="verificationCode" type="text" class="form-control" placeholder="验证码">
+                    <a onclick="getVerificationCode(this)" class="input-group-addon btn">获取验证码</a>
+                </div>
+            </div>
+            <div class="form-group text-bold">
+                设置新密码
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon" style="width: 100px;">新密码</div>
+                    <input name="newpassword" type="password" class="form-control">
+                    <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon" style="width: 100px;">确认新密码</div>
+                    <input name="confignewpassword" type="password" class="form-control">
+                    <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                </div>
+            </div>
+            <div class="form-group text-center no-margin">
+                <a href="login.html" class="btn btn-default">返回</a>
+                <button onclick="forgetPwd()" type="button" class="btn btn-primary" style="margin-left: 35px;">提交
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- jQuery 2.2.3 -->
+<script src="plugins/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="plugins/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<!-- toastr -->
+<script src="plugins/toastr/toastr.min.js"></script>
+<script>
+    var interval, timeout = 0;
+
+    function forgetPwd() {
+        if (!$("input[name='account']").val().trim()) {
+            toastr.error("登录账号不能为空");
+            return;
+        }
+        if (!$("input[name='verificationCode']").val().trim()) {
+            toastr.error("验证码不能为空");
+            return;
+        }
+        if (!$("input[name='newpassword']").val().trim()) {
+            toastr.error("新密码不能为空");
+            return;
+        }
+        if (!$("input[name='confignewpassword']").val().trim()) {
+            toastr.error("确认新密码不能为空");
+            return;
+        }
+        if (!$("input[name='newpassword']").val().trim() === $("input[name='confignewpassword']").val().trim()) {
+            toastr.error("两次密码不一致");
+            return;
+        }
+        $.ajax({
+            type: "post",
+            data: {
+                account: $("input[name='account']").val(),
+                verificationCode: $("input[name='verificationCode']").val(),
+                password: $("input[name='confignewpassword']").val()
+            },
+            url: "/common/forgetPwd",
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message)
+                    setTimeout('location.href = "login.html"', 1000);
+                } else {
+                    toastr.error(result.message);
+                }
+            }
+        });
+    }
+
+    function getVerificationCode(element) {
+        if (!$("input[name='account']").val().trim()) {
+            toastr.error("登录账号不能为空");
+            return;
+        }
+        intervalx(element);
+        $.ajax({
+            type: "post",
+            data: {
+                type: $("#type").val(),
+                account: $("input[name='account']").val()
+            },
+            url: "/common/getVerificationCodeByType",
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message)
+                } else {
+                    toastr.error(result.message);
+                    customClearInterval(element);
+                }
+            }
+        });
+    }
+
+    function customClearInterval(element) {
+        clearInterval(interval);
+        $(element).removeAttr("disabled");
+        $(element).html("获取验证码")
+    }
+
+    function intervalx(element) {
+        if (timeout != 0) {
+            return;
+        }
+        timeout = 60;
+        $(element).attr("disabled", "disabled");
+        $(element).html(timeout + "秒后重试")
+        interval = setInterval(function () {
+            timeout--;
+            if (timeout == 0) {
+                customClearInterval(element);
+                return;
+            }
+            $(element).html(timeout + "秒后重试")
+        }, 1000);
+    }
+</script>
+</body>
+</html>
