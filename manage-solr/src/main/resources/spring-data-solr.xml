@@ -7,7 +7,7 @@
        http://www.springframework.org/schema/data/solr
        http://www.springframework.org/schema/data/solr/spring-solr.xsd">
 
-    <solr:solr-client id="solrClient" url="${encryption.solr.server.url}" maxConnections="100"
+    <solr:solr-client id="solrClient" url="${solr.username}:${solr.password}@${encryption.solr.server.url}" maxConnections="100"
                       timeout="100"/>
 
     <solr:repositories base-package="com.ozf.laiyw.manage.solr"/>

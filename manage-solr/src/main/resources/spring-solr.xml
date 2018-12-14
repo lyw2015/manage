@@ -5,7 +5,7 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="httpSolrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
-        <constructor-arg value="${encryption.solr.server.url}"/>
+        <constructor-arg value="${solr.username}:${solr.password}@${encryption.solr.server.url}"/>
         <property name="parser">
             <bean class="org.apache.solr.client.solrj.impl.XMLResponseParser"/>
         </property>
