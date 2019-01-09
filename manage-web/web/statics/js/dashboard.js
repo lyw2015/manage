@@ -130,7 +130,6 @@ function countUserGuest() {
                     tempdata.push(result["ip"][key])
                 }
                 data.push(tempdata);
-                console.log(data)
                 canvasLine(labels, data);
             }
         }

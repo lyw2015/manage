@@ -54,6 +54,10 @@ clean = function () {
 }
 
 
+searchIcon = function(){
+    top.addTabs({id:'system-icons',title: '系统图标',close: true,url: 'pages/system/icons.html',urlType: 'relative'});
+}
+
 UpdateMenu = function (id, bl) {
     if (!id) {
         parent.toastr.error("无效菜单");

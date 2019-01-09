@@ -100,7 +100,7 @@ function loadRoleData() {
                 field: 'name',
                 title: '角色名称'
             }, {
-                field: 'type',
+                field: 'typeName',
                 title: '角色类型'
             }
         ],
