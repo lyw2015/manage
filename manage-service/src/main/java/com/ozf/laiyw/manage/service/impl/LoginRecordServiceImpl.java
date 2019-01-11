@@ -150,8 +150,9 @@ public class LoginRecordServiceImpl implements LoginRecordService {
     @Override
     public int updateLoginRecord(LoginRecord loginRecord) {
         LoginRecord exist = loginRecordMapper.findLoginRecordBySessionId(loginRecord.getSessionId());
-        if (null == exist)
+        if (null == exist) {
             return 0;
+        }
         String lastTime = loginRecord.getLastTime();
         if (Boolean.FALSE.toString().equals(loginRecord.getOnline())) {
             lastTime = loginRecord.getLogoutTime();

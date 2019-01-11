@@ -26,8 +26,9 @@ public class RunTask implements InitializingBean, ApplicationContextAware {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (null == map || map.isEmpty())
+        if (null == map || map.isEmpty()) {
             return;
+        }
         for (String taskName : map.keySet()) {
             try {
                 executor.execute(map.get(taskName));

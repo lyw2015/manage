@@ -49,15 +49,17 @@ public class CustomUsernamePasswordToken extends UsernamePasswordToken {
 
     @Override
     public Object getPrincipal() {
-        if (StringUtils.isEmpty(verificationAccount))
+        if (StringUtils.isEmpty(verificationAccount)) {
             return super.getPrincipal();
+        }
         return verificationAccount;
     }
 
     @Override
     public Object getCredentials() {
-        if (StringUtils.isEmpty(verificationAccount))
+        if (StringUtils.isEmpty(verificationAccount)) {
             return super.getCredentials();
+        }
         return verificationAccount;
     }
 

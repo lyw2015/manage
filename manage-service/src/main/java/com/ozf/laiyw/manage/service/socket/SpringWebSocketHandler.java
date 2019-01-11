@@ -60,8 +60,9 @@ public class SpringWebSocketHandler implements WebSocketHandler {
     //消息处理，在客户端通过Websocket API发送的消息会经过这里，然后进行相应的处理
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> message) throws Exception {
-        if (message.getPayloadLength() == 0)
+        if (message.getPayloadLength() == 0) {
             return;
+        }
         logger.info("WebSocket接收消息--->" + message.getPayload().toString());
     }
 

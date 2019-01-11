@@ -52,8 +52,9 @@ public class MenuController extends BaseController {
     @RequestMapping("/saveMenuInfo")
     @ResponseBody
     public WebResult saveMenuInfo(Menu menu) {
-        if (StringUtils.isEmpty(menu.getName()))
+        if (StringUtils.isEmpty(menu.getName())) {
             return WebResult.errorResult("菜单名称不能为空");
+        }
         try {
             menuService.saveMenuInfo(menu);
             return WebResult.successResult();
@@ -67,8 +68,9 @@ public class MenuController extends BaseController {
     @RequestMapping("/updateMenuInfo")
     @ResponseBody
     public WebResult updateMenuInfo(Menu menu) {
-        if (StringUtils.isEmpty(menu.getName()))
+        if (StringUtils.isEmpty(menu.getName())) {
             return WebResult.errorResult("菜单名称不能为空");
+        }
         try {
             menuService.updateMenuInfo(menu);
             return WebResult.successResult();
@@ -82,8 +84,9 @@ public class MenuController extends BaseController {
     @RequestMapping("/removeMenu")
     @ResponseBody
     public WebResult removeMenu(String id) {
-        if (StringUtils.isEmpty(id))
+        if (StringUtils.isEmpty(id)) {
             return WebResult.errorResult("请指定需要删除的菜单");
+        }
         try {
             int count = menuService.removeMenu(id);
             if (count == -1) {
@@ -102,8 +105,9 @@ public class MenuController extends BaseController {
     @RequestMapping("/getMenuById")
     @ResponseBody
     public WebResult getMenuById(String id) {
-        if (StringUtils.isEmpty(id))
+        if (StringUtils.isEmpty(id)) {
             return WebResult.errorResult("请指定需要查询的菜单");
+        }
         return WebResult.successResult(menuService.getMenuById(id));
     }
 }

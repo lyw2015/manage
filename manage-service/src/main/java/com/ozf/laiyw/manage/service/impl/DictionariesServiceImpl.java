@@ -46,8 +46,9 @@ public class DictionariesServiceImpl implements DictionariesService {
     @Override
     public int updateDictionariesStatus(String id) {
         List<DictionariesItem> list = getDictionariesItemByDid(id);
-        if (null != list && list.size() > 0)
+        if (null != list && list.size() > 0) {
             return -1;
+        }
         init();
         return dictionariesMapper.updateDictionariesStatus(id);
     }
@@ -72,8 +73,9 @@ public class DictionariesServiceImpl implements DictionariesService {
     @Override
     public List<DictionariesItem> getDictionariesItemByIdentification(String identification) {
         List<DictionariesItem> list = (List<DictionariesItem>) redisCacheUtils.getMapDataByKey(dictionariesKey, identification);
-        if (null == list || list.isEmpty())
+        if (null == list || list.isEmpty()) {
             init();
+        }
         list = (List<DictionariesItem>) redisCacheUtils.getMapDataByKey(dictionariesKey, identification);
         return list;
     }

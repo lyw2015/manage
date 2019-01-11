@@ -56,8 +56,9 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public int removeMenu(String id) {
         List list = menuMapper.getChildrenByParentId(id);
-        if (null != list && list.size() > 0)
+        if (null != list && list.size() > 0) {
             return -1;
+        }
         int num = menuMapper.isQuote(id);
         if (num > 0) {
             return -2;

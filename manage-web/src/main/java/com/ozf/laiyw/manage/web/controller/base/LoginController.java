@@ -62,8 +62,9 @@ public class LoginController extends BaseController {
     @RequestMapping("/login")
     @ResponseBody
     public WebResult login(User user) {
-        if (StringUtils.isEmpty(user.getAccount()) || StringUtils.isEmpty(user.getPassword()))
+        if (StringUtils.isEmpty(user.getAccount()) || StringUtils.isEmpty(user.getPassword())) {
             return WebResult.errorResult("账号密码不能为空");
+        }
         return executeLogin(new CustomUsernamePasswordToken(
                 user.getAccount(),
                 user.getPassword(),

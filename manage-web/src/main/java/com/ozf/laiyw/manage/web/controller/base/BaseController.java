@@ -19,10 +19,10 @@ public class BaseController {
     protected HttpSession session;
 
     @ModelAttribute
-    public void setReqAndRes(HttpServletRequest request, HttpServletResponse response) {
+    public void setReqAndRes(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) {
         this.request = request;
         this.response = response;
-        this.session = request.getSession();
+        this.session = httpSession;
     }
 
     //重定向到指定URL

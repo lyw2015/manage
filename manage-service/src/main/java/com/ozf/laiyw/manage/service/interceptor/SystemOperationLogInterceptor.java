@@ -128,8 +128,9 @@ public class SystemOperationLogInterceptor implements HandlerInterceptor {
 
     private String getParameter(HttpServletRequest httpServletRequest) {
         Map<String, String[]> parameterMap = httpServletRequest.getParameterMap();
-        if (null == parameterMap || parameterMap.isEmpty())
+        if (null == parameterMap || parameterMap.isEmpty()) {
             return "";
+        }
         StringBuffer sb = new StringBuffer();
         String value = null;
         for (String name : parameterMap.keySet()) {
