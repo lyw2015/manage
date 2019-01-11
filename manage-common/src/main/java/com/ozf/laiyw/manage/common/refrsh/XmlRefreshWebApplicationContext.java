@@ -109,6 +109,7 @@ public class XmlRefreshWebApplicationContext extends XmlWebApplicationContext {
      *
      * @see org.springframework.core.io.DefaultResourceLoader#getResource(java.lang.String)
      */
+    @Override
     public Resource getResource(String location) {
         Assert.notNull(location, "Location must not be null");
         if (location.startsWith(CLASSPATH_URL_PREFIX)) {
@@ -130,6 +131,7 @@ public class XmlRefreshWebApplicationContext extends XmlWebApplicationContext {
             super(path, classLoader);
         }
 
+        @Override
         public InputStream getInputStream() throws IOException {
             InputStream is = null;
             is = this.getClassLoader().getResource(this.getPath()).openStream();

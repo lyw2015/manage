@@ -134,7 +134,7 @@ public class DateUtils {
      * @return
      */
     public static long pastDays(Date date) {
-        long t = new Date().getTime() - date.getTime();
+        long t = System.currentTimeMillis() - date.getTime();
         return t / (24 * 60 * 60 * 1000);
     }
 
@@ -145,7 +145,7 @@ public class DateUtils {
      * @return
      */
     public static long pastHour(Date date) {
-        long t = new Date().getTime() - date.getTime();
+        long t = System.currentTimeMillis() - date.getTime();
         return t / (60 * 60 * 1000);
     }
 
@@ -156,7 +156,7 @@ public class DateUtils {
      * @return
      */
     public static long pastMinutes(Date date) {
-        long t = new Date().getTime() - date.getTime();
+        long t = System.currentTimeMillis() - date.getTime();
         return t / (60 * 1000);
     }
 
@@ -221,9 +221,9 @@ public class DateUtils {
      *
      * @return
      */
-    public static Date getMonthStartTime(String year_month) {
+    public static Date getMonthStartTime(String yearMonth) {
         Calendar c = Calendar.getInstance();
-        c.setTime(parseDate(year_month, YYYY_MM));
+        c.setTime(parseDate(yearMonth, YYYY_MM));
         try {
             c.set(Calendar.DATE, 1);
             return parseDate(formatDate(c.getTime(), YYYY_MM_DD_HH_MM_SS), YYYY_MM_DD_HH_MM_SS);
@@ -238,9 +238,9 @@ public class DateUtils {
      *
      * @return
      */
-    public static Date getMonthEndTime(String year_month) {
+    public static Date getMonthEndTime(String yearMonth) {
         Calendar c = Calendar.getInstance();
-        c.setTime(parseDate(year_month, YYYY_MM));
+        c.setTime(parseDate(yearMonth, YYYY_MM));
         try {
             c.set(Calendar.DATE, 1);
             c.add(Calendar.MONTH, 1);
@@ -293,20 +293,21 @@ public class DateUtils {
      *
      * @return
      */
-    public static Date getQuarterStartTime(String year_quarter) {
-        String yq[] = year_quarter.split("-");
+    public static Date getQuarterStartTime(String yearQuarter) {
+        String[] yq = yearQuarter.split("-");
         Calendar c = Calendar.getInstance();
         c.setTime(parseDate(yq[0], YYYY));
         int quarter = Integer.valueOf(yq[1]);
         try {
-            if (quarter == 1)
+            if (quarter == 1) {
                 c.set(Calendar.MONTH, 0);
-            else if (quarter == 2)
+            } else if (quarter == 2) {
                 c.set(Calendar.MONTH, 3);
-            else if (quarter == 3)
+            } else if (quarter == 3) {
                 c.set(Calendar.MONTH, 6);
-            else if (quarter == 4)
+            } else if (quarter == 4) {
                 c.set(Calendar.MONTH, 9);
+            }
             c.set(Calendar.DATE, 1);
             return parseDate(formatDate(c.getTime(), YYYY_MM_DD_HH_MM_SS), YYYY_MM_DD_HH_MM_SS);
         } catch (Exception e) {
@@ -320,8 +321,8 @@ public class DateUtils {
      *
      * @return
      */
-    public static Date getQuarterEndTime(String year_quarter) {
-        String yq[] = year_quarter.split("-");
+    public static Date getQuarterEndTime(String yearQuarter) {
+        String[] yq = yearQuarter.split("-");
         Calendar c = Calendar.getInstance();
         c.setTime(parseDate(yq[0], YYYY));
         int quarter = Integer.valueOf(yq[1]);

@@ -80,8 +80,9 @@ public class JwtUtils {
      * @throws Exception
      */
     public DecodedJWT verifyToken(String token) throws Exception {
-        if (StringUtils.isEmpty(token))
+        if (StringUtils.isEmpty(token)) {
             return null;
+        }
         try {
             return JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
         } catch (Exception e) {

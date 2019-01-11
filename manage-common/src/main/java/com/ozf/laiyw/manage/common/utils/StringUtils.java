@@ -14,8 +14,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return
      */
     public static String join(Object[] objs, String sper) {
-        if (objs == null || objs.length == 0 || isEmpty(sper))
+        if (objs == null || objs.length == 0 || isEmpty(sper)) {
             return null;
+        }
         StringBuffer sb = new StringBuffer();
         for (Object obj : objs) {
             sb.append(obj).append(sper);

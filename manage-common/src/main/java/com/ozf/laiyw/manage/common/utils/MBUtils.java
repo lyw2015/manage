@@ -22,8 +22,9 @@ public class MBUtils {
      */
     public static Map convertObjToMap(Object obj) {
         Map<String, Object> reMap = new HashMap<String, Object>();
-        if (obj == null)
+        if (obj == null) {
             return null;
+        }
         Field[] fields = obj.getClass().getDeclaredFields();
         try {
             for (int i = 0; i < fields.length; i++) {
